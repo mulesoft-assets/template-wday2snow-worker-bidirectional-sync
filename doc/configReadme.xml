@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<configuration>
+	<placeholders>
+		<placeholder id="template_name">Workday Worker to ServiceNow User bidirectional sync</placeholder>
+	</placeholders>
+</configuration>
