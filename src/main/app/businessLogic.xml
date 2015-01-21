@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:wd-integration="http://www.mulesoft.org/schema/mule/wd-integration" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
+http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schema/mule/wd-integration/current/mule-wd-integration.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd" version="EE-3.5.2">
+    <data-mapper:config name="Worker_to_User" transformationGraphPath="worker_to_user.grf" doc:name="Worker_to_User"/>
+    <data-mapper:config name="User_To_ChangePreferredNameRequestType" transformationGraphPath="user_to_changepreferrednamerequesttype.grf" doc:name="User_To_ChangePreferredNameRequestType"/>
+    <data-mapper:config name="User_To_MaintainContactInformationForPersonEventRequestType" transformationGraphPath="user_to_maintaincontactinformationforpersoneventrequesttype.grf" doc:name="User_To_MaintainContactInformationForPersonEventRequestType"/>
+    <data-mapper:config name="User_To_HireEmployeeRequestType" transformationGraphPath="user_to_hireemployeerequesttype.grf" doc:name="User_To_HireEmployeeRequestType_1"/>
+    
+    <batch:job name="syncBatchWorkday" max-failed-records="1">
+        <batch:threading-profile poolExhaustedAction="WAIT"/>
+        <batch:process-records>
+            <batch:step name="GetLastEvent">
+                <batch:set-record-variable variableName="workDayId" value="#[payload.workerReference.getID().get(1).getValue()]" doc:name="store Workday Id"/>
+                <enricher source="payload" target="#[recordVars['lastEvent']]" doc:name="store the value in 'recordVars['lastEvent']'">
+                    <processor-chain doc:name="Processor Chain">
+                        <wd-integration:get-event-detail config-ref="Workday_Integrations" eventDetailRequest-ref="#[org.mule.templates.EventDetailRequest.create(payload)]" doc:name="query for the last event"/>
+                        <custom-transformer class="org.mule.templates.TransactionLogProcessor" doc:name="iterate through transaction logs"/>
+                    </processor-chain>
+                </enricher>
+            </batch:step>
+
+			<batch:step name="getUserInServiceNowIfExists" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
+
+                <enricher source="#[payload]" target="#[recordVars['userInTargetInstance']]" doc:name="store user">
+                	<servicenow:get-records config-ref="ServiceNow" type="SYS_USER" doc:name="Get Users from ServiceNow">
+
+            		</servicenow:get-records>
+                </enricher>
+            </batch:step>
+            <batch:step name="mapWorkersToUsers" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
+                <data-mapper:transform config-ref="Worker_to_User" doc:name="Worker to User">
+                </data-mapper:transform>
+
+            </batch:step>
+            <batch:step name="InsertUserInServiceNowIfItDoesntExist" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty()]">
+                <servicenow:insert config-ref="ServiceNow" type="SYS_USER" doc:name="Insert user to ServiceNow">
+
+                </servicenow:insert>
+            </batch:step>
+            <batch:step name="UpdateUserInServiceNowIfItExists" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty() == false]">
+                <expression-component doc:name="Add the servicenow Id to the object to be updated"><![CDATA[payload.put('sysId', recordVars['userInTargetInstance'].getGetRecordsResult().get(0).getSysId());]]></expression-component>
+                <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update user in ServiceNow">
+
+                </servicenow:update>
+            </batch:step>
+
+        </batch:process-records>
+        <batch:on-complete>
+            <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
+        </batch:on-complete>
+    </batch:job>
+
+    <batch:job name="syncBatchServiceNow" max-failed-records="1">
+        <batch:threading-profile poolExhaustedAction="WAIT"/>
+        <batch:process-records>
+            <batch:step name="storeUserInformation" >
+                <batch:set-record-variable variableName="snowUser" value="#[payload]" doc:name="store Service Now user"/>
+                <batch:set-record-variable variableName="userUpdatedBy" value="#[payload.getSysUpdatedBy()]" doc:name="Store User sysUpdatedBy"/>
+            </batch:step>
+
+            <batch:step name="findUserInWorkdayStep" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; payload.getUserName() != '']">
+
+                <enricher source="#[payload]" target="#[recordVars['workerInTargetInstance']]" doc:name="store worker">
+                    <wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Get Workers from Workday" workersRequest-ref="#[org.mule.templates.WorkersRequest.getWorker(payload.getUserName())]"/>
+                </enricher>
+
+            </batch:step>
+
+            <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExist" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] == null || recordVars['workerInTargetInstance'].responseData == null)]">
+                <data-mapper:transform config-ref="User_To_HireEmployeeRequestType" doc:name="User To HireEmployeeRequestType">
+                </data-mapper:transform>
+                <wd-staffing:hire-employee config-ref="Workday_Staffing" doc:name="Hire Employee"/>
+                <batch:set-record-variable variableName="workerId" value="#[payload.employeeReference.getID().get(1).getValue()]" doc:name="store Worker ID"/>
+                <expression-component doc:name="prepare User for update"><![CDATA[java.util.Map userMap = new java.util.LinkedHashMap();
+userMap.put('sysId',recordVars['snowUser'].getSysId());
+userMap.put('userName', recordVars['workerId']);
+
+payload = userMap;
+]]></expression-component>
+                <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update userName in Service Now">
+
+                </servicenow:update>
+            </batch:step>
+            <batch:step name="updateWorkerInWorkdayIfWorkerExists" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] != null || recordVars['workerInTargetInstance'].responseData != null)]">
+                <data-mapper:transform config-ref="User_To_MaintainContactInformationForPersonEventRequestType" doc:name="User To MaintainContactInformationForPersonEventRequestType">
+
+                </data-mapper:transform>
+                <wd-hr:maintain-contact-information config-ref="Workday_Human_Resource" doc:name="Update Contact Information"/>
+                <set-payload value="#[recordVars['snowUser']]" doc:name="Set Payload to Service Now User"/>
+                <data-mapper:transform config-ref="User_To_ChangePreferredNameRequestType" doc:name="User To ChangePreferredNameRequestType">
+
+                </data-mapper:transform>
+                <wd-hr:change-preferred-name config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
+            </batch:step>
+        </batch:process-records>
+        <batch:on-complete>
+            <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
+        </batch:on-complete>
+    </batch:job>
+</mule>

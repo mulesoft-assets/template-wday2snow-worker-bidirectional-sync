@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+    
+    <!-- This is the endponits file. In this file you should declare all your inbound and outbound endpoints, in order to control the access to your integration -->
+
+    <flow name="triggerSyncFromWorkdayFlow"  processingStrategy="synchronous" initialState="started">
+		<poll doc:name="Poll">
+			<fixed-frequency-scheduler frequency="${poll.frequencyMillis}" startDelay="${poll.startDelayMillis}" />
+			<watermark variable="lastQueryDateA" default-expression="${watermark.default.expression}" update-expression="#[groovy: new Date(System.currentTimeMillis() - 10000).format('yyyy-MM-dd HH:mm:ss')]"/>
+            <processor-chain doc:name="Processor Chain">
+            	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
+                <wd-hr:get-workers config-ref="Workday_Human_Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.create(lastQueryDateA,${poll.frequencyMillis}, ${poll.offset})]" doc:name="Fetch Workers from Workday"/>
+            </processor-chain>
+		</poll>
+        <choice doc:name="Choice">
+            <when expression="payload.responseData == null">
+                <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
+            </when>
+            <otherwise>
+                <set-payload value="#[payload.responseData.worker]" doc:name="Set Payload to Worker data"/>
+                <batch:execute name="syncBatchWorkday" doc:name="trigger Workday batch execution"/>
+            </otherwise>
+        </choice>
+        <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>
+    </flow>
+
+	<flow name="triggerSyncFromServiceNowFlow"  processingStrategy="synchronous" initialState="started">
+   		<poll doc:name="Poll">
+   			<fixed-frequency-scheduler frequency="${poll.frequencyMillis}" startDelay="${poll.startDelayMillis}" />
+   			<watermark variable="lastQueryDateB" default-expression="${watermark.default.expression}" update-expression="#[groovy: new Date(System.currentTimeMillis() - 10000).format('yyyy-MM-dd HH:mm:ss')]"/>
+            <processor-chain doc:name="Processor Chain">
+            	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
+                <expression-component doc:name="Apply GMT Time Zone Offset to lastQueryDateB" doc:description="All times are stored in the Service Now platform in Coordinated Universal Time (UTC). They are displayed globally based on the system time zone, but are displayed to users in their local time zone according to user preferences (http://wiki.servicenow.com/index.php?title=Using_Time_Zones)."><![CDATA[payload = org.mule.templates.util.DateUtil.applyTimeZone(flowVars.lastQueryDateB,'yyyy-MM-dd HH:mm:ss','GMT');]]></expression-component>
+
+
+                <servicenow:get-records config-ref="ServiceNow" type="SYS_USER" doc:name="Fetch Users from Service Now">
+                    <servicenow:get-records-request>
+                        <servicenow:get-records-request key="sysUpdatedOn">&gt; #[payload]</servicenow:get-records-request>
+                    </servicenow:get-records-request>
+                </servicenow:get-records>
+
+            </processor-chain>
+		</poll>
+        <choice doc:name="Choice">
+            <when expression="#[payload.getGetRecordsResult().isEmpty()]">
+                <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
+            </when>
+            <otherwise>
+                <set-payload doc:name="Set Payload to User data" value="#[payload.getGetRecordsResult()]"/>
+                <batch:execute name="syncBatchServiceNow" doc:name="Trigger Service Now batch execution"/>
+            </otherwise>
+        </choice>
+        <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>
+    </flow>
+</mule>
