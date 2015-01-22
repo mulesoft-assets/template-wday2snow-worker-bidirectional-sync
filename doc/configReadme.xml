@@ -1,6 +1,88 @@
 <?xml version="1.0"?>
 <configuration>
 	<placeholders>
-		<placeholder id="template_name">Workday Worker to ServiceNow User bidirectional sync</placeholder>
+		<placeholder id="template_name">Workday Worker to ServiceNow User Bidirectional synchronization</placeholder>
 	</placeholders>
+	<sections>
+		<section id="use_case">  
+			I want to have my workers/users synchronized between Workday and ServiceNow.
+<![CDATA[
+### Template overview <a name="templateoverview"/>
+						
+Let's say we want to keep Workday synchronized with ServiceNow. Then, the integration behavior can be summarized just with the following steps:
+
+1. Ask Workday:
+> *Which changes have there been since the last time I got in touch with you?*
+
+2. For each of the updates fetched in the previous step (1.), ask ServiceNow:
+> *Does the update received from Workday should be applied?*
+
+3. If ServiceNow's answer for the previous question (2.) is *Yes*, then *upsert* (create or update depending on each particular case) ServiceNow with the belonging change
+
+4. Repeat previous steps (1. to 3.) the other way around (using ServiceNow as the source and Workday as the target)
+
+ Repeat *ad infinitum*:
+
+5. Ask Workday:
+> *Which changes have there been since the question I've made in the step 1.?*
+
+And so on...
+			  
+The question for recent changes since a certain moment is nothing but a [poll inbound](http://www.mulesoft.org/documentation/display/current/Poll+Reference) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
+]]>
+		</section>
+		<section id="considerations">
+<![CDATA[ 
+**Note:** This particular Anypoint Template illustrate the synchronization use case between Workday and ServiceNow.
+There are a couple of things you should take into account before running this template:
+
+1. **Workers cannot be deleted in Workday:** They are only set as terminated employees.
+
+2. All times are stored in the ServiceNow platform in Coordinated Universal Time (UTC) so time data needs to be converted to UTC time zone before querying the ServiceNow.
+
+3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.			
+]]>
+		</section>
+		<section id="application_configuration">
+			<![CDATA[
+#### Workday Connector configuration
++ wday.user `user@company`
++ wday.password `secret`
++ wday.endpoint `https://impl-cc.workday.com/ccx/service/company/Human_Resources/v21.1`
++ wday.integration.user.id `72d1073ba8f51050e3c83a48d7a9ead6`
+
+#### Default values for required WorkDay fields
++ wday.country `USA`
++ wday.state `USA-CA`
++ wday.organization `SUPERVISORY_ORGANIZATION-1-435`
++ wday.jobprofileId `39905`
++ wday.postalCode `90001`
++ wday.city `San Francisco`
++ wday.location `San_Francisco_Site`
++ wday.currency `USD`
+
+#### ServiceNow Connector configuration
++ snow.user `mule123` 
++ snow.password `secret`
++ snow.endpoint `https://dev.service-now.com`
++ snow.integration.user.id `eb3236d02bb87100c173448405da15de`
+	  ]]>
+		</section>
+		<section id="api_calls">
+			<![CDATA[
+There are no special considerations regarding API calls.
+]]>
+		</section>
+		<section id="default_endpoints_xml">
+		<![CDATA[
+This file should contain every inbound and outbound endpoint of your integration app. It is intended to contain the application API.
+In this particular template, this file contains a couple of poll inbound endpoints that query Workday and ServiceNow for updates using watermark as mentioned before.
+]]>
+		</section>
+		<section id="default_business_logic_xml">
+		<![CDATA[
+This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for both executing the synchronization from Workday to ServiceNow and the other way around.
+]]>
+		</section>
+	</sections>		
 </configuration>
