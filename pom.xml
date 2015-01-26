@@ -40,6 +40,18 @@
                             <groupId>org.mule.modules</groupId>
                             <artifactId>mule-module-workday-integrations</artifactId>
                         </inclusion>
+                    <inclusion>
+                            <groupId>org.mule.modules</groupId>
+                            <artifactId>mule-module-workday-absencemanagement</artifactId>
+                        </inclusion>
+                    <inclusion>
+                            <groupId>org.mule.modules</groupId>
+                            <artifactId>mule-module-workday-humanresources</artifactId>
+                        </inclusion>
+                    <inclusion>
+                            <groupId>org.mule.modules</groupId>
+                            <artifactId>mule-module-workday-staffing</artifactId>
+                        </inclusion>
                     </inclusions>
 				</configuration>
 			</plugin>
@@ -61,6 +73,27 @@
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-workday-integrations</artifactId>
             <version>4.1.0</version>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-spring-config</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-workday-absencemanagement</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-workday-humanresources</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+    <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-workday-staffing</artifactId>
+            <version>4.1.1</version>
         </dependency>
     </dependencies>
 

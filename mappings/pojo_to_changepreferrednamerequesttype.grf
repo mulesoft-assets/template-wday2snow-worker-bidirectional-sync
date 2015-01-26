@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Admin" created="Thu Oct 16 08:52:37 CEST 2014" description="Pojo To ChangePreferredNameRequestType" guiVersion="3.4.4.P" id="1413462678302" licenseCode="Unlicensed" licenseType="Unknown" modified="Thu Oct 16 08:52:37 CEST 2014" modifiedBy="Admin" name="Pojo_To_ChangePreferredNameRequestType" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="6c62ebc7-4379-4e84-abcd-66c2ad5b2474">
+<Record fieldDelimiter="," name="ChangePreferredNameRequestType" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/businessProcessParameters/autoComplete" containerType="SINGLE" label="autoComplete" name="autoComplete" type="boolean"/>
+<Field __index="1" __sourcePath="{}/object/businessProcessParameters/commentData/comment" containerType="SINGLE" label="comment" name="comment" type="string"/>
+<Field __index="4" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="5" __sourcePath="{}/object/businessProcessParameters/runNow" containerType="SINGLE" label="runNow" name="runNow" type="boolean"/>
+<Field __index="8" __sourcePath="{}/object/changePreferredNameData/nameData/countryReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_1" type="string"/>
+<Field __index="9" __sourcePath="{}/object/changePreferredNameData/nameData/firstName" containerType="SINGLE" label="firstName" name="firstName" type="string"/>
+<Field __index="10" __sourcePath="{}/object/changePreferredNameData/nameData/formattedName" containerType="SINGLE" label="formattedName" name="formattedName" type="string"/>
+<Field __index="11" __sourcePath="{}/object/changePreferredNameData/nameData/fullNameForSingaporeAndMalaysia" containerType="SINGLE" label="fullNameForSingaporeAndMalaysia" name="fullNameForSingaporeAndMalaysia" type="string"/>
+<Field __index="12" __sourcePath="{}/object/changePreferredNameData/nameData/lastName" containerType="SINGLE" label="lastName" name="lastName" type="string"/>
+<Field __index="13" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/firstName" containerType="SINGLE" label="firstName" name="firstName_1" type="string"/>
+<Field __index="14" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/firstName2" containerType="SINGLE" label="firstName2" name="firstName2" type="string"/>
+<Field __index="15" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/lastName" containerType="SINGLE" label="lastName" name="lastName_1" type="string"/>
+<Field __index="16" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/lastName2" containerType="SINGLE" label="lastName2" name="lastName2" type="string"/>
+<Field __index="17" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/localName" containerType="SINGLE" label="localName" name="localName" type="string"/>
+<Field __index="18" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/localScript" containerType="SINGLE" label="localScript" name="localScript" type="string"/>
+<Field __index="19" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/middleName" containerType="SINGLE" label="middleName" name="middleName" type="string"/>
+<Field __index="20" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/middleName2" containerType="SINGLE" label="middleName2" name="middleName2" type="string"/>
+<Field __index="21" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/secondaryLastName" containerType="SINGLE" label="secondaryLastName" name="secondaryLastName" type="string"/>
+<Field __index="22" __sourcePath="{}/object/changePreferredNameData/nameData/localNameDetailData/secondaryLastName2" containerType="SINGLE" label="secondaryLastName2" name="secondaryLastName2" type="string"/>
+<Field __index="23" __sourcePath="{}/object/changePreferredNameData/nameData/middleName" containerType="SINGLE" label="middleName" name="middleName_1" type="string"/>
+<Field __index="26" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/salutationReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_2" type="string"/>
+<Field __index="29" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/titleReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_3" type="string"/>
+<Field __index="30" __sourcePath="{}/object/changePreferredNameData/nameData/reportingName" containerType="SINGLE" label="reportingName" name="reportingName" type="string"/>
+<Field __index="31" __sourcePath="{}/object/changePreferredNameData/nameData/secondaryLastName" containerType="SINGLE" label="secondaryLastName" name="secondaryLastName_1" type="string"/>
+<Field __index="34" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/academicSuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_4" type="string"/>
+<Field __index="37" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/hereditarySuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_5" type="string"/>
+<Field __index="40" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/honorarySuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_6" type="string"/>
+<Field __index="43" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/professionalSuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_7" type="string"/>
+<Field __index="46" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/religiousSuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_8" type="string"/>
+<Field __index="49" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/royalSuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_9" type="string"/>
+<Field __index="52" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/socialSuffixReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_10" type="string"/>
+<Field __index="53" __sourcePath="{}/object/changePreferredNameData/useLegalNameAsPreferredName" containerType="SINGLE" label="useLegalNameAsPreferredName" name="useLegalNameAsPreferredName" type="boolean"/>
+<Field __index="56" __sourcePath="{}/object/changePreferredNameData/workerReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_11" type="string"/>
+<Field __index="57" __sourcePath="{}/object/version" containerType="SINGLE" label="version" name="version" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="2" __referenceCounter="0" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="ac46ed66-03e1-481f-b11f-dc364b871d8e">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="2" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="3" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="6" __referenceCounter="1" __sourcePath="{}/object/changePreferredNameData/nameData/countryReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="b8452f02-d955-4a61-9f9c-12bdff513f7b">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="6" __sourcePath="{}/object/changePreferredNameData/nameData/countryReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="7" __sourcePath="{}/object/changePreferredNameData/nameData/countryReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="24" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/salutationReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="89443bd0-0db0-4bac-9d5d-d04497977258">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="24" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/salutationReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="25" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/salutationReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="27" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/titleReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="00bfd363-a775-47b0-b362-2f0c01405ca4">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="27" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/titleReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="28" __sourcePath="{}/object/changePreferredNameData/nameData/prefixData/titleReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="32" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/academicSuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="b763569e-a4bb-4739-b53a-771b3eaf343a">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="32" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/academicSuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="33" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/academicSuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="35" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/hereditarySuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="6fc620b6-8fc8-4636-9aef-a4ffb7606f29">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="35" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/hereditarySuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="36" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/hereditarySuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="38" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/honorarySuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="a7cd671b-cceb-4f2e-9716-444da6e1e51b">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="38" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/honorarySuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="39" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/honorarySuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="41" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/professionalSuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="d81c80bf-d34c-4baa-ba3e-ec9ab09bb7ef">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="41" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/professionalSuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="42" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/professionalSuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="44" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/religiousSuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="0a3495b2-6120-41ff-9cc7-9ec09ccd0e83">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="44" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/religiousSuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="45" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/religiousSuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="47" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/royalSuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="6e990298-ca6a-44ea-b3c1-8fa30a564ab3">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="47" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/royalSuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="48" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/royalSuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="50" __referenceCounter="0" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/socialSuffixReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="60adcf8b-21ed-4ab6-b1ce-debcd861baa0">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="50" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/socialSuffixReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="51" __sourcePath="{}/object/changePreferredNameData/nameData/suffixData/socialSuffixReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="54" __referenceCounter="1" __sourcePath="{}/object/changePreferredNameData/workerReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" _parent_id="__parent_id" _type="Output" id="f268d49c-5525-47dd-a459-921551fe88d3">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="54" __sourcePath="{}/object/changePreferredNameData/workerReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="55" __sourcePath="{}/object/changePreferredNameData/workerReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="3" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="d4814851-47ad-4391-9351-880dde782b74">
+<Record fieldDelimiter="," name="Worker" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/addr1" containerType="SINGLE" label="addr1" name="addr1" type="string"/>
+<Field __index="1" __sourcePath="{}/object/basePay" containerType="SINGLE" label="basePay" name="basePay" type="string"/>
+<Field __index="2" __sourcePath="{}/object/basePayCurrency" containerType="SINGLE" label="basePayCurrency" name="basePayCurrency" type="string"/>
+<Field __index="3" __sourcePath="{}/object/basePayFreq" containerType="SINGLE" label="basePayFreq" name="basePayFreq" type="string"/>
+<Field __index="4" __sourcePath="{}/object/city" containerType="SINGLE" label="city" name="city" type="string"/>
+<Field __index="5" __sourcePath="{}/object/country" containerType="SINGLE" label="country" name="country" type="string"/>
+<Field __index="6" __sourcePath="{}/object/eeType" containerType="SINGLE" label="eeType" name="eeType" type="string"/>
+<Field __index="7" __sourcePath="{}/object/email" containerType="SINGLE" label="email" name="email" type="string"/>
+<Field __index="8" __sourcePath="{}/object/firstName" containerType="SINGLE" label="firstName" name="firstName" type="string"/>
+<Field __index="9" __sourcePath="{}/object/hireDate" containerType="SINGLE" label="hireDate" name="hireDate" type="string"/>
+<Field __index="10" __sourcePath="{}/object/jobProfile" containerType="SINGLE" label="jobProfile" name="jobProfile" type="string"/>
+<Field __index="11" __sourcePath="{}/object/lastName" containerType="SINGLE" label="lastName" name="lastName" type="string"/>
+<Field __index="12" __sourcePath="{}/object/location" containerType="SINGLE" label="location" name="location" type="string"/>
+<Field __index="13" __sourcePath="{}/object/mgrID" containerType="SINGLE" label="mgrID" name="mgrID" type="string"/>
+<Field __index="14" __sourcePath="{}/object/payRateType" containerType="SINGLE" label="payRateType" name="payRateType" type="string"/>
+<Field __index="15" __sourcePath="{}/object/phone" containerType="SINGLE" label="phone" name="phone" type="string"/>
+<Field __index="16" __sourcePath="{}/object/postal" containerType="SINGLE" label="postal" name="postal" type="string"/>
+<Field __index="17" __sourcePath="{}/object/reqID" containerType="SINGLE" label="reqID" name="reqID" type="string"/>
+<Field __index="18" __sourcePath="{}/object/startDate" containerType="SINGLE" label="startDate" name="startDate" type="string"/>
+<Field __index="19" __sourcePath="{}/object/state" containerType="SINGLE" label="state" name="state" type="string"/>
+<Field __index="20" __sourcePath="{}/object/timeType" containerType="SINGLE" label="timeType" name="timeType" type="string"/>
+<Field __index="21" __sourcePath="{}/object/title" containerType="SINGLE" label="title" name="title" type="string"/>
+<Field __index="22" __sourcePath="{}/object/zip" containerType="SINGLE" label="zip" name="zip" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Pojo READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="addr1" trim="true" xpath="addr1"/>
+  <Mapping cloverField="basePay" trim="true" xpath="basePay"/>
+  <Mapping cloverField="basePayCurrency" trim="true" xpath="basePayCurrency"/>
+  <Mapping cloverField="basePayFreq" trim="true" xpath="basePayFreq"/>
+  <Mapping cloverField="city" trim="true" xpath="city"/>
+  <Mapping cloverField="country" trim="true" xpath="country"/>
+  <Mapping cloverField="eeType" trim="true" xpath="eeType"/>
+  <Mapping cloverField="email" trim="true" xpath="email"/>
+  <Mapping cloverField="firstName" trim="true" xpath="firstName"/>
+  <Mapping cloverField="hireDate" trim="true" xpath="hireDate"/>
+  <Mapping cloverField="jobProfile" trim="true" xpath="jobProfile"/>
+  <Mapping cloverField="lastName" trim="true" xpath="lastName"/>
+  <Mapping cloverField="location" trim="true" xpath="location"/>
+  <Mapping cloverField="mgrID" trim="true" xpath="mgrID"/>
+  <Mapping cloverField="payRateType" trim="true" xpath="payRateType"/>
+  <Mapping cloverField="phone" trim="true" xpath="phone"/>
+  <Mapping cloverField="postal" trim="true" xpath="postal"/>
+  <Mapping cloverField="reqID" trim="true" xpath="reqID"/>
+  <Mapping cloverField="startDate" trim="true" xpath="startDate"/>
+  <Mapping cloverField="state" trim="true" xpath="state"/>
+  <Mapping cloverField="timeType" trim="true" xpath="timeType"/>
+  <Mapping cloverField="title" trim="true" xpath="title"/>
+  <Mapping cloverField="zip" trim="true" xpath="zip"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <typed-object-ref type-ref="org.mule.templates.Worker"/>
+  <typed-object type="org.mule.templates.Worker">
+    <typed-object-ref name="addr1" type-ref="java.lang.String"/>
+    <typed-object-ref name="basePay" type-ref="java.lang.String"/>
+    <typed-object-ref name="basePayCurrency" type-ref="java.lang.String"/>
+    <typed-object-ref name="basePayFreq" type-ref="java.lang.String"/>
+    <typed-object-ref name="city" type-ref="java.lang.String"/>
+    <typed-object-ref name="country" type-ref="java.lang.String"/>
+    <typed-object-ref name="eeType" type-ref="java.lang.String"/>
+    <typed-object-ref name="email" type-ref="java.lang.String"/>
+    <typed-object-ref name="firstName" type-ref="java.lang.String"/>
+    <typed-object-ref name="hireDate" type-ref="java.lang.String"/>
+    <typed-object-ref name="jobProfile" type-ref="java.lang.String"/>
+    <typed-object-ref name="lastName" type-ref="java.lang.String"/>
+    <typed-object-ref name="location" type-ref="java.lang.String"/>
+    <typed-object-ref name="mgrID" type-ref="java.lang.String"/>
+    <typed-object-ref name="payRateType" type-ref="java.lang.String"/>
+    <typed-object-ref name="phone" type-ref="java.lang.String"/>
+    <typed-object-ref name="postal" type-ref="java.lang.String"/>
+    <typed-object-ref name="reqID" type-ref="java.lang.String"/>
+    <typed-object-ref name="startDate" type-ref="java.lang.String"/>
+    <typed-object-ref name="state" type-ref="java.lang.String"/>
+    <typed-object-ref name="timeType" type-ref="java.lang.String"/>
+    <typed-object-ref name="title" type-ref="java.lang.String"/>
+    <typed-object-ref name="zip" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+</schema-object>
+]]></attr>
+</Node>
+<Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Pojo WRITER" guiX="900" guiY="20" id="BEAN_WRITER0" type="BEAN_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <businessProcessParameters>
+    <autoComplete>$0.autoComplete</autoComplete>
+    <commentData>
+      <comment>$0.comment</comment>
+      <workerReference>
+        <descriptor>$0.descriptor</descriptor>
+      </workerReference>
+    </commentData>
+    <runNow>$0.runNow</runNow>
+  </businessProcessParameters>
+  <changePreferredNameData>
+    <nameData>
+      <countryReference>
+        <clover:collection clover:name="ID">
+          <item clover:inPort="2" clover:key="__parent_id" clover:parentKey="__id">
+            <type>$2.type</type>
+            <value>$2.value</value>
+          </item>
+        </clover:collection>
+        <descriptor>$0.descriptor_1</descriptor>
+      </countryReference>
+      <firstName>$0.firstName</firstName>
+      <formattedName>$0.formattedName</formattedName>
+      <fullNameForSingaporeAndMalaysia>$0.fullNameForSingaporeAndMalaysia</fullNameForSingaporeAndMalaysia>
+      <lastName>$0.lastName</lastName>
+      <localNameDetailData>
+        <firstName>$0.firstName_1</firstName>
+        <firstName2>$0.firstName2</firstName2>
+        <lastName>$0.lastName_1</lastName>
+        <lastName2>$0.lastName2</lastName2>
+        <localName>$0.localName</localName>
+        <localScript>$0.localScript</localScript>
+        <middleName>$0.middleName</middleName>
+        <middleName2>$0.middleName2</middleName2>
+        <secondaryLastName>$0.secondaryLastName</secondaryLastName>
+        <secondaryLastName2>$0.secondaryLastName2</secondaryLastName2>
+      </localNameDetailData>
+      <middleName>$0.middleName_1</middleName>
+      <prefixData>
+        <salutationReference>
+          <descriptor>$0.descriptor_2</descriptor>
+        </salutationReference>
+        <titleReference>
+          <descriptor>$0.descriptor_3</descriptor>
+        </titleReference>
+      </prefixData>
+      <reportingName>$0.reportingName</reportingName>
+      <secondaryLastName>$0.secondaryLastName_1</secondaryLastName>
+      <suffixData>
+        <academicSuffixReference>
+          <descriptor>$0.descriptor_4</descriptor>
+        </academicSuffixReference>
+        <hereditarySuffixReference>
+          <descriptor>$0.descriptor_5</descriptor>
+        </hereditarySuffixReference>
+        <honorarySuffixReference>
+          <descriptor>$0.descriptor_6</descriptor>
+        </honorarySuffixReference>
+        <professionalSuffixReference>
+          <descriptor>$0.descriptor_7</descriptor>
+        </professionalSuffixReference>
+        <religiousSuffixReference>
+          <descriptor>$0.descriptor_8</descriptor>
+        </religiousSuffixReference>
+        <royalSuffixReference>
+          <descriptor>$0.descriptor_9</descriptor>
+        </royalSuffixReference>
+        <socialSuffixReference>
+          <descriptor>$0.descriptor_10</descriptor>
+        </socialSuffixReference>
+      </suffixData>
+    </nameData>
+    <useLegalNameAsPreferredName>$0.useLegalNameAsPreferredName</useLegalNameAsPreferredName>
+    <workerReference>
+      <clover:collection clover:name="ID">
+        <item clover:inPort="1" clover:key="__parent_id" clover:parentKey="__id">
+          <type>$1.type</type>
+          <value>$1.value</value>
+        </item>
+      </clover:collection>
+      <descriptor>$0.descriptor_11</descriptor>
+    </workerReference>
+  </changePreferredNameData>
+  <version>$0.version</version>
+</object>]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <typed-object-ref type-ref="com.workday.hr.ChangePreferredNameRequestType"/>
+  <typed-object type="java.lang.Boolean"/>
+  <typed-object type="com.workday.hr.WorkerObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.BusinessProcessParametersType">
+    <typed-object-ref name="autoComplete" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="commentData" type-ref="com.workday.hr.BusinessProcessCommentDataType"/>
+    <typed-object-ref name="runNow" type-ref="java.lang.Boolean"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CountryObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="com.workday.hr.LocalPersonNameDetailDataType">
+    <typed-object-ref name="firstName" type-ref="java.lang.String"/>
+    <typed-object-ref name="firstName2" type-ref="java.lang.String"/>
+    <typed-object-ref name="lastName" type-ref="java.lang.String"/>
+    <typed-object-ref name="lastName2" type-ref="java.lang.String"/>
+    <typed-object-ref name="localName" type-ref="java.lang.String"/>
+    <typed-object-ref name="localScript" type-ref="java.lang.String"/>
+    <typed-object-ref name="middleName" type-ref="java.lang.String"/>
+    <typed-object-ref name="middleName2" type-ref="java.lang.String"/>
+    <typed-object-ref name="secondaryLastName" type-ref="java.lang.String"/>
+    <typed-object-ref name="secondaryLastName2" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.BusinessProcessCommentDataType">
+    <typed-object-ref name="comment" type-ref="java.lang.String"/>
+    <typed-object-ref name="workerReference" type-ref="com.workday.hr.WorkerObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.PersonNamePrefixDataType">
+    <typed-object-ref name="salutationReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="titleReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.ChangePreferredNameRequestType">
+    <typed-object-ref name="businessProcessParameters" type-ref="com.workday.hr.BusinessProcessParametersType"/>
+    <typed-object-ref name="changePreferredNameData" type-ref="com.workday.hr.ChangePreferredNameBusinessProcessDataType"/>
+    <typed-object-ref name="version" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.WorkerObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.WorkerObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.PersonNameSuffixDataType">
+    <typed-object-ref name="academicSuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="hereditarySuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="honorarySuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="professionalSuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="religiousSuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="royalSuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+    <typed-object-ref name="socialSuffixReference" type-ref="com.workday.hr.CountryPredefinedPersonNameComponentValueObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.ChangePreferredNameBusinessProcessDataType">
+    <typed-object-ref name="nameData" type-ref="com.workday.hr.PersonNameDetailDataType"/>
+    <typed-object-ref name="useLegalNameAsPreferredName" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="workerReference" type-ref="com.workday.hr.WorkerObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.PersonNameDetailDataType">
+    <typed-object-ref name="countryReference" type-ref="com.workday.hr.CountryObjectType"/>
+    <typed-object-ref name="firstName" type-ref="java.lang.String"/>
+    <typed-object-ref name="formattedName" type-ref="java.lang.String"/>
+    <typed-object-ref name="fullNameForSingaporeAndMalaysia" type-ref="java.lang.String"/>
+    <typed-object-ref name="lastName" type-ref="java.lang.String"/>
+    <typed-object-ref name="localNameDetailData" type-ref="com.workday.hr.LocalPersonNameDetailDataType"/>
+    <typed-object-ref name="middleName" type-ref="java.lang.String"/>
+    <typed-object-ref name="prefixData" type-ref="com.workday.hr.PersonNamePrefixDataType"/>
+    <typed-object-ref name="reportingName" type-ref="java.lang.String"/>
+    <typed-object-ref name="secondaryLastName" type-ref="java.lang.String"/>
+    <typed-object-ref name="suffixData" type-ref="com.workday.hr.PersonNameSuffixDataType"/>
+  </typed-object>
+</schema-object>
+]]></attr>
+<attr name="__metadata"><![CDATA[true]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; workerReference 'ID'" guiX="460" guiY="120" id="FOREACH_OBJECT_ID" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = input.mgrID;
+output.type = "Employee_ID";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; countryReference 'ID'" guiX="460" guiY="220" id="FOREACH_OBJECT_ID1" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = "USA";
+output.type = "ISO_3166-1_Alpha-3_Code";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'object'" guiX="460" guiY="20" id="FOREACH_OBJECT_OBJECT" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.firstName = input.firstName;
+output.lastName = input.lastName;]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Duplicate Employee" guiX="240" guiY="20" id="SIMPLE_COPY0" type="SIMPLE_COPY"/>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge2" inPort="Port 0 (in)" metadata="d4814851-47ad-4391-9351-880dde782b74" outPort="Port 0 (out)" toNode="SIMPLE_COPY0:0"/>
+<Edge debugMode="true" fromNode="FOREACH_OBJECT_ID:0" guiBendpoints="" id="Edge4" inPort="Port 1 (in)" metadata="f268d49c-5525-47dd-a459-921551fe88d3" outPort="Port 0 (out)" toNode="BEAN_WRITER0:1"/>
+<Edge debugMode="true" fromNode="FOREACH_OBJECT_ID1:0" guiBendpoints="" id="Edge6" inPort="Port 2 (in)" metadata="b8452f02-d955-4a61-9f9c-12bdff513f7b" outPort="Port 0 (out)" toNode="BEAN_WRITER0:2"/>
+<Edge debugMode="true" fromNode="FOREACH_OBJECT_OBJECT:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="6c62ebc7-4379-4e84-abcd-66c2ad5b2474" outPort="Port 0 (out)" toNode="BEAN_WRITER0:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="d4814851-47ad-4391-9351-880dde782b74" outPort="Port 0 (out)" toNode="FOREACH_OBJECT_OBJECT:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:1" guiBendpoints="" id="Edge3" inPort="Port 0 (in)" metadata="d4814851-47ad-4391-9351-880dde782b74" outPort="Port 1 (out)" toNode="FOREACH_OBJECT_ID:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:2" guiBendpoints="" id="Edge5" inPort="Port 0 (in)" metadata="d4814851-47ad-4391-9351-880dde782b74" outPort="Port 2 (out)" toNode="FOREACH_OBJECT_ID1:0"/>
+</Phase>
+</Graph>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+
+
+	<data-mapper:config name="Pojo_To_ChangePreferredNameRequestType" transformationGraphPath="pojo_to_changepreferrednamerequesttype.grf" doc:name="Pojo_To_ChangePreferredNameRequestType"/>
+    <servicenow:config name="ServiceNow_Test" username="${snow.test.user}" password="${snow.test.password}" serviceEndpoint="${snow.endpoint}" doc:name="ServiceNow"/>
+    <wd-hr:config name="Workday_Human_Resource_Test" doc:name="Workday Human Resource" hrEndpoint="${wday.endpoint}" hrPassword="${wday.test.password}" hrUser="${wday.test.user}">
+        <wd-hr:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
+    </wd-hr:config>
+
+    <sub-flow name="insertUserInServiceNowFlow" >
+        <servicenow:insert config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow"/>
+
+        <logger level="INFO" message="Insert User in Service Now result: #[payload]" doc:name="Logger"/>
+    </sub-flow>
+    <sub-flow name="updateUserInServiceNowFlow">
+        <servicenow:update config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow"/>
+        <logger message="Update User in Service Now result: #[payload]" level="INFO" doc:name="Logger"/>
+    </sub-flow>
+    <sub-flow name="queryUserFromServiceNowFlow" >
+        <servicenow:get-records config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow">
+        </servicenow:get-records>
+
+        <logger level="INFO" message="Query user from Service Now result: #[payload]" doc:name="Logger"/>
+    </sub-flow>
+
+    
+    <sub-flow name="queryWorkerFromWorkdayFlow" >
+
+        <wd-hr:get-workers config-ref="Workday_Human_Resource_Test" doc:name="Workday Human Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.getWorker(payload)]"/>
+    </sub-flow>
+
+    
+    <sub-flow name="updateWorkerInWorkdayFlow" >
+        <data-mapper:transform config-ref="Pojo_To_ChangePreferredNameRequestType" doc:name="Pojo To ChangePreferredNameRequestType"/>
+        <wd-hr:change-preferred-name config-ref="Workday_Human_Resource_Test" doc:name="Workday Human Resource"/>
+    </sub-flow>
+
+</mule>
