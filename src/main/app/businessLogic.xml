@@ -39,7 +39,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
                 <enricher source="#[payload]" target="#[recordVars['userInTargetInstance']]" doc:name="store user">
                 	<servicenow:get-records config-ref="ServiceNow" type="SYS_USER" doc:name="Get Users from ServiceNow">
-
+                        <servicenow:get-records-request>
+                            <servicenow:get-records-request key="userName">#[recordVars['workDayId']]</servicenow:get-records-request>
+                        </servicenow:get-records-request>
             		</servicenow:get-records>
                 </enricher>
             </batch:step>
