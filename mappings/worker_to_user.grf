@@ -11399,14 +11399,14 @@
 //START -> DO NOT REMOVE
 output.__id = input.__id;
 //END -> DO NOT REMOVE
-output.name = input.name;
+output.name = input.formattedName_1;
 output.active = input.active;
-output.firstName = input.firstName;
-output.lastName = input.lastName;
-output.middleName = input.middleName;
+output.firstName = input.firstName_2;
+output.lastName = input.lastName_2;
+output.middleName = input.middleName_3;
 output.email = input.EmailRule;
 output.country = input.CountryRule;
-output.employeeNumber = input.firstName + "." + input.lastName;
+output.employeeNumber = input.firstName_2 + "." + input.lastName_2;
 output.homePhone = input.PhoneRule;
 output.zip = input.ZipCodeRule;
 output.street = input.StreetRule;

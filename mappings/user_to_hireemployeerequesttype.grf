@@ -10496,7 +10496,9 @@ output.__id = input.__id;
 output.firstName_4 = input.firstName;
 output.lastName_4 = input.lastName;
 output.middleName_5 = input.middleName;
-]]></attr>
+output.firstName_6 = input.firstName;
+output.lastName_6 = input.lastName;
+output.middleName_7 = input.middleName;]]></attr>
 </Node>
 <Node enabled="enabled" guiName="Foreach 'object' -&gt; 'payPlanSubData'" guiX="460" guiY="420" id="FOREACH_OBJECT_PAY_PLAN_SUB_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
 <attr name="melScript"><![CDATA[//MEL
