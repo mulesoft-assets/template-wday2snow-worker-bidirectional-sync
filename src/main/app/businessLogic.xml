@@ -84,6 +84,16 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
             <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExist" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] == null || recordVars['workerInTargetInstance'].responseData == null)]">
                 <data-mapper:transform config-ref="User_To_HireEmployeeRequestType" doc:name="User To HireEmployeeRequestType">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="defaultOrganization">${wday.organization}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCity">${wday.city}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultJobProfile">${wday.jobprofileId}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCurrency">${wday.currency}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCountry">${wday.country}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultPostalCode">${wday.postalCode}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultLocation">${wday.location}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultState">${wday.state}</data-mapper:input-argument>
+                    </data-mapper:input-arguments>
                 </data-mapper:transform>
                 <wd-staffing:hire-employee config-ref="Workday_Staffing" doc:name="Hire Employee"/>
                 <batch:set-record-variable variableName="workerId" value="#[payload.employeeReference.getID().get(1).getValue()]" doc:name="store Worker ID"/>
@@ -99,6 +109,16 @@ payload = userMap;
             </batch:step>
             <batch:step name="updateWorkerInWorkdayIfWorkerExists" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] != null || recordVars['workerInTargetInstance'].responseData != null)]">
                 <data-mapper:transform config-ref="User_To_MaintainContactInformationForPersonEventRequestType" doc:name="User To MaintainContactInformationForPersonEventRequestType">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="defaultOrganization">${wday.organization}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCity">${wday.city}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultJobProfile">${wday.jobprofileId}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCurrency">${wday.currency}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultCountry">${wday.country}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultPostalCode">${wday.postalCode}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultLocation">${wday.location}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="defaultState">${wday.state}</data-mapper:input-argument>
+                    </data-mapper:input-arguments>
 
                 </data-mapper:transform>
                 <wd-hr:maintain-contact-information config-ref="Workday_Human_Resource" doc:name="Update Contact Information"/>
