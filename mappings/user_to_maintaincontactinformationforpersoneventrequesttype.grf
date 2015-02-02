@@ -1114,7 +1114,7 @@ output.value = "HOME";]]></attr>
 //START -> DO NOT REMOVE
 output.__id = input.__id;
 //END -> DO NOT REMOVE
-output.effectiveDate = (isnull(input.sysCreatedOn) ? null : str2calendar(input.sysCreatedOn,"yyyy-MM-dd HH:mm:ss"));]]></attr>
+output.effectiveDate = (isnull(input.sysUpdatedOn) ? null : str2calendar(input.sysCreatedOn,"yyyy-MM-dd HH:mm:ss"));]]></attr>
 </Node>
 <Node enabled="enabled" guiName="Foreach 'object' -&gt; 'phoneData'" guiX="460" guiY="420" id="FOREACH_OBJECT_PHONE_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
 <attr name="melScript"><![CDATA[//MEL
