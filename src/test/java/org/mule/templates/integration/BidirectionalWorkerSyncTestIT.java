@@ -227,8 +227,8 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		GetRecordsResponse snowResponse = (GetRecordsResponse) object;
 		GetRecordsResult user = snowResponse.getGetRecordsResult().get(0);
 		
-		Assert.assertEquals("The user should have been sync and the first name must match", workdayUser.get(VAR_FIRST_NAME), user.getFirstName());
-		Assert.assertEquals("The user should have been sync and the last name must match", workdayUser.get(VAR_LAST_NAME), user.getLastName());
+		Assert.assertEquals("The user should have been sync and the first name must match", worker.getFirstName(), user.getFirstName());
+		Assert.assertEquals("The user should have been sync and the last name must match", worker.getLastName(), user.getLastName());
 	}
 	
 	private WorkerType queryWorkdayWorker(String id,
