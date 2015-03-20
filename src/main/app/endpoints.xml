@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -18,6 +21,7 @@ http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/ba
 			<watermark variable="lastQueryDateA" default-expression="${watermark.default.expression}" update-expression="#[groovy: new Date(System.currentTimeMillis() - 10000).format('yyyy-MM-dd HH:mm:ss')]"/>
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
+                <logger message="Fetching Workday updates: #[flowVars['lastQueryDateA']] - #[groovy: new Date().format('yyyy-MM-dd HH:mm:ss')]" level="INFO" doc:name="Logger"/>
                 <wd-hr:get-workers config-ref="Workday_Human_Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.create(lastQueryDateA,${poll.frequencyMillis}, ${poll.offset})]" doc:name="Fetch Workers from Workday"/>
             </processor-chain>
 		</poll>
@@ -40,6 +44,7 @@ http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/ba
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
                 <expression-component doc:name="Apply GMT Time Zone Offset to lastQueryDateB" doc:description="All times are stored in the Service Now platform in Coordinated Universal Time (UTC). They are displayed globally based on the system time zone, but are displayed to users in their local time zone according to user preferences (http://wiki.servicenow.com/index.php?title=Using_Time_Zones)."><![CDATA[payload = org.mule.templates.util.DateUtil.applyTimeZone(flowVars.lastQueryDateB,'yyyy-MM-dd HH:mm:ss','GMT');]]></expression-component>
+                <logger message="Fetching ServiceNow updates: #[flowVars['lastQueryDateB']] - #[groovy: new Date().format('yyyy-MM-dd HH:mm:ss')]" level="INFO" doc:name="Logger"/>
 
 
                 <servicenow:get-records config-ref="ServiceNow" type="SYS_USER" doc:name="Fetch Users from Service Now">

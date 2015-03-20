@@ -51,12 +51,14 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
             </batch:step>
             <batch:step name="InsertUserInServiceNowIfItDoesntExist" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty()]">
+                <logger message="inserting user to ServiceNow: #[payload]" level="INFO" doc:name="Logger"/>
                 <servicenow:insert config-ref="ServiceNow" type="SYS_USER" doc:name="Insert user to ServiceNow">
 
                 </servicenow:insert>
             </batch:step>
             <batch:step name="UpdateUserInServiceNowIfItExists" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty() == false]">
                 <expression-component doc:name="Add the servicenow Id to the object to be updated"><![CDATA[payload.put('sysId', recordVars['userInTargetInstance'].getGetRecordsResult().get(0).getSysId());]]></expression-component>
+                <logger message="updating user in ServiceNow: #[payload]" level="INFO" doc:name="Logger"/>
                 <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update user in ServiceNow">
 
                 </servicenow:update>
@@ -64,6 +66,8 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 
         </batch:process-records>
         <batch:on-complete>
+        	<json:object-to-json-transformer doc:name="transform BatchJobInstance to JSON"/>
+            <logger message="Migration process has finished: #[payload]" level="INFO" doc:name="Log the batch result"/>
             <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
         </batch:on-complete>
     </batch:job>
@@ -97,6 +101,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                         <data-mapper:input-argument key="defaultState">${wday.state}</data-mapper:input-argument>
                     </data-mapper:input-arguments>
                 </data-mapper:transform>
+                <logger message="inserting worker to Workday: #[payload]" level="INFO" doc:name="Logger"/>
                 <wd-staffing:hire-employee config-ref="Workday_Staffing" doc:name="Hire Employee"/>
                 <batch:set-record-variable variableName="workerId" value="#[payload.employeeReference.getID().get(1).getValue()]" doc:name="store Worker ID"/>
                 <expression-component doc:name="prepare User for update"><![CDATA[java.util.Map userMap = new java.util.LinkedHashMap();
@@ -123,15 +128,20 @@ payload = userMap;
                     </data-mapper:input-arguments>
 
                 </data-mapper:transform>
+                <logger message="updating worker in Workday: #[payload]" level="INFO" doc:name="Logger"/>
                 <wd-hr:maintain-contact-information config-ref="Workday_Human_Resource" doc:name="Update Contact Information"/>
                 <set-payload value="#[recordVars['snowUser']]" doc:name="Set Payload to Service Now User"/>
                 <data-mapper:transform config-ref="User_To_ChangePreferredNameRequestType" doc:name="User To ChangePreferredNameRequestType">
 
                 </data-mapper:transform>
+                <logger message="updating worker in Workday: #[payload]" level="INFO" doc:name="Logger"/>
                 <wd-hr:change-preferred-name config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
+
             </batch:step>
         </batch:process-records>
         <batch:on-complete>
+        	<json:object-to-json-transformer doc:name="transform BatchJobInstance to JSON"/>
+            <logger message="Migration process has finished: #[payload]" level="INFO" doc:name="Log the batch result"/>
             <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
         </batch:on-complete>
     </batch:job>
