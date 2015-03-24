@@ -2,7 +2,6 @@
 <mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.6.1.ee" schemaVersion="3.5.0.0">
     <name>template-wday2snow-worker-bidirectional-sync</name>
     <description></description>
-    <muleExtension name="Workday Absence" qualifier="org.mule.tooling.ui.contribution.wd-absence"/>
     <muleExtension name="Workday Integrations" qualifier="org.mule.tooling.ui.contribution.wd-integration"/>
     <muleExtension name="Workday Human Resource" qualifier="org.mule.tooling.ui.contribution.wd-hr"/>
     <muleExtension name="Workday Staffing" qualifier="org.mule.tooling.ui.contribution.wd-staffing"/>

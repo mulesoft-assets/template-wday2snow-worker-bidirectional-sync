@@ -22,7 +22,6 @@
 	<properties>
 		<wday.st.version>4.1.1</wday.st.version>
 		<wday.int.version>4.1.0</wday.int.version>	
-		<wday.abs.version>4.1.1</wday.abs.version>	
 	</properties>
 
 	<build>
@@ -40,10 +39,6 @@
 						<inclusion>
                             <groupId>org.mule.modules</groupId>
                             <artifactId>mule-module-workday-integrations</artifactId>
-                        </inclusion>
-                    <inclusion>
-                            <groupId>org.mule.modules</groupId>
-                            <artifactId>mule-module-workday-absencemanagement</artifactId>
                         </inclusion>
                     <inclusion>
                             <groupId>org.mule.modules</groupId>
@@ -70,11 +65,6 @@
             <artifactId>mule-module-spring-config</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-workday-absencemanagement</artifactId>
-            <version>${wday.abs.version}</version>
         </dependency>
     	<dependency>
             <groupId>org.mule.modules</groupId>
