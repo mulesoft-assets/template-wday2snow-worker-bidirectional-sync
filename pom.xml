@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.mule.templates</groupId>
 		<artifactId>templates-tooling-parent-pom</artifactId>
-		<version>1.0.13</version>
+		<version>1.1.6</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -20,8 +20,9 @@
 	</scm>
 
 	<properties>
-		<workday.version>4.0.1</workday.version>
-		<snow.version>4.0.0</snow.version>		
+		<wday.st.version>4.1.1</wday.st.version>
+		<wday.int.version>4.1.0</wday.int.version>	
+		<wday.abs.version>4.1.1</wday.abs.version>	
 	</properties>
 
 	<build>
@@ -61,39 +62,34 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-workday</artifactId>
-			<version>${workday.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-module-servicenow</artifactId>
 			<version>${snow.version}</version>
 		</dependency>
-    <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-workday-integrations</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-    <dependency>
+    	<dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-spring-config</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-workday-absencemanagement</artifactId>
-            <version>4.1.1</version>
+            <version>${wday.abs.version}</version>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-workday-humanresources</artifactId>
-            <version>4.1.1</version>
+            <version>${wday.hr.version}</version>
         </dependency>
-    <dependency>
+    	<dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-workday-staffing</artifactId>
-            <version>4.1.1</version>
+            <version>${wday.st.version}</version>
+        </dependency>
+      	<dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-workday-integrations</artifactId>
+            <version>${wday.int.version}</version>
         </dependency>
     <dependency>
             <groupId>com.mulesoft.muleesb.modules</groupId>

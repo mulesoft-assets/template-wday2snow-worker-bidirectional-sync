@@ -4,9 +4,7 @@
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -16,7 +14,7 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
 http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schema/mule/wd-integration/current/mule-wd-integration.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd" version="EE-3.5.2">
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd" version="EE-3.6.1">
     <data-mapper:config name="Worker_to_User" transformationGraphPath="worker_to_user.grf" doc:name="Worker_to_User"/>
     <data-mapper:config name="User_To_ChangePreferredNameRequestType" transformationGraphPath="user_to_changepreferrednamerequesttype.grf" doc:name="User_To_ChangePreferredNameRequestType"/>
     <data-mapper:config name="User_To_MaintainContactInformationForPersonEventRequestType" transformationGraphPath="user_to_maintaincontactinformationforpersoneventrequesttype.grf" doc:name="User_To_MaintainContactInformationForPersonEventRequestType"/>
