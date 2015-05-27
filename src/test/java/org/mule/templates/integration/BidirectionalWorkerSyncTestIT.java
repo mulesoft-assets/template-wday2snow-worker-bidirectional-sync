@@ -17,7 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -101,7 +106,13 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
         				+ cal.get(Calendar.DAY_OF_MONTH) + ","
         				+ cal.get(Calendar.HOUR_OF_DAY) + ","
         				+ cal.get(Calendar.MINUTE) + ","
-        				+ cal.get(Calendar.SECOND) + ") ]");  
+        				+ cal.get(Calendar.SECOND) + ") ]");
+
+		DateTime dt = new DateTime(cal.getTimeInMillis());
+		dt = dt.withZone(DateTimeZone.forID("GMT"));
+        System.err.println("aaaa: " + dt.toString());
+        System.setProperty(
+        		"snow.watermark.default.expression", dt.toString());
 	}
 
 	@Before
