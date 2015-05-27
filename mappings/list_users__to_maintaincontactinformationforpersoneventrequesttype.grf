@@ -1,0 +1,1041 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Admin" created="Wed May 27 10:43:48 CEST 2015" description="List&lt;users&gt; To MaintainContactInformationForPersonEventRequestType" guiVersion="3.4.4.P" id="1432721182935" licenseCode="Unlicensed" licenseType="Unknown" modified="Wed May 27 10:43:48 CEST 2015" modifiedBy="Admin" name="List_users__To_MaintainContactInformationForPersonEventRequestType" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="8" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="396cdbc4-06fe-4d7e-984f-5e28d2a51acb">
+<Record fieldDelimiter="," name="addressData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="8" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressFormatType" containerType="SINGLE" label="addressFormatType" name="addressFormatType" type="string"/>
+<Field __index="9" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressID" containerType="SINGLE" label="addressID" name="addressID" type="string"/>
+<Field __index="15" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="18" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_1" type="string"/>
+<Field __index="21" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryRegionReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_2" type="string"/>
+<Field __index="22" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/defaultedBusinessSiteAddress" containerType="SINGLE" label="defaultedBusinessSiteAddress" name="defaultedBusinessSiteAddress" type="boolean"/>
+<Field __index="23" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/delete" containerType="SINGLE" label="delete" name="delete" type="boolean"/>
+<Field __index="24" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/doNotReplaceAll" containerType="SINGLE" label="doNotReplaceAll" name="doNotReplaceAll" type="boolean"/>
+<Field __dmType="Calendar" __index="25" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/effectiveDate" containerType="SINGLE" label="effectiveDate" name="effectiveDate" type="string"/>
+<Field __index="26" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/formattedAddress" containerType="SINGLE" label="formattedAddress" name="formattedAddress" type="string"/>
+<Field __dmType="Calendar" __index="27" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/lastModified" containerType="SINGLE" label="lastModified" name="lastModified" type="string"/>
+<Field __index="28" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/municipality" containerType="SINGLE" label="municipality" name="municipality" type="string"/>
+<Field __index="29" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/municipalityLocal" containerType="SINGLE" label="municipalityLocal" name="municipalityLocal" type="string"/>
+<Field __index="30" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/postalCode" containerType="SINGLE" label="postalCode" name="postalCode" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="10" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressLineData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="f2d9527a-1a42-4b32-8117-bc1fe879cf39">
+<Record fieldDelimiter="," name="addressLineData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="10" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressLineData/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="11" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressLineData/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="12" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressLineData/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="49" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="d23c107a-3bc4-4065-a71b-b356356835b3">
+<Record fieldDelimiter="," name="emailAddressData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="49" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/emailAddress" containerType="SINGLE" label="emailAddress" name="emailAddress" type="string"/>
+<Field __index="50" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/emailComment" containerType="SINGLE" label="emailComment" name="emailComment" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="3" __referenceCounter="0" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="104a0ab8-3071-4c90-871d-0e9f907d0152">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="3" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="4" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="13" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="cf20874c-3102-46fe-b3bc-52bdbffae5f0">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="13" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="14" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/addressReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="16" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="07a3f2ce-ddfc-4dae-b14f-3bb02d65f8e8">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="16" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="17" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="19" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryRegionReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="1f4a3e60-fcbb-4f57-b0dd-ba348a7112fc">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="19" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryRegionReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="20" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/countryRegionReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="40" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData/typeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6b1dc30a-0131-4469-9241-3aba1456b20f" _parent_id="__parent_id" _type="Output" id="aeb642e3-831c-43d2-8648-9d949f6bb34d">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="40" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData/typeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="41" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData/typeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="43" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="b30b712d-9e53-4fa4-b3b2-bac0c84df0b2" _parent_id="__parent_id" _type="Output" id="f3bcb0df-fdac-4deb-8723-144e70d0dc54">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="43" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="44" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="46" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForTenantedReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="d8a706c6-02d6-40b9-878e-d8648873261a" _parent_id="__parent_id" _type="Output" id="2efd63e0-cf1e-486c-93cd-47b584121ea8">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="46" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForTenantedReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="47" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForTenantedReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="54" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData/typeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="1b8d15e5-c293-4df0-aad0-6666b67c8a6e" _parent_id="__parent_id" _type="Output" id="d37e5c57-b145-4e28-a663-aa2b20c07d91">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="54" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData/typeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="55" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData/typeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="57" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="8158e7f2-c177-4180-8f3f-aef64ff9e3fc" _parent_id="__parent_id" _type="Output" id="3b549a74-3266-4e88-877c-e7576850e091">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="57" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="58" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="60" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForTenantedReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="5f1d71ec-4d83-4f1b-8c34-df26561fa14e" _parent_id="__parent_id" _type="Output" id="f0645d3e-cf4c-407f-9cf4-7f8eec8cc8a3">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="60" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForTenantedReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="61" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForTenantedReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="65" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerTypeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="7b9504bc-c82b-4b5b-b1c8-4ce4f8a4ff0c" _parent_id="__parent_id" _type="Output" id="f740c4e8-d13f-4bdd-9aa2-ccf9b126472f">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="65" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerTypeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="66" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerTypeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="71" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData/typeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="6968d049-3aad-46af-b576-8a9d1328a274" _parent_id="__parent_id" _type="Output" id="891bec4d-848d-45a7-9694-92e415f78317">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="71" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData/typeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="72" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData/typeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="74" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="a681c6b8-707d-4c37-a1d5-2bf5902eda79" _parent_id="__parent_id" _type="Output" id="d12c1f44-48a6-439b-a717-83d3ac348b1c">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="74" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="75" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="77" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForTenantedReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="51551806-9a61-440c-b0dc-0b76ad2d8c35" _parent_id="__parent_id" _type="Output" id="bd2e9ce3-3afc-4e12-883d-a7b9db09e6cd">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="77" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForTenantedReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="78" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForTenantedReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="84" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneDeviceTypeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="db172cde-6536-4d57-8493-275ac4064681" _parent_id="__parent_id" _type="Output" id="4c374219-c868-44c9-8b2c-8b2d5bc804d1">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="84" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneDeviceTypeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="85" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneDeviceTypeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="92" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData/typeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="b899d53b-3b16-4b2d-8109-b62b537e5a4f" _parent_id="__parent_id" _type="Output" id="8ee5f69e-d966-40dc-ad2f-172bfc80d360">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="92" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData/typeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="93" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData/typeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="95" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="36b12772-c971-4f41-90cd-5ca416ac8118" _parent_id="__parent_id" _type="Output" id="8a7208f5-7024-4c1c-bbca-0b7270463bf9">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="95" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="96" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="98" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForTenantedReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="c07b4930-4bf3-46ee-a989-1a2c56ed7519" _parent_id="__parent_id" _type="Output" id="25b6dde5-3076-4878-9fe3-8aaca031d960">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="98" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForTenantedReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="99" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForTenantedReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="104" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData/typeReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="27cab752-c6ea-40d5-9055-a2d5331027b2" _parent_id="__parent_id" _type="Output" id="6b7e8a0f-6079-45da-9e7b-741e7e067742">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="104" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData/typeReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="105" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData/typeReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="107" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="4b79d26f-fe34-440e-bb09-55c8a03be627" _parent_id="__parent_id" _type="Output" id="a650f9ef-bb30-4767-a62f-0d5da9dbdc86">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="107" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="108" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="110" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForTenantedReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="a833711e-1bbd-4654-9d7d-452f4561df67" _parent_id="__parent_id" _type="Output" id="64b3d134-472c-41fc-a319-ff039f341de9">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="110" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForTenantedReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="111" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForTenantedReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="115" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerReference/ID" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="4991eed5-0e34-487c-91fa-b180eaf681cb">
+<Record fieldDelimiter="," name="ID" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="115" __sourcePath="{}/object/maintainContactInformationData/workerReference/ID/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="116" __sourcePath="{}/object/maintainContactInformationData/workerReference/ID/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="63" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="7b9504bc-c82b-4b5b-b1c8-4ce4f8a4ff0c">
+<Record fieldDelimiter="," name="instantMessengerData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="63" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerAddress" containerType="SINGLE" label="instantMessengerAddress" name="instantMessengerAddress" type="string"/>
+<Field __index="64" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerComment" containerType="SINGLE" label="instantMessengerComment" name="instantMessengerComment" type="string"/>
+<Field __index="67" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/instantMessengerTypeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="148f134c-8ce8-4652-a677-0077b4fab14b">
+<Record fieldDelimiter="," name="MaintainContactInformationForPersonEventRequestType" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/object/addOnly" containerType="SINGLE" label="addOnly" name="addOnly" type="boolean"/>
+<Field __index="1" __sourcePath="{}/object/businessProcessParameters/autoComplete" containerType="SINGLE" label="autoComplete" name="autoComplete" type="boolean"/>
+<Field __index="2" __sourcePath="{}/object/businessProcessParameters/commentData/comment" containerType="SINGLE" label="comment" name="comment" type="string"/>
+<Field __index="5" __sourcePath="{}/object/businessProcessParameters/commentData/workerReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="6" __sourcePath="{}/object/businessProcessParameters/runNow" containerType="SINGLE" label="runNow" name="runNow" type="boolean"/>
+<Field __dmType="Calendar" __index="7" __sourcePath="{}/object/maintainContactInformationData/effectiveDate" containerType="SINGLE" label="effectiveDate" name="effectiveDate" type="string"/>
+<Field __index="117" __sourcePath="{}/object/maintainContactInformationData/workerReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor_1" type="string"/>
+<Field __index="118" __sourcePath="{}/object/version" containerType="SINGLE" label="version" name="version" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="80" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="db172cde-6536-4d57-8493-275ac4064681">
+<Record fieldDelimiter="," name="phoneData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="80" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/areaCode" containerType="SINGLE" label="areaCode" name="areaCode" type="string"/>
+<Field __index="81" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/countryISOCode" containerType="SINGLE" label="countryISOCode" name="countryISOCode" type="string"/>
+<Field __index="82" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/formattedPhone" containerType="SINGLE" label="formattedPhone" name="formattedPhone" type="string"/>
+<Field __index="83" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/internationalPhoneCode" containerType="SINGLE" label="internationalPhoneCode" name="internationalPhoneCode" type="string"/>
+<Field __index="86" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneDeviceTypeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="87" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneExtension" containerType="SINGLE" label="phoneExtension" name="phoneExtension" type="string"/>
+<Field __index="88" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/phoneNumber" containerType="SINGLE" label="phoneNumber" name="phoneNumber" type="string"/>
+</Record>
+</Metadata>
+<Metadata _type="Lookup" id="a9c33065-edd1-4ba6-a1cb-4522b16c6c59">
+<Record fieldDelimiter="," name="snow2wdayCountryCodesUpdate" recordDelimiter="&#10;" type="delimited">
+<Field containerType="SINGLE" label="snowCode" name="snowCode" type="string"/>
+<Field containerType="SINGLE" label="wdayCode" name="wdayCode" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="31" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/submunicipalityData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="2acf98ac-0223-40fa-bb47-f7775235b9cc">
+<Record fieldDelimiter="," name="submunicipalityData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="31" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/submunicipalityData/addressComponentName" containerType="SINGLE" label="addressComponentName" name="addressComponentName" type="string"/>
+<Field __index="32" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/submunicipalityData/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="33" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/submunicipalityData/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="34" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/subregionData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="624a0dd4-a385-435a-b540-3dc2c5a0f0a6">
+<Record fieldDelimiter="," name="subregionData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="34" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/subregionData/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+<Field __index="35" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/subregionData/type" containerType="SINGLE" label="type" name="type" type="string"/>
+<Field __index="36" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/subregionData/value" containerType="SINGLE" label="value" name="value" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="39" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="1b52984a-78c7-457b-b096-431492e810e1" _parent_id="__parent_id" _type="Output" id="6b1dc30a-0131-4469-9241-3aba1456b20f">
+<Record fieldDelimiter="," name="typeData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="39" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData/primary" containerType="SINGLE" label="primary" name="primary" type="boolean"/>
+<Field __index="42" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/typeData/typeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="53" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="3bef8cf3-abcc-4a3f-8333-d31b6afccd27" _parent_id="__parent_id" _type="Output" id="1b8d15e5-c293-4df0-aad0-6666b67c8a6e">
+<Record fieldDelimiter="," name="typeData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="53" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData/primary" containerType="SINGLE" label="primary" name="primary" type="boolean"/>
+<Field __index="56" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/typeData/typeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="70" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="2c038cfc-2037-49f4-bacb-12e9c55706b1" _parent_id="__parent_id" _type="Output" id="6968d049-3aad-46af-b576-8a9d1328a274">
+<Record fieldDelimiter="," name="typeData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="70" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData/primary" containerType="SINGLE" label="primary" name="primary" type="boolean"/>
+<Field __index="73" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/typeData/typeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="91" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="266a521f-cc31-4282-8003-79e61f9fb45b" _parent_id="__parent_id" _type="Output" id="b899d53b-3b16-4b2d-8109-b62b537e5a4f">
+<Record fieldDelimiter="," name="typeData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="91" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData/primary" containerType="SINGLE" label="primary" name="primary" type="boolean"/>
+<Field __index="94" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/typeData/typeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="103" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="430eb8c0-33e8-4069-bf3c-d1eb6ba8bad3" _parent_id="__parent_id" _type="Output" id="27cab752-c6ea-40d5-9055-a2d5331027b2">
+<Record fieldDelimiter="," name="typeData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="103" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData/primary" containerType="SINGLE" label="primary" name="primary" type="boolean"/>
+<Field __index="106" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/typeData/typeReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="37" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" _parent_id="__parent_id" _type="Output" id="1b52984a-78c7-457b-b096-431492e810e1">
+<Record fieldDelimiter="," name="usageData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="37" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="38" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/public" containerType="SINGLE" label="public" name="public" type="boolean"/>
+</Record>
+</Metadata>
+<Metadata __index="51" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="d23c107a-3bc4-4065-a71b-b356356835b3" _parent_id="__parent_id" _type="Output" id="3bef8cf3-abcc-4a3f-8333-d31b6afccd27">
+<Record fieldDelimiter="," name="usageData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="51" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="52" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/public" containerType="SINGLE" label="public" name="public" type="boolean"/>
+</Record>
+</Metadata>
+<Metadata __index="68" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="7b9504bc-c82b-4b5b-b1c8-4ce4f8a4ff0c" _parent_id="__parent_id" _type="Output" id="2c038cfc-2037-49f4-bacb-12e9c55706b1">
+<Record fieldDelimiter="," name="usageData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="68" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="69" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/public" containerType="SINGLE" label="public" name="public" type="boolean"/>
+</Record>
+</Metadata>
+<Metadata __index="89" __referenceCounter="1" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="db172cde-6536-4d57-8493-275ac4064681" _parent_id="__parent_id" _type="Output" id="266a521f-cc31-4282-8003-79e61f9fb45b">
+<Record fieldDelimiter="," name="usageData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="89" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="90" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/public" containerType="SINGLE" label="public" name="public" type="boolean"/>
+</Record>
+</Metadata>
+<Metadata __index="101" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="949186e1-8451-45ba-9892-c268cc079a4b" _parent_id="__parent_id" _type="Output" id="430eb8c0-33e8-4069-bf3c-d1eb6ba8bad3">
+<Record fieldDelimiter="," name="usageData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="101" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="102" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/public" containerType="SINGLE" label="public" name="public" type="boolean"/>
+</Record>
+</Metadata>
+<Metadata __index="43" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="1b52984a-78c7-457b-b096-431492e810e1" _parent_id="__parent_id" _type="Output" id="b30b712d-9e53-4fa4-b3b2-bac0c84df0b2">
+<Record fieldDelimiter="," name="useForReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="45" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="57" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="3bef8cf3-abcc-4a3f-8333-d31b6afccd27" _parent_id="__parent_id" _type="Output" id="8158e7f2-c177-4180-8f3f-aef64ff9e3fc">
+<Record fieldDelimiter="," name="useForReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="59" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="74" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="2c038cfc-2037-49f4-bacb-12e9c55706b1" _parent_id="__parent_id" _type="Output" id="a681c6b8-707d-4c37-a1d5-2bf5902eda79">
+<Record fieldDelimiter="," name="useForReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="76" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="95" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="266a521f-cc31-4282-8003-79e61f9fb45b" _parent_id="__parent_id" _type="Output" id="36b12772-c971-4f41-90cd-5ca416ac8118">
+<Record fieldDelimiter="," name="useForReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="97" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="107" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="430eb8c0-33e8-4069-bf3c-d1eb6ba8bad3" _parent_id="__parent_id" _type="Output" id="4b79d26f-fe34-440e-bb09-55c8a03be627">
+<Record fieldDelimiter="," name="useForReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="109" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="46" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForTenantedReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="1b52984a-78c7-457b-b096-431492e810e1" _parent_id="__parent_id" _type="Output" id="d8a706c6-02d6-40b9-878e-d8648873261a">
+<Record fieldDelimiter="," name="useForTenantedReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="48" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/addressData/usageData/useForTenantedReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="60" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForTenantedReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="3bef8cf3-abcc-4a3f-8333-d31b6afccd27" _parent_id="__parent_id" _type="Output" id="5f1d71ec-4d83-4f1b-8c34-df26561fa14e">
+<Record fieldDelimiter="," name="useForTenantedReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="62" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/emailAddressData/usageData/useForTenantedReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="77" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForTenantedReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="2c038cfc-2037-49f4-bacb-12e9c55706b1" _parent_id="__parent_id" _type="Output" id="51551806-9a61-440c-b0dc-0b76ad2d8c35">
+<Record fieldDelimiter="," name="useForTenantedReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="79" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/instantMessengerData/usageData/useForTenantedReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="98" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForTenantedReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="266a521f-cc31-4282-8003-79e61f9fb45b" _parent_id="__parent_id" _type="Output" id="c07b4930-4bf3-46ee-a989-1a2c56ed7519">
+<Record fieldDelimiter="," name="useForTenantedReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="100" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/phoneData/usageData/useForTenantedReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="110" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForTenantedReference" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="430eb8c0-33e8-4069-bf3c-d1eb6ba8bad3" _parent_id="__parent_id" _type="Output" id="a833711e-1bbd-4654-9d7d-452f4561df67">
+<Record fieldDelimiter="," name="useForTenantedReference" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="112" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/usageData/useForTenantedReference/descriptor" containerType="SINGLE" label="descriptor" name="descriptor" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="15" __sourcePath="{}/users" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _type="Input" id="77363cbd-7ba6-4ae8-9854-9ba700d3486b">
+<Record fieldDelimiter="," name="users" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __implementationClass="java.lang.String" __index="0" __sourcePath="{}/users/city" containerType="SINGLE" label="city" name="city" type="string"/>
+<Field __implementationClass="java.lang.String" __index="1" __sourcePath="{}/users/country" containerType="SINGLE" label="country" name="country" type="string"/>
+<Field __implementationClass="java.lang.String" __index="2" __sourcePath="{}/users/email" containerType="SINGLE" label="email" name="email" type="string"/>
+<Field __implementationClass="java.lang.String" __index="3" __sourcePath="{}/users/firstName" containerType="SINGLE" label="firstName" name="firstName" type="string"/>
+<Field __implementationClass="java.lang.String" __index="4" __sourcePath="{}/users/homePhone" containerType="SINGLE" label="homePhone" name="homePhone" type="string"/>
+<Field __implementationClass="java.lang.String" __index="5" __sourcePath="{}/users/lastName" containerType="SINGLE" label="lastName" name="lastName" type="string"/>
+<Field __implementationClass="java.lang.String" __index="6" __sourcePath="{}/users/middleName" containerType="SINGLE" label="middleName" name="middleName" type="string"/>
+<Field __implementationClass="java.lang.String" __index="7" __sourcePath="{}/users/state" containerType="SINGLE" label="state" name="state" type="string"/>
+<Field __implementationClass="java.lang.String" __index="8" __sourcePath="{}/users/street" containerType="SINGLE" label="street" name="street" type="string"/>
+<Field __implementationClass="java.lang.String" __index="9" __sourcePath="{}/users/sysCreatedOn" containerType="SINGLE" label="sysCreatedOn" name="sysCreatedOn" type="string"/>
+<Field __implementationClass="java.lang.String" __index="10" __sourcePath="{}/users/zip" containerType="SINGLE" label="zip" name="zip" type="string"/>
+<Field __implementationClass="java.lang.String" __index="12" __sourcePath="{}/users/sysUpdatedBy" containerType="SINGLE" label="sysUpdatedBy" name="sysUpdatedBy" type="string"/>
+<Field __sourcePath="{}/users/sysUpdatedOn" containerType="SINGLE" label="sysUpdatedOn" name="sysUpdatedOn" type="string"/>
+<Field __sourcePath="{}/users/userName" containerType="SINGLE" label="userName" name="userName" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="101" __referenceCounter="0" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="148f134c-8ce8-4652-a677-0077b4fab14b" _parent_id="__parent_id" _type="Output" id="949186e1-8451-45ba-9892-c268cc079a4b">
+<Record fieldDelimiter="," name="webAddressData" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __index="113" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/webAddress" containerType="SINGLE" label="webAddress" name="webAddress" type="string"/>
+<Field __index="114" __sourcePath="{}/object/maintainContactInformationData/workerContactInformationData/webAddressData/webAddressComment" containerType="SINGLE" label="webAddressComment" name="webAddressComment" type="string"/>
+</Record>
+</Metadata>
+<LookupTable id="snow2wdayCountryCodesUpdate" key="snowCode" metadata="a9c33065-edd1-4ba6-a1cb-4522b16c6c59" name="snow2wdayCountryCodesUpdate" type="simpleLookup">
+<attr name="lookupType"><![CDATA[UserDefined]]></attr>
+<attr name="data"><![CDATA[US,USA
+]]></attr>
+</LookupTable>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry2" input="true" name="defaultOrganization" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry3" input="true" name="defaultCity" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry4" input="true" name="defaultJobProfile" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry5" input="true" name="defaultCurrency" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry6" input="true" name="defaultCountry" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry7" input="true" name="defaultPostalCode" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry8" input="true" name="defaultLocation" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry9" input="true" name="defaultState" output="false" type="string"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Map&lt;k,v&gt; READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="city" trim="true" xpath="city"/>
+  <Mapping cloverField="country" trim="true" xpath="country"/>
+  <Mapping cloverField="email" trim="true" xpath="email"/>
+  <Mapping cloverField="firstName" trim="true" xpath="firstName"/>
+  <Mapping cloverField="homePhone" trim="true" xpath="homePhone"/>
+  <Mapping cloverField="lastName" trim="true" xpath="lastName"/>
+  <Mapping cloverField="middleName" trim="true" xpath="middleName"/>
+  <Mapping cloverField="state" trim="true" xpath="state"/>
+  <Mapping cloverField="street" trim="true" xpath="street"/>
+  <Mapping cloverField="sysCreatedOn" trim="true" xpath="sysCreatedOn"/>
+  <Mapping cloverField="zip" trim="true" xpath="zip"/>
+  <Mapping cloverField="sysUpdatedBy" trim="true" xpath="sysUpdatedBy"/>
+  <Mapping cloverField="sysUpdatedOn" trim="true" xpath="sysUpdatedOn"/>
+  <Mapping cloverField="userName" trim="true" xpath="userName"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+<attr name="__metadata"><![CDATA[true]]></attr>
+</Node>
+<Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Pojo WRITER" guiX="900" guiY="20" id="BEAN_WRITER0" type="BEAN_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="3">
+  <addOnly>$3.addOnly</addOnly>
+  <businessProcessParameters>
+    <autoComplete>$3.autoComplete</autoComplete>
+    <commentData>
+      <comment>$3.comment</comment>
+      <workerReference>
+        <descriptor>$3.descriptor</descriptor>
+      </workerReference>
+    </commentData>
+    <runNow>$3.runNow</runNow>
+  </businessProcessParameters>
+  <maintainContactInformationData>
+    <effectiveDate>$3.effectiveDate</effectiveDate>
+    <workerContactInformationData>
+      <clover:collection clover:name="addressData">
+        <item clover:inPort="0" clover:key="__parent_id" clover:parentKey="__id">
+          <addressFormatType>$0.addressFormatType</addressFormatType>
+          <addressID>$0.addressID</addressID>
+          <clover:collection clover:name="addressLineData">
+            <item clover:inPort="1" clover:key="__parent_id" clover:parentKey="__id">
+              <descriptor>$1.descriptor</descriptor>
+              <type>$1.type</type>
+              <value>$1.value</value>
+            </item>
+          </clover:collection>
+          <addressReference>
+            <descriptor>$0.descriptor</descriptor>
+          </addressReference>
+          <countryReference>
+            <clover:collection clover:name="ID">
+              <item clover:inPort="7" clover:key="__parent_id" clover:parentKey="__id">
+                <type>$7.type</type>
+                <value>$7.value</value>
+              </item>
+            </clover:collection>
+            <descriptor>$0.descriptor_1</descriptor>
+          </countryReference>
+          <countryRegionReference>
+            <clover:collection clover:name="ID">
+              <item clover:inPort="8" clover:key="__parent_id" clover:parentKey="__id">
+                <type>$8.type</type>
+                <value>$8.value</value>
+              </item>
+            </clover:collection>
+            <descriptor>$0.descriptor_2</descriptor>
+          </countryRegionReference>
+          <defaultedBusinessSiteAddress>$0.defaultedBusinessSiteAddress</defaultedBusinessSiteAddress>
+          <delete>$0.delete</delete>
+          <doNotReplaceAll>$0.doNotReplaceAll</doNotReplaceAll>
+          <effectiveDate>$0.effectiveDate</effectiveDate>
+          <formattedAddress>$0.formattedAddress</formattedAddress>
+          <lastModified>$0.lastModified</lastModified>
+          <municipality>$0.municipality</municipality>
+          <municipalityLocal>$0.municipalityLocal</municipalityLocal>
+          <postalCode>$0.postalCode</postalCode>
+          <clover:collection clover:name="usageData">
+            <item clover:inPort="6" clover:key="__parent_id" clover:parentKey="__id">
+              <comments>$6.comments</comments>
+              <public>$6.public</public>
+              <clover:collection clover:name="typeData">
+                <item>
+                  <typeReference>
+                    <clover:collection clover:name="ID">
+                      <item clover:inPort="5" clover:key="__parent_id" clover:parentKey="__id">
+                        <type>$5.type</type>
+                        <value>$5.value</value>
+                      </item>
+                    </clover:collection>
+                  </typeReference>
+                </item>
+              </clover:collection>
+            </item>
+          </clover:collection>
+        </item>
+      </clover:collection>
+      <clover:collection clover:name="emailAddressData">
+        <item clover:inPort="2" clover:key="__parent_id" clover:parentKey="__id">
+          <emailAddress>$2.emailAddress</emailAddress>
+          <emailComment>$2.emailComment</emailComment>
+          <clover:collection clover:name="usageData">
+            <item clover:inPort="10" clover:key="__parent_id" clover:parentKey="__id">
+              <comments>$10.comments</comments>
+              <public>$10.public</public>
+              <clover:collection clover:name="typeData">
+                <item>
+                  <typeReference>
+                    <clover:collection clover:name="ID">
+                      <item clover:inPort="9" clover:key="__parent_id" clover:parentKey="__id">
+                        <type>$9.type</type>
+                        <value>$9.value</value>
+                      </item>
+                    </clover:collection>
+                  </typeReference>
+                </item>
+              </clover:collection>
+            </item>
+          </clover:collection>
+        </item>
+      </clover:collection>
+      <clover:collection clover:name="phoneData">
+        <item clover:inPort="4" clover:key="__parent_id" clover:parentKey="__id">
+          <areaCode>$4.areaCode</areaCode>
+          <countryISOCode>$4.countryISOCode</countryISOCode>
+          <formattedPhone>$4.formattedPhone</formattedPhone>
+          <internationalPhoneCode>$4.internationalPhoneCode</internationalPhoneCode>
+          <phoneDeviceTypeReference>
+            <clover:collection clover:name="ID">
+              <item clover:inPort="13" clover:key="__parent_id" clover:parentKey="__id">
+                <type>$13.type</type>
+                <value>$13.value</value>
+              </item>
+            </clover:collection>
+            <descriptor>$4.descriptor</descriptor>
+          </phoneDeviceTypeReference>
+          <phoneExtension>$4.phoneExtension</phoneExtension>
+          <phoneNumber>$4.phoneNumber</phoneNumber>
+          <clover:collection clover:name="usageData">
+            <item clover:inPort="12" clover:key="__parent_id" clover:parentKey="__id">
+              <comments>$12.comments</comments>
+              <public>$12.public</public>
+              <clover:collection clover:name="typeData">
+                <item>
+                  <typeReference>
+                    <clover:collection clover:name="ID">
+                      <item clover:inPort="11" clover:key="__parent_id" clover:parentKey="__id">
+                        <type>$11.type</type>
+                        <value>$11.value</value>
+                      </item>
+                    </clover:collection>
+                  </typeReference>
+                </item>
+              </clover:collection>
+            </item>
+          </clover:collection>
+        </item>
+      </clover:collection>
+    </workerContactInformationData>
+    <workerReference>
+      <clover:collection clover:name="ID">
+        <item clover:inPort="14" clover:key="__parent_id" clover:parentKey="__id">
+          <type>$14.type</type>
+          <value>$14.value</value>
+        </item>
+      </clover:collection>
+      <descriptor>$3.descriptor_1</descriptor>
+    </workerReference>
+  </maintainContactInformationData>
+  <version>$3.version</version>
+</object>]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><schema-object>
+  <typed-object-ref type-ref="com.workday.hr.MaintainContactInformationForPersonEventRequestType"/>
+  <typed-object type="java.lang.Boolean"/>
+  <typed-object type="com.workday.hr.WorkerObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.BusinessProcessParametersType">
+    <typed-object-ref name="autoComplete" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="commentData" type-ref="com.workday.hr.BusinessProcessCommentDataType"/>
+    <typed-object-ref name="runNow" type-ref="java.lang.Boolean"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CountryObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.EmailAddressInformationDataType">
+    <typed-object-ref name="emailAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="emailComment" type-ref="java.lang.String"/>
+    <schema-collection name="usageData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationMethodUsageInformationDataType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageTypeObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageTypeObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageBehaviorObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.BusinessProcessCommentDataType">
+    <typed-object-ref name="comment" type-ref="java.lang.String"/>
+    <typed-object-ref name="workerReference" type-ref="com.workday.hr.WorkerObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.PhoneDeviceTypeObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.SubmunicipalityInformationDataType">
+    <typed-object-ref name="addressComponentName" type-ref="java.lang.String"/>
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.ContactInformationDataType">
+    <schema-collection name="addressData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.AddressInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="emailAddressData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.EmailAddressInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="instantMessengerData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.InstantMessengerInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="phoneData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.PhoneInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="webAddressData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.WebAddressInformationDataType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.PhoneInformationDataType">
+    <typed-object-ref name="areaCode" type-ref="java.lang.String"/>
+    <typed-object-ref name="countryISOCode" type-ref="java.lang.String"/>
+    <typed-object-ref name="formattedPhone" type-ref="java.lang.String"/>
+    <typed-object-ref name="internationalPhoneCode" type-ref="java.lang.String"/>
+    <typed-object-ref name="phoneDeviceTypeReference" type-ref="com.workday.hr.PhoneDeviceTypeObjectType"/>
+    <typed-object-ref name="phoneExtension" type-ref="java.lang.String"/>
+    <typed-object-ref name="phoneNumber" type-ref="java.lang.String"/>
+    <schema-collection name="usageData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationMethodUsageInformationDataType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.MaintainContactInformationForPersonEventRequestType">
+    <typed-object-ref name="addOnly" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="businessProcessParameters" type-ref="com.workday.hr.BusinessProcessParametersType"/>
+    <typed-object-ref name="maintainContactInformationData" type-ref="com.workday.hr.ContactInformationForPersonEventDataType"/>
+    <typed-object-ref name="version" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.InstantMessengerInformationDataType">
+    <typed-object-ref name="instantMessengerAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="instantMessengerComment" type-ref="java.lang.String"/>
+    <typed-object-ref name="instantMessengerTypeReference" type-ref="com.workday.hr.InstantMessengerTypeObjectType"/>
+    <schema-collection name="usageData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationMethodUsageInformationDataType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.CountryRegionObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.WebAddressInformationDataType">
+    <schema-collection name="usageData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationMethodUsageInformationDataType"/>
+    </schema-collection>
+    <typed-object-ref name="webAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="webAddressComment" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="javax.xml.datatype.XMLGregorianCalendar"/>
+  <typed-object type="com.workday.hr.SubregionInformationDataType">
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageBehaviorTenantedObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="com.workday.hr.CountryRegionObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CountryRegionObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.AddressLineInformationDataType">
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.ContactInformationForPersonEventDataType">
+    <typed-object-ref name="effectiveDate" type-ref="javax.xml.datatype.XMLGregorianCalendar"/>
+    <typed-object-ref name="workerContactInformationData" type-ref="com.workday.hr.ContactInformationDataType"/>
+    <typed-object-ref name="workerReference" type-ref="com.workday.hr.WorkerObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationMethodUsageInformationDataType">
+    <typed-object-ref name="comments" type-ref="java.lang.String"/>
+    <typed-object-ref name="public" type-ref="java.lang.Boolean"/>
+    <schema-collection name="typeData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageTypeDataType"/>
+    </schema-collection>
+    <schema-collection name="useForReference" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageBehaviorObjectType"/>
+    </schema-collection>
+    <schema-collection name="useForTenantedReference" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageBehaviorTenantedObjectType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.InstantMessengerTypeObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.InstantMessengerTypeObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.AddressInformationDataType">
+    <typed-object-ref name="addressFormatType" type-ref="java.lang.String"/>
+    <typed-object-ref name="addressID" type-ref="java.lang.String"/>
+    <schema-collection name="addressLineData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.AddressLineInformationDataType"/>
+    </schema-collection>
+    <typed-object-ref name="addressReference" type-ref="com.workday.hr.AddressReferenceObjectType"/>
+    <typed-object-ref name="countryReference" type-ref="com.workday.hr.CountryObjectType"/>
+    <typed-object-ref name="countryRegionReference" type-ref="com.workday.hr.CountryRegionObjectType"/>
+    <typed-object-ref name="defaultedBusinessSiteAddress" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="delete" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="doNotReplaceAll" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="effectiveDate" type-ref="javax.xml.datatype.XMLGregorianCalendar"/>
+    <typed-object-ref name="formattedAddress" type-ref="java.lang.String"/>
+    <typed-object-ref name="lastModified" type-ref="javax.xml.datatype.XMLGregorianCalendar"/>
+    <typed-object-ref name="municipality" type-ref="java.lang.String"/>
+    <typed-object-ref name="municipalityLocal" type-ref="java.lang.String"/>
+    <typed-object-ref name="postalCode" type-ref="java.lang.String"/>
+    <schema-collection name="submunicipalityData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.SubmunicipalityInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="subregionData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.SubregionInformationDataType"/>
+    </schema-collection>
+    <schema-collection name="usageData" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationMethodUsageInformationDataType"/>
+    </schema-collection>
+  </typed-object>
+  <typed-object type="com.workday.hr.PhoneDeviceTypeObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.PhoneDeviceTypeObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.WorkerObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.WorkerObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.AddressReferenceObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageTypeDataType">
+    <typed-object-ref name="primary" type-ref="java.lang.Boolean"/>
+    <typed-object-ref name="typeReference" type-ref="com.workday.hr.CommunicationUsageTypeObjectType"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageBehaviorObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageBehaviorObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageTypeObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.CommunicationUsageBehaviorTenantedObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.CommunicationUsageBehaviorTenantedObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.InstantMessengerTypeObjectIDType">
+    <typed-object-ref name="type" type-ref="java.lang.String"/>
+    <typed-object-ref name="value" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="com.workday.hr.AddressReferenceObjectType">
+    <schema-collection name="ID" type="java.util.List">
+      <typed-object-ref type-ref="com.workday.hr.AddressReferenceObjectIDType"/>
+    </schema-collection>
+    <typed-object-ref name="descriptor" type-ref="java.lang.String"/>
+  </typed-object>
+</schema-object>
+]]></attr>
+<attr name="__metadata"><![CDATA[true]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'addressData'" guiX="460" guiY="20" id="FOREACH_USERS_ADDRESS_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.effectiveDate = (isnull(input.sysUpdatedOn) ? null : str2calendar(input.sysUpdatedOn,"yyyy-MM-dd HH:mm:ss"));
+output.postalCode = (isnull(input.zip) ? inputArguments.defaultPostalCode : input.zip);
+output.municipality = (isnull(input.city) ? inputArguments.defaultCity : input.city);
+]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'addressLineData'" guiX="460" guiY="120" id="FOREACH_USERS_ADDRESS_LINE_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = isnull(input.street) ? inputArguments.defaultLocation : input.street;
+output.type = "ADDRESS_LINE_1";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'emailAddressData'" guiX="460" guiY="220" id="FOREACH_USERS_EMAIL_ADDRESS_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.emailAddress = input.email;]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; addressData/usageData/TypeData/typeReference 'ID'" guiX="460" guiY="520" id="FOREACH_USERS_ID" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.type = "Communication_Usage_Type_ID";
+output.value = "HOME";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; countryReference 'ID'" guiX="460" guiY="720" id="FOREACH_USERS_ID1" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = (isnull(lookup(snow2wdayCountryCodesUpdate).get([input.country])) ? inputArguments.defaultCountry : lookup(snow2wdayCountryCodesUpdate).get([input.country]).wdayCode);
+output.type = "ISO_3166-1_Alpha-3_Code";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; countryRegionReference 'ID'" guiX="460" guiY="820" id="FOREACH_USERS_ID2" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = output.value = (isnull(input.state) ? inputArguments.defaultState : input.state);
+output.type = "Country_Region_ID";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; emailAddressData/usageData/TypeData/typeReference 'ID'" guiX="460" guiY="920" id="FOREACH_USERS_ID3" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.type = "Communication_Usage_Type_ID";
+output.value = "HOME";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; phoneData/usageData/TypeData/typeReference 'ID'" guiX="460" guiY="1120" id="FOREACH_USERS_ID4" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.type = "Communication_Usage_Type_ID";
+output.value = "HOME";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; phoneDeviceTypeReference 'ID'" guiX="460" guiY="1320" id="FOREACH_USERS_ID5" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.type = "Phone_Device_Type_ID";
+output.value = "1063.5";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; workerReference 'ID'" guiX="460" guiY="1420" id="FOREACH_USERS_ID6" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.value = input.userName;
+output.type = "Employee_ID";]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'object'" guiX="460" guiY="320" id="FOREACH_USERS_OBJECT" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.effectiveDate = (isnull(input.sysUpdatedOn) ? null : str2calendar(input.sysCreatedOn,"yyyy-MM-dd HH:mm:ss"));]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'phoneData'" guiX="460" guiY="420" id="FOREACH_USERS_PHONE_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.phoneNumber = input.homePhone;
+output.countryISOCode = (isnull(lookup(snow2wdayCountryCodesUpdate).get([input.country])) ? inputArguments.defaultCountry : lookup(snow2wdayCountryCodesUpdate).get([input.country]).wdayCode);]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; addressData 'usageData'" guiX="460" guiY="620" id="FOREACH_USERS_USAGE_DATA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.public = 0;
+]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; emailAddressData 'usageData'" guiX="460" guiY="1020" id="FOREACH_USERS_USAGE_DATA1" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.public = 1;]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; phoneData 'usageData'" guiX="460" guiY="1220" id="FOREACH_USERS_USAGE_DATA2" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+output.__parent_id = input.__id;
+//END -> DO NOT REMOVE
+output.public = 1;]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Duplicate users" guiX="240" guiY="20" id="SIMPLE_COPY0" type="SIMPLE_COPY"/>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge2" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 0 (out)" toNode="SIMPLE_COPY0:0"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ADDRESS_DATA:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="396cdbc4-06fe-4d7e-984f-5e28d2a51acb" outPort="Port 0 (out)" toNode="BEAN_WRITER0:0"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ADDRESS_LINE_DATA:0" guiBendpoints="" id="Edge4" inPort="Port 1 (in)" metadata="f2d9527a-1a42-4b32-8117-bc1fe879cf39" outPort="Port 0 (out)" toNode="BEAN_WRITER0:1"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_EMAIL_ADDRESS_DATA:0" guiBendpoints="" id="Edge6" inPort="Port 2 (in)" metadata="d23c107a-3bc4-4065-a71b-b356356835b3" outPort="Port 0 (out)" toNode="BEAN_WRITER0:2"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID:0" guiBendpoints="" id="Edge12" inPort="Port 5 (in)" metadata="aeb642e3-831c-43d2-8648-9d949f6bb34d" outPort="Port 0 (out)" toNode="BEAN_WRITER0:5"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID1:0" guiBendpoints="" id="Edge16" inPort="Port 7 (in)" metadata="07a3f2ce-ddfc-4dae-b14f-3bb02d65f8e8" outPort="Port 0 (out)" toNode="BEAN_WRITER0:7"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID2:0" guiBendpoints="" id="Edge18" inPort="Port 8 (in)" metadata="1f4a3e60-fcbb-4f57-b0dd-ba348a7112fc" outPort="Port 0 (out)" toNode="BEAN_WRITER0:8"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID3:0" guiBendpoints="" id="Edge20" inPort="Port 9 (in)" metadata="d37e5c57-b145-4e28-a663-aa2b20c07d91" outPort="Port 0 (out)" toNode="BEAN_WRITER0:9"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID4:0" guiBendpoints="" id="Edge24" inPort="Port 11 (in)" metadata="8ee5f69e-d966-40dc-ad2f-172bfc80d360" outPort="Port 0 (out)" toNode="BEAN_WRITER0:11"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID5:0" guiBendpoints="" id="Edge28" inPort="Port 13 (in)" metadata="4c374219-c868-44c9-8b2c-8b2d5bc804d1" outPort="Port 0 (out)" toNode="BEAN_WRITER0:13"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_ID6:0" guiBendpoints="" id="Edge30" inPort="Port 14 (in)" metadata="4991eed5-0e34-487c-91fa-b180eaf681cb" outPort="Port 0 (out)" toNode="BEAN_WRITER0:14"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_OBJECT:0" guiBendpoints="" id="Edge8" inPort="Port 3 (in)" metadata="148f134c-8ce8-4652-a677-0077b4fab14b" outPort="Port 0 (out)" toNode="BEAN_WRITER0:3"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_PHONE_DATA:0" guiBendpoints="" id="Edge10" inPort="Port 4 (in)" metadata="db172cde-6536-4d57-8493-275ac4064681" outPort="Port 0 (out)" toNode="BEAN_WRITER0:4"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_USAGE_DATA:0" guiBendpoints="" id="Edge14" inPort="Port 6 (in)" metadata="1b52984a-78c7-457b-b096-431492e810e1" outPort="Port 0 (out)" toNode="BEAN_WRITER0:6"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_USAGE_DATA1:0" guiBendpoints="" id="Edge22" inPort="Port 10 (in)" metadata="3bef8cf3-abcc-4a3f-8333-d31b6afccd27" outPort="Port 0 (out)" toNode="BEAN_WRITER0:10"/>
+<Edge debugMode="true" fromNode="FOREACH_USERS_USAGE_DATA2:0" guiBendpoints="" id="Edge26" inPort="Port 12 (in)" metadata="266a521f-cc31-4282-8003-79e61f9fb45b" outPort="Port 0 (out)" toNode="BEAN_WRITER0:12"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 0 (out)" toNode="FOREACH_USERS_ADDRESS_DATA:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:1" guiBendpoints="" id="Edge3" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 1 (out)" toNode="FOREACH_USERS_ADDRESS_LINE_DATA:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:2" guiBendpoints="" id="Edge5" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 2 (out)" toNode="FOREACH_USERS_EMAIL_ADDRESS_DATA:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:3" guiBendpoints="" id="Edge7" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 3 (out)" toNode="FOREACH_USERS_OBJECT:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:4" guiBendpoints="" id="Edge9" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 4 (out)" toNode="FOREACH_USERS_PHONE_DATA:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:5" guiBendpoints="" id="Edge11" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 5 (out)" toNode="FOREACH_USERS_ID:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:6" guiBendpoints="" id="Edge13" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 6 (out)" toNode="FOREACH_USERS_USAGE_DATA:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:7" guiBendpoints="" id="Edge15" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 7 (out)" toNode="FOREACH_USERS_ID1:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:8" guiBendpoints="" id="Edge17" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 8 (out)" toNode="FOREACH_USERS_ID2:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:9" guiBendpoints="" id="Edge19" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 9 (out)" toNode="FOREACH_USERS_ID3:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:10" guiBendpoints="" id="Edge21" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 10 (out)" toNode="FOREACH_USERS_USAGE_DATA1:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:11" guiBendpoints="" id="Edge23" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 11 (out)" toNode="FOREACH_USERS_ID4:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:12" guiBendpoints="" id="Edge25" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 12 (out)" toNode="FOREACH_USERS_USAGE_DATA2:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:13" guiBendpoints="" id="Edge27" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 13 (out)" toNode="FOREACH_USERS_ID5:0"/>
+<Edge debugMode="true" fromNode="SIMPLE_COPY0:14" guiBendpoints="" id="Edge29" inPort="Port 0 (in)" metadata="77363cbd-7ba6-4ae8-9854-9ba700d3486b" outPort="Port 14 (out)" toNode="FOREACH_USERS_ID6:0"/>
+</Phase>
+</Graph>

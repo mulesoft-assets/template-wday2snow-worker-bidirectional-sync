@@ -8,6 +8,7 @@ package org.mule.templates;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.workday.hr.WorkerType;
 import com.workday.integrations.ActionEventObjectIDType;
@@ -17,14 +18,11 @@ import com.workday.integrations.GetEventDetailsRequestType;
 
 public class EventDetailRequest {
 
-	public static GetEventDetailsRequestType create(WorkerType data){
-		if (data.getWorkerData().getTransactionLogEntryData().getTransactionLogEntry().isEmpty())
-			throw new IllegalArgumentException("No transaction logs to process.");
+	public static GetEventDetailsRequestType create(Map<String, Object> data){
 		
-		GetEventDetailsRequestType get = prepareRequest(
-				data.getWorkerData().getTransactionLogEntryData().getTransactionLogEntry().get(0).getTransactionLogReference().getID().get(0).getType(),
-				data.getWorkerData().getTransactionLogEntryData().getTransactionLogEntry().get(0).getTransactionLogReference().getID().get(0).getValue());
-		return get ;
+		return prepareRequest(
+				data.get("lastEventType").toString(),
+				data.get("lastEventValue").toString());		
 	}
 
 	public static GetEventDetailsRequestType prepareRequest(String type, String value) {

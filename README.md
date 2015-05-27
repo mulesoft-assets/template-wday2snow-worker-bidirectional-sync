@@ -141,6 +141,14 @@ Mule Studio provides you with really easy way to deploy your Template directly t
 ## Properties to be configured (With examples) <a name="propertiestobeconfigured"/>
 In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detail list with examples:
 ### Application configuration
+**Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.			
+			
++ poll.frequencyMillis `10000`
++ poll.startDelayMillis `500`
+
++ snow.watermark.default.expression `#[groovy: java.text.SimpleDateFormat df = new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss'); df.parse('2015-05-27 14:00:00').format('yyyy-MM-dd HH:mm:ss', TimeZone.getTimeZone('GMT'));]`
++ wday.watermark.default.expression `#[groovy: new GregorianCalendar(2015, Calendar.MAY, 27, 14, 00, 00)]`
+			
 #### Workday Connector configuration
 + wday.user `user@company`
 + wday.password `secret`

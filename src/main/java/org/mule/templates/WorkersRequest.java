@@ -6,9 +6,7 @@
 
 package org.mule.templates;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,17 +28,15 @@ import com.workday.hr.WorkerResponseGroupType;
 
 public class WorkersRequest {
 
-public static GetWorkersRequestType create(Date startDate, int periodInMillis, int offset) throws ParseException, DatatypeConfigurationException {
+public static GetWorkersRequestType create(GregorianCalendar startDate) throws ParseException, DatatypeConfigurationException {
 		
 		EffectiveAndUpdatedDateTimeDataType dateRangeData = new EffectiveAndUpdatedDateTimeDataType();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.add(Calendar.SECOND, -offset / 1000);
-		dateRangeData.setUpdatedThrough(xmlDate(cal.getTime()));
-		cal.setTime(startDate);
-		cal.add(Calendar.SECOND, - (periodInMillis + offset) / 1000);
-		dateRangeData.setUpdatedFrom(xmlDate(cal.getTime()));
-		TransactionLogCriteriaType transactionLogCriteria = new TransactionLogCriteriaType();
+	    GregorianCalendar current = new GregorianCalendar();
+	    current.add(Calendar.SECOND, -1);
+	    dateRangeData.setUpdatedFrom(getXMLGregorianCalendar(startDate));
+	    dateRangeData.setUpdatedThrough(getXMLGregorianCalendar(current));
+	    
+	    TransactionLogCriteriaType transactionLogCriteria = new TransactionLogCriteriaType();
 		transactionLogCriteria.setTransactionDateRangeData(dateRangeData);
 		
 		WorkerRequestCriteriaType workerRequestCriteria = new WorkerRequestCriteriaType();
@@ -61,21 +57,7 @@ public static GetWorkersRequestType create(Date startDate, int periodInMillis, i
 		return getWorkersType;
 	}
 
-public static GetWorkersRequestType create(String startDateString, int periodInMillis, int offset) throws ParseException, DatatypeConfigurationException {
-	
-	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	Date startDate = dateFormat.parse(startDateString);
-	
-	return create(startDate, periodInMillis, offset);
-}
-
-	private static XMLGregorianCalendar xmlDate(Date date) throws DatatypeConfigurationException {
-		GregorianCalendar gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
-		gregorianCalendar.setTime(date);
-		return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-	}
-
-public static GetWorkersRequestType getWorker(String id) throws ParseException, DatatypeConfigurationException {
+	public static GetWorkersRequestType getWorker(String id) throws ParseException, DatatypeConfigurationException {
 		
 		WorkerRequestReferencesType reqRefs = new WorkerRequestReferencesType();
 		List<WorkerObjectType> workerReferences = new ArrayList<WorkerObjectType>();
@@ -103,4 +85,10 @@ public static GetWorkersRequestType getWorker(String id) throws ParseException, 
 							
 		return getWorkersType;
 	}
+	
+	private static XMLGregorianCalendar getXMLGregorianCalendar(GregorianCalendar date) throws DatatypeConfigurationException {
+		return DatatypeFactory.newInstance().newXMLGregorianCalendar(date);
+	}	
 }
+
+

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.6.1.ee" schemaVersion="3.5.0.0">
-    <name>template-wday2snow-worker-bidirectional-sync</name>
+<mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.6.2.ee" schemaVersion="3.5.0.0">
+    <name>template-wday2snow-worker-bidirectional-sync-1.1.1-SNAPSHOT</name>
     <description></description>
     <muleExtension name="Workday Integrations" qualifier="org.mule.tooling.ui.contribution.wd-integration"/>
-    <muleExtension name="Workday Human Resource" qualifier="org.mule.tooling.ui.contribution.wd-hr"/>
     <muleExtension name="Workday Staffing" qualifier="org.mule.tooling.ui.contribution.wd-staffing"/>
     <muleExtension name="ServiceNow" qualifier="org.mule.tooling.ui.contribution.servicenow.3.5.0"/>
+    <muleExtension name="Workday Human Resource" qualifier="org.mule.tooling.ui.contribution.wd-hr"/>
 </mule-project>

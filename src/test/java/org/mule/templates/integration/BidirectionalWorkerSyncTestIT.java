@@ -10,7 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +57,7 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 	
 	private static final String SERVICE_NOW_INBOUND_FLOW_NAME = "triggerSyncFromServiceNowFlow";
 	private static final String WORKDAY_INBOUND_FLOW_NAME = "triggerSyncFromWorkdayFlow";
-	private static final int TIMEOUT_MILLIS = 60;
+	private static final int TIMEOUT_MILLIS = 300;
 
 	private SubflowInterceptingChainLifecycleWrapper insertUserInServiceNowFlow;
 	private SubflowInterceptingChainLifecycleWrapper updateUserInServiceNowFlow;
@@ -88,6 +90,18 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		System.setProperty("poll.startDelayMillis", "8000");
         System.setProperty("poll.frequencyMillis", "30000");
 		
+        Date initialDate = new Date(System.currentTimeMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(initialDate);
+        System.setProperty(
+        		"wday.watermark.default.expression", 
+        		"#[groovy: new GregorianCalendar("
+        				+ cal.get(Calendar.YEAR) + ","
+        				+ cal.get(Calendar.MONTH) + ","
+        				+ cal.get(Calendar.DAY_OF_MONTH) + ","
+        				+ cal.get(Calendar.HOUR_OF_DAY) + ","
+        				+ cal.get(Calendar.MINUTE) + ","
+        				+ cal.get(Calendar.SECOND) + ") ]");  
 	}
 
 	@Before

@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+<mule xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
 http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd">
+    <data-mapper:config name="GetWorkersResponseType_To_Map" transformationGraphPath="getworkersresponsetype_to_map.grf" doc:name="GetWorkersResponseType_To_Map"/>
+    <data-mapper:config name="GetRecordsResponse_To_Map" transformationGraphPath="getrecordsresponse_to_map.grf" doc:name="GetRecordsResponse_To_Map"/>
     
     <!-- This is the endpoints file. In this file you should declare your inbound and outbound endpoints in order to control the access to your integration -->
 
     <flow name="triggerSyncFromWorkdayFlow"  processingStrategy="synchronous" initialState="started">
 		<poll doc:name="Poll">
 			<fixed-frequency-scheduler frequency="${poll.frequencyMillis}" startDelay="${poll.startDelayMillis}" />
-			<watermark variable="lastQueryDateA" default-expression="${watermark.default.expression}" update-expression="#[groovy: new Date(System.currentTimeMillis() - 10000).format('yyyy-MM-dd HH:mm:ss')]"/>
+			<watermark variable="lastQueryDateA" default-expression="${wday.watermark.default.expression}" selector="FIRST" selector-expression="#[payload.LastModifiedOn]"/>
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
-                <logger message="Fetching Workday updates: #[flowVars['lastQueryDateA']] - #[groovy: new Date().format('yyyy-MM-dd HH:mm:ss')]" level="INFO" doc:name="Logger"/>
-                <wd-hr:get-workers config-ref="Workday_Human_Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.create(lastQueryDateA,${poll.frequencyMillis}, ${poll.offset})]" doc:name="Fetch Workers from Workday"/>
+                <logger message="Fetching Workday updates: #[groovy: new Date().format('yyyy-MM-dd HH:mm:ss')]" level="INFO" doc:name="Logger"/>
+                <wd-hr:get-workers config-ref="Workday_Human_Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.create(lastQueryDateA)]" doc:name="Fetch Workers from Workday"/>
+                <data-mapper:transform config-ref="GetWorkersResponseType_To_Map" doc:name="GetWorkersResponseType To Map">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="UpdatedThrough">#[payload.getRequestCriteria().getTransactionLogCriteriaData()[0].getTransactionDateRangeData().getUpdatedThrough()]</data-mapper:input-argument>
+                    </data-mapper:input-arguments>
+                </data-mapper:transform>
             </processor-chain>
 		</poll>
         <choice doc:name="Choice">
-            <when expression="payload.responseData == null">
+            <when expression="payload.size() == 0">
                 <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
             </when>
             <otherwise>
-                <set-payload value="#[payload.responseData.worker]" doc:name="Set Payload to Worker data"/>
-                <batch:execute name="syncBatchWorkday" doc:name="trigger Workday batch execution"/>
+                <batch:execute name="syncBatchWorkday" doc:name="syncBatchWorkday"/>
             </otherwise>
         </choice>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>
@@ -40,28 +48,24 @@ http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/ba
 	<flow name="triggerSyncFromServiceNowFlow"  processingStrategy="synchronous" initialState="started">
    		<poll doc:name="Poll">
    			<fixed-frequency-scheduler frequency="${poll.frequencyMillis}" startDelay="${poll.startDelayMillis}" />
-   			<watermark variable="lastQueryDateB" default-expression="${watermark.default.expression}" update-expression="#[groovy: new Date(System.currentTimeMillis() - 10000).format('yyyy-MM-dd HH:mm:ss')]"/>
+   			<watermark variable="lastQueryDateB" default-expression="${snow.watermark.default.expression}" selector="MAX" selector-expression="#[payload.sysModifiedOn]"/>
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
-                <expression-component doc:name="Apply GMT Time Zone Offset to lastQueryDateB" doc:description="All times are stored in the Service Now platform in Coordinated Universal Time (UTC). They are displayed globally based on the system time zone, but are displayed to users in their local time zone according to user preferences (http://wiki.servicenow.com/index.php?title=Using_Time_Zones)."><![CDATA[payload = org.mule.templates.util.DateUtil.applyTimeZone(flowVars.lastQueryDateB,'yyyy-MM-dd HH:mm:ss','GMT');]]></expression-component>
-                <logger message="Fetching ServiceNow updates: #[flowVars['lastQueryDateB']] - #[groovy: new Date().format('yyyy-MM-dd HH:mm:ss')]" level="INFO" doc:name="Logger"/>
-
-
+                <logger message="Fetching ServiceNow updates: #[flowVars['lastQueryDateB']] GMT" level="INFO" doc:name="Logger"/>
                 <servicenow:get-records config-ref="ServiceNow" type="SYS_USER" doc:name="Fetch Users from Service Now">
                     <servicenow:get-records-request>
-                        <servicenow:get-records-request key="sysUpdatedOn">&gt; #[payload]</servicenow:get-records-request>
+                        <servicenow:get-records-request key="sysUpdatedOn">&gt; #[flowVars['lastQueryDateB']]</servicenow:get-records-request>
                     </servicenow:get-records-request>
                 </servicenow:get-records>
-
+                <data-mapper:transform config-ref="GetRecordsResponse_To_Map" doc:name="GetRecordsResponse To Map"/>               
             </processor-chain>
 		</poll>
         <choice doc:name="Choice">
-            <when expression="#[payload.getGetRecordsResult().isEmpty()]">
+            <when expression="#[payload.size() == 0]">
                 <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
             </when>
             <otherwise>
-                <set-payload doc:name="Set Payload to User data" value="#[payload.getGetRecordsResult()]"/>
-                <batch:execute name="syncBatchServiceNow" doc:name="Trigger Service Now batch execution"/>
+                <batch:execute name="syncBatchServiceNow" doc:name="syncBatchServiceNow"/>
             </otherwise>
         </choice>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>

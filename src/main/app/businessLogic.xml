@@ -14,17 +14,15 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
 http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schema/mule/wd-integration/current/mule-wd-integration.xsd
-http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd" version="EE-3.6.1">
-    <data-mapper:config name="Worker_to_User" transformationGraphPath="worker_to_user.grf" doc:name="Worker_to_User"/>
-    <data-mapper:config name="User_To_ChangePreferredNameRequestType" transformationGraphPath="user_to_changepreferrednamerequesttype.grf" doc:name="User_To_ChangePreferredNameRequestType"/>
-    <data-mapper:config name="User_To_MaintainContactInformationForPersonEventRequestType" transformationGraphPath="user_to_maintaincontactinformationforpersoneventrequesttype.grf" doc:name="User_To_MaintainContactInformationForPersonEventRequestType"/>
-    <data-mapper:config name="User_To_HireEmployeeRequestType" transformationGraphPath="user_to_hireemployeerequesttype.grf" doc:name="User_To_HireEmployeeRequestType_1"/>
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd" version="EE-3.6.2">
+    <data-mapper:config name="List_users__To_HireEmployeeRequestType" transformationGraphPath="list_users__to_hireemployeerequesttype.grf" doc:name="List_users__To_HireEmployeeRequestType"/>
+    <data-mapper:config name="List_users__To_MaintainContactInformationForPersonEventRequestType" transformationGraphPath="list_users__to_maintaincontactinformationforpersoneventrequesttype.grf" doc:name="List_users__To_MaintainContactInformationForPersonEventRequestType"/>
+    <data-mapper:config name="List_users__To_ChangePreferredNameRequestType" transformationGraphPath="list_users__to_changepreferrednamerequesttype.grf" doc:name="List_users__To_ChangePreferredNameRequestType"/>
     
     <batch:job name="syncBatchWorkday" max-failed-records="1">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
             <batch:step name="GetLastEvent">
-                <batch:set-record-variable variableName="workDayId" value="#[payload.workerReference.getID().get(1).getValue()]" doc:name="store Workday Id"/>
                 <enricher source="payload" target="#[recordVars['lastEvent']]" doc:name="store the value in 'recordVars['lastEvent']'">
                     <processor-chain doc:name="Processor Chain">
                         <wd-integration:get-event-detail config-ref="Workday_Integrations" eventDetailRequest-ref="#[org.mule.templates.EventDetailRequest.create(payload)]" doc:name="query for the last event"/>
@@ -43,12 +41,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             		</servicenow:get-records>
                 </enricher>
             </batch:step>
-            <batch:step name="mapWorkersToUsers" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
-                <data-mapper:transform config-ref="Worker_to_User" doc:name="Worker to User">
-                </data-mapper:transform>
-
-            </batch:step>
-            <batch:step name="InsertUserInServiceNowIfItDoesntExist" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty()]">
+                        <batch:step name="InsertUserInServiceNowIfItDoesntExist" accept-expression="#[recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].getGetRecordsResult().isEmpty()]">
                 <logger message="inserting user to ServiceNow: #[payload]" level="INFO" doc:name="Logger"/>
                 <servicenow:insert config-ref="ServiceNow" type="SYS_USER" doc:name="Insert user to ServiceNow">
 
@@ -74,21 +67,22 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
             <batch:step name="storeUserInformation" >
+                <logger message="ServiceNow user: #[payload]" level="INFO" doc:name="Log the ServiceNow user"/>
                 <batch:set-record-variable variableName="snowUser" value="#[payload]" doc:name="store Service Now user"/>
-                <batch:set-record-variable variableName="userUpdatedBy" value="#[payload.getSysUpdatedBy()]" doc:name="Store User sysUpdatedBy"/>
+                <batch:set-record-variable variableName="userUpdatedBy" value="#[payload['sysUpdatedBy']]" doc:name="Store User sysUpdatedBy"/>
             </batch:step>
 
-            <batch:step name="findUserInWorkdayStep" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; payload.getUserName() != '']">
+            <batch:step name="findUserInWorkdayStep" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; payload['userName'] != '']">
 
                 <enricher source="#[payload]" target="#[recordVars['workerInTargetInstance']]" doc:name="store worker">
-                    <wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Get Workers from Workday" workersRequest-ref="#[org.mule.templates.WorkersRequest.getWorker(payload.getUserName())]"/>
+                    <wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Get Workers from Workday" workersRequest-ref="#[org.mule.templates.WorkersRequest.getWorker(payload['userName'])]"/>
                 </enricher>
 
             </batch:step>
 
             <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExist" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] == null || recordVars['workerInTargetInstance'].responseData == null)]">
-                <data-mapper:transform config-ref="User_To_HireEmployeeRequestType" doc:name="User To HireEmployeeRequestType">
-                    <data-mapper:input-arguments>
+                <data-mapper:transform doc:name="User To HireEmployeeRequestType" config-ref="List_users__To_HireEmployeeRequestType">
+                	<data-mapper:input-arguments>
                         <data-mapper:input-argument key="defaultOrganization">${wday.organization}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultCity">${wday.city}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultJobProfile">${wday.jobprofileId}</data-mapper:input-argument>
@@ -99,22 +93,22 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                         <data-mapper:input-argument key="defaultState">${wday.state}</data-mapper:input-argument>
                     </data-mapper:input-arguments>
                 </data-mapper:transform>
-                <logger message="inserting worker to Workday: #[payload]" level="INFO" doc:name="Logger"/>
+
                 <wd-staffing:hire-employee config-ref="Workday_Staffing" doc:name="Hire Employee"/>
                 <batch:set-record-variable variableName="workerId" value="#[payload.employeeReference.getID().get(1).getValue()]" doc:name="store Worker ID"/>
                 <expression-component doc:name="prepare User for update"><![CDATA[java.util.Map userMap = new java.util.LinkedHashMap();
-userMap.put('sysId',recordVars['snowUser'].getSysId());
-userMap.put('userName', recordVars['workerId']);
+ userMap.put('sysId',recordVars['snowUser']['sysId']); 
+ userMap.put('userName', recordVars['workerId']); 
 
-payload = userMap;
-]]></expression-component>
+ payload = userMap; 
+ ]]></expression-component> 
                 <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update userName in Service Now">
 
                 </servicenow:update>
             </batch:step>
             <batch:step name="updateWorkerInWorkdayIfWorkerExists" accept-expression="#[recordVars['userUpdatedBy'] != '${snow.integration.user.id}' &amp;&amp; (recordVars['workerInTargetInstance'] != null || recordVars['workerInTargetInstance'].responseData != null)]">
-                <data-mapper:transform config-ref="User_To_MaintainContactInformationForPersonEventRequestType" doc:name="User To MaintainContactInformationForPersonEventRequestType">
-                    <data-mapper:input-arguments>
+	            <data-mapper:transform config-ref="List_users__To_MaintainContactInformationForPersonEventRequestType" doc:name="User To MaintainContactInformationForPersonEventRequestType">
+	            	<data-mapper:input-arguments>
                         <data-mapper:input-argument key="defaultOrganization">${wday.organization}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultCity">${wday.city}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultJobProfile">${wday.jobprofileId}</data-mapper:input-argument>
@@ -123,16 +117,13 @@ payload = userMap;
                         <data-mapper:input-argument key="defaultPostalCode">${wday.postalCode}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultLocation">${wday.location}</data-mapper:input-argument>
                         <data-mapper:input-argument key="defaultState">${wday.state}</data-mapper:input-argument>
-                    </data-mapper:input-arguments>
-
+                    </data-mapper:input-arguments>	                              
                 </data-mapper:transform>
-                <logger message="updating worker in Workday: #[payload]" level="INFO" doc:name="Logger"/>
+
                 <wd-hr:maintain-contact-information config-ref="Workday_Human_Resource" doc:name="Update Contact Information"/>
                 <set-payload value="#[recordVars['snowUser']]" doc:name="Set Payload to Service Now User"/>
-                <data-mapper:transform config-ref="User_To_ChangePreferredNameRequestType" doc:name="User To ChangePreferredNameRequestType">
+                <data-mapper:transform config-ref="List_users__To_ChangePreferredNameRequestType" doc:name="User To ChangePreferredNameRequestType"/>
 
-                </data-mapper:transform>
-                <logger message="updating worker in Workday: #[payload]" level="INFO" doc:name="Logger"/>
                 <wd-hr:change-preferred-name config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
 
             </batch:step>
