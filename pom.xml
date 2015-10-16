@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>org.mule.templates</groupId>
 		<artifactId>templates-tooling-parent-pom</artifactId>
-		<version>1.1.9</version>
+		<version>1.2.3</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>template-wday2snow-worker-bidirectional-sync</artifactId>
 	<packaging>mule</packaging>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<name>template-wday2snow-worker-bidirectional-sync Mule Anypoint Template Project</name>
 
 	<scm>
@@ -21,8 +21,8 @@
   </scm>
 
 	<properties>
-		<wday.st.version>4.1.1</wday.st.version>
-		<wday.int.version>4.1.0</wday.int.version>	
+		<wday.st.version>5.0.0</wday.st.version>
+		<wday.int.version>5.0.0</wday.int.version>	
 	</properties>
 
 	<build>
@@ -94,6 +94,18 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-ws</artifactId>
+			<version>${mule.version}</version>
+			<scope>test</scope>
+		</dependency>
+    <dependency>
+            <groupId>com.mulesoft.weave</groupId>
+            <artifactId>mule-plugin-weave_2.11</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 	<repositories>
@@ -101,6 +113,12 @@
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
 			<url>https://repository.mulesoft.org/nexus/content/repositories/releases/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mule-ee-releases</id>
+			<name>MuleSoft Releases EE Repository</name>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/releases-ee/</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
