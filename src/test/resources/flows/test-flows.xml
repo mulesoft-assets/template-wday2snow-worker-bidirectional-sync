@@ -1,50 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" 
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" 
 	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.2"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
-http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
-http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
 
 
-	<data-mapper:config name="Pojo_To_ChangePreferredNameRequestType" transformationGraphPath="pojo_to_changepreferrednamerequesttype.grf" doc:name="Pojo_To_ChangePreferredNameRequestType"/>
-    <servicenow:config name="ServiceNow_Test" username="${snow.test.user}" password="${snow.test.password}" serviceEndpoint="${snow.endpoint}" doc:name="ServiceNow"/>
+	<servicenow:config name="ServiceNow_Test" username="${snow.test.user}" password="${snow.test.password}" serviceAddress="${snow.endpoint}" doc:name="ServiceNow"/>
+        
     <wd-hr:config name="Workday_Human_Resource_Test" doc:name="Workday Human Resource" hrEndpoint="${wday.endpoint}" hrPassword="${wday.test.password}" hrUser="${wday.test.user}">
         <wd-hr:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
     </wd-hr:config>
 
-    <sub-flow name="insertUserInServiceNowFlow" >
-        <servicenow:insert config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow"/>
+    <flow name="insertUserInServiceNowFlow" >
+        <dw:transform-message doc:name="Create insert User request">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sys_user
+---
+{
+	ns0#insert: {
+		ns0#active: payload.active,
+		ns0#city: payload.city,
+		ns0#country: payload.country,
+		ns0#email: payload.email,
+		ns0#"employee_number": payload.employeeNumber,
+		ns0#"first_name": payload.firstName,
+		ns0#"home_phone": payload.homePhone,
+		ns0#"last_name": payload.lastName,
+		ns0#"middle_name": payload.middleName,
+		ns0#name: payload.name,
+		ns0#state: payload.state,
+		ns0#street: payload.street,
+		ns0#"user_name": payload.userName,
+		ns0#zip: payload.zip
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <servicenow:invoke config-ref="ServiceNow_Test" type="sys_user||insert" doc:name="ServiceNow"/>
+        <dw:transform-message doc:name="Get record sys_id">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.insertResponse."sys_id"]]></dw:set-payload>
+        </dw:transform-message>
 
-        <logger level="INFO" message="Insert User in Service Now result: #[payload]" doc:name="Logger"/>
-    </sub-flow>
-    <sub-flow name="updateUserInServiceNowFlow">
-        <servicenow:update config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow"/>
-        <logger message="Update User in Service Now result: #[payload]" level="INFO" doc:name="Logger"/>
-    </sub-flow>
-    <sub-flow name="queryUserFromServiceNowFlow" >
-        <servicenow:get-records config-ref="ServiceNow_Test" type="SYS_USER" doc:name="ServiceNow">
-        </servicenow:get-records>
+        <logger level="INFO" message="Insert User in Service Now result sys_id: #[payload]" doc:name="Logger"/>
+    </flow>
+    <flow name="updateUserInServiceNowFlow">
+
+        <dw:transform-message doc:name="Create update User request">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sys_user
+---
+{
+	ns0#update: {
+		ns0#active: payload.active,
+		ns0#city: payload.city,
+		ns0#country: payload.country,
+		ns0#email: payload.email,
+		ns0#"employee_number": payload.employeeNumber,
+		ns0#"first_name": payload.firstName,
+		ns0#"home_phone": payload.homePhone,
+		ns0#"last_name": payload.lastName,
+		ns0#"middle_name": payload.middleName,
+		ns0#name: payload.name,
+		ns0#state: payload.state,
+		ns0#street: payload.street,
+		ns0#"user_name": payload.userName,
+		ns0#zip: payload.zip,
+		ns0#"sys_id": payload.sysId
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <servicenow:invoke config-ref="ServiceNow_Test" type="sys_user||update" doc:name="ServiceNow"/>
+        <dw:transform-message doc:name="Get record sys_id">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.updateResponse."sys_id"]]></dw:set-payload>
+        </dw:transform-message>
+
+ <logger message="Update User in Service Now  - result sys_id: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="queryUserFromServiceNowFlow" >
+
+        <dw:transform-message doc:name="Create getRecords by username request">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sys_user
+---
+{
+	ns0#getRecords: {
+		ns0#"user_name": payload.userName	
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        
+        <servicenow:invoke config-ref="ServiceNow_Test" type="sys_user||getRecords" doc:name="ServiceNow"/>
+
+        <dw:transform-message doc:name="Get records result">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse != '' and payload.getRecordsResponse != null) otherwise []]]></dw:set-payload>
+        </dw:transform-message>
 
         <logger level="INFO" message="Query user from Service Now result: #[payload]" doc:name="Logger"/>
-    </sub-flow>
+    </flow>
 
     
     <sub-flow name="queryWorkerFromWorkdayFlow" >
-
-        <wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Workday Human Resource" workersRequest-ref="#[org.mule.templates.WorkersRequest.getWorker(payload)]"/>
+<dw:transform-message doc:name="Prepare GetWorkersRequestType request">
+                            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+{
+	requestReferences: {
+		workerReference: [{
+			ID: [{
+				type: "Employee_ID",
+				value: payload
+			}]
+		}]
+	},
+	responseGroup: {
+		includeEmploymentInformation: true,
+		includeOrganizations: true,
+		includePersonalInformation: true,
+		includeReference: true,
+		includeRoles: true,
+		includeTransactionLogData: true,
+		includeUserAccount: true
+	}
+} as :object {
+	class : "com.workday.hr.GetWorkersRequestType"
+}]]></dw:set-payload>
+                        </dw:transform-message>
+        <wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Workday Human Resource" />
     </sub-flow>
 
     
     <sub-flow name="updateWorkerInWorkdayFlow" >
-        <data-mapper:transform config-ref="Pojo_To_ChangePreferredNameRequestType" doc:name="Pojo To ChangePreferredNameRequestType"/>
+<dw:transform-message doc:name="Transform Pojo To ChangePreferredNameRequestType">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+{
+	changePreferredNameData: {
+		nameData: {
+			countryReference: {
+				ID: [{
+					type: "ISO_3166-1_Alpha-3_Code",
+					value: "USA"
+				}]
+			},
+			firstName : payload.firstName,
+			lastName : payload.lastName			
+		},
+		workerReference: {
+			ID: [{
+				type: "Employee_ID",
+				value: payload.mgrID
+			}]
+		}
+	}
+} as :object {
+	class : "com.workday.hr.ChangePreferredNameRequestType"
+}]]></dw:set-payload>
+        </dw:transform-message>
+
         <wd-hr:change-preferred-name config-ref="Workday_Human_Resource_Test" doc:name="Workday Human Resource"/>
     </sub-flow>
 

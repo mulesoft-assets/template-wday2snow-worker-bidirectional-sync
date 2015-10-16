@@ -17,12 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,14 +28,12 @@ import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.construct.Flow;
 import org.mule.processor.chain.InterceptingChainLifecycleWrapper;
 import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
-import org.mule.templates.Worker;
-import org.mule.transport.NullPayload;
+import org.mule.templates.object.Worker;
 
 import com.mulesoft.module.batch.BatchTestHelper;
-import com.servicenow.usermanagement.sysuser.GetRecordsResponse;
-import com.servicenow.usermanagement.sysuser.GetRecordsResponse.GetRecordsResult;
 import com.workday.hr.GetWorkersResponseType;
 import com.workday.hr.PersonNameDataType;
 import com.workday.hr.WorkerType;
@@ -54,7 +49,7 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 	private static String WORKDAY_WORKER_ID;
 	private static String SERVICE_NOW_USER_ID;
 	private static final String VAR_ID = "sysId";
-	private static final String VAR_USERNAME = "userName";
+	private static final String VAR_USER_NAME = "userName";
 	private static final String VAR_LAST_NAME = "lastName";
 	private static final String VAR_FIRST_NAME = "firstName";
 	private static final String VAR_EMAIL = "email";
@@ -64,10 +59,10 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 	private static final String WORKDAY_INBOUND_FLOW_NAME = "triggerSyncFromWorkdayFlow";
 	private static final int TIMEOUT_MILLIS = 300;
 
-	private SubflowInterceptingChainLifecycleWrapper insertUserInServiceNowFlow;
-	private SubflowInterceptingChainLifecycleWrapper updateUserInServiceNowFlow;
+	private Flow insertUserInServiceNowFlow;
+	private Flow updateUserInServiceNowFlow;
+	private Flow queryUserFromServiceNowFlow;
 	private SubflowInterceptingChainLifecycleWrapper updateWorkerInWorkdayFlow;
-	private InterceptingChainLifecycleWrapper queryUserFromServiceNowFlow;
 	private InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow;
 	private BatchTestHelper batchTestHelper;
 	
@@ -128,22 +123,19 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		stopFlowSchedulers(WORKDAY_INBOUND_FLOW_NAME);
 	}
 	
-	private void getAndInitializeFlows() throws InitialisationException {
+	private void getAndInitializeFlows() throws MuleException {
 		// Flow for inserting a user in Service Now
-		insertUserInServiceNowFlow = getSubFlow("insertUserInServiceNowFlow");
-		insertUserInServiceNowFlow.initialise();
+		insertUserInServiceNowFlow = muleContext.getRegistry().lookupObject("insertUserInServiceNowFlow");
 				
 		// Flow for updating a user in Service Now
-		updateUserInServiceNowFlow = getSubFlow("updateUserInServiceNowFlow");
-		updateUserInServiceNowFlow.initialise();
+		updateUserInServiceNowFlow = muleContext.getRegistry().lookupObject("updateUserInServiceNowFlow");
+
+		// Flow for querying the user from Service Now
+		queryUserFromServiceNowFlow = muleContext.getRegistry().lookupObject("queryUserFromServiceNowFlow");
 		
 		// Flow for updating a user in Workday
 		updateWorkerInWorkdayFlow = getSubFlow("updateWorkerInWorkdayFlow");
 		updateWorkerInWorkdayFlow.initialise();
-
-		// Flow for querying the user from Service Now
-		queryUserFromServiceNowFlow = getSubFlow("queryUserFromServiceNowFlow");
-		queryUserFromServiceNowFlow.initialise();
 
 		// Flow for querying the worker from Workday
 		queryWorkerFromWorkdayFlow = getSubFlow("queryWorkerFromWorkdayFlow");
@@ -155,36 +147,35 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		String infixServiceNow = "_0_SNOW_" + TEMPLATE_NAME + "_" + System.currentTimeMillis();
 		serviceNowUser0.put(VAR_FIRST_NAME, "fn" + infixServiceNow);
 		serviceNowUser0.put(VAR_LAST_NAME, "ln" + infixServiceNow);
+		serviceNowUser0.put(VAR_USER_NAME, "32604");
 		serviceNowUser0.put(VAR_EMAIL, "e" + infixServiceNow + "@example.com");
 		
 		serviceNowUser0.put(VAR_ID, SERVICE_NOW_USER_ID);
 		
 		logger.info("updating a Service Now user: " + serviceNowUser0.get(VAR_EMAIL));
-		Object user = updateServieNowUser(serviceNowUser0, updateUserInServiceNowFlow);
+		Object userSysId = updateServieNowUser(serviceNowUser0, updateUserInServiceNowFlow);
 		
 		// if there is no such a user with specified ID insert new one to trigger flow
-		if(user instanceof NullPayload) {
+		if(userSysId == null) {
 			logger.warn("User " +  serviceNowUser0.get(VAR_EMAIL) + " was not found.");
 			logger.info("inserting service now user: " + serviceNowUser0.get(VAR_EMAIL));
-			user = insertServiceNowUser(serviceNowUser0, insertUserInServiceNowFlow);
-		}
-		
-		Map<String, Object> snowUser = (Map<String, Object>) user;
+			userSysId = insertServiceNowUser(serviceNowUser0, insertUserInServiceNowFlow);
+		}	
 		
 		createdUsersInServiceNow.clear();
-		serviceNowUser0.put(VAR_ID, snowUser.get(VAR_ID));
+		serviceNowUser0.put(VAR_ID, userSysId);
 		createdUsersInServiceNow.add(serviceNowUser0);
 	}
 	
-	private Object insertServiceNowUser(Map<String, Object> user, SubflowInterceptingChainLifecycleWrapper isertFlow) throws MuleException, Exception {
+	private Object insertServiceNowUser(Map<String, Object> user, Flow isertFlow) throws MuleException, Exception {
 		return isertFlow.process(getTestEvent(Collections.unmodifiableMap(user), MessageExchangePattern.REQUEST_RESPONSE)).getMessage().getPayload();
 	}
 	
-	private Object updateServieNowUser(Map<String, Object> user, InterceptingChainLifecycleWrapper updateUserFlow) throws MuleException, Exception {
+	private Object updateServieNowUser(Map<String, Object> user, Flow updateUserFlow) throws MuleException, Exception {
 		return updateUserFlow.process(getTestEvent(user, MessageExchangePattern.REQUEST_RESPONSE)).getMessage().getPayload();
 	}
 	
-	private Object queryServieNowUser(Map<String, Object> user, InterceptingChainLifecycleWrapper queryUserFlow) throws MuleException, Exception {
+	private Object queryServieNowUser(Map<String, Object> user, Flow queryUserFlow) throws MuleException, Exception {
 		return queryUserFlow.process(getTestEvent(user, MessageExchangePattern.REQUEST_RESPONSE)).getMessage().getPayload();
 	}
 
@@ -217,9 +208,9 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		executeWaitAndAssertBatchJob(SERVICE_NOW_INBOUND_FLOW_NAME);
 		Map<String, Object> user = createdUsersInServiceNow.get(0);
 		
-		GetRecordsResponse snowResponse = (GetRecordsResponse) queryServieNowUser(user , queryUserFromServiceNowFlow);
+		List<Map<String, Object>> snowResponse = (List<Map<String,Object>>) queryServieNowUser(user , queryUserFromServiceNowFlow);
 		
-		WorkerType worker = queryWorkdayWorker(snowResponse.getGetRecordsResult().get(0).getUserName(), queryWorkerFromWorkdayFlow);
+		WorkerType worker = queryWorkdayWorker((String)snowResponse.get(0).get("user_name"), queryWorkerFromWorkdayFlow);
 		PersonNameDataType workerNameData = worker.getWorkerData().getPersonalData().getNameData();
 		
 		Assert.assertFalse("Synchronized user should not be null payload", worker == null);
@@ -243,21 +234,19 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 
 		Map<String, Object> workdayUser = new HashMap<String, Object>();
 		Worker worker = createdWorkersInWorkday.get(0);
-		workdayUser.put(VAR_USERNAME, worker.getMgrID());
+		workdayUser.put(VAR_USER_NAME, worker.getMgrID());
 		
-		Object object =  queryServieNowUser(workdayUser , queryUserFromServiceNowFlow);
+		List<?> snowResponse =  (List<?>) queryServieNowUser(workdayUser , queryUserFromServiceNowFlow);
 		
-		Assert.assertFalse("Synchronized user should not be null payload", object instanceof NullPayload);
+		Assert.assertFalse("Synchronized user should not be null payload", snowResponse == null);
 		
-		GetRecordsResponse snowResponse = (GetRecordsResponse) object;
-		GetRecordsResult user = snowResponse.getGetRecordsResult().get(0);
+		Map<String, Object> user = (Map<String, Object>) snowResponse.get(0);
 		
-		Assert.assertEquals("The user should have been sync and the first name must match", worker.getFirstName(), user.getFirstName());
-		Assert.assertEquals("The user should have been sync and the last name must match", worker.getLastName(), user.getLastName());
+		Assert.assertEquals("The user should have been sync and the first name must match", worker.getFirstName(), user.get("first_name"));
+		Assert.assertEquals("The user should have been sync and the last name must match", worker.getLastName(), user.get("last_name"));
 	}
 	
-	private WorkerType queryWorkdayWorker(String id,
-			InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow2) {
+	private WorkerType queryWorkdayWorker(String id, InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow2) {
 		try {
 			MuleEvent response = queryWorkerFromWorkdayFlow2.process(getTestEvent(id, MessageExchangePattern.REQUEST_RESPONSE));
 			GetWorkersResponseType res = (GetWorkersResponseType) response.getMessage().getPayload();

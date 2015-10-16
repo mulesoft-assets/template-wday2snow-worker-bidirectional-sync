@@ -3,7 +3,7 @@
 <mule xmlns:wd-integration="http://www.mulesoft.org/schema/mule/wd-integration" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.2"
+	xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -21,15 +21,9 @@ http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schem
 	
 	<spring:beans>
   		<spring:bean id="PollSynchronizer" name="PollSynchronizer" class="org.mule.templates.util.PollSynchronizer" scope="singleton" />
- 	</spring:beans>
-     	
- 	<servicenow:config name="ServiceNow" username="${snow.user}"
-		password="${snow.password}" serviceEndpoint="${snow.endpoint}"
-		doc:name="ServiceNow">
-		<servicenow:connection-pooling-profile
-			initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW" />
-		<reconnect />
-	</servicenow:config>
+ 	</spring:beans>     
+	
+    <servicenow:config name="ServiceNow" username="${snow.user}" password="${snow.password}" serviceAddress="${snow.endpoint}" doc:name="ServiceNow: configuration"/>
 	
 	<wd-hr:config name="Workday_Human_Resource" hrUser="${wday.user}" hrPassword="${wday.password}" hrEndpoint="${wday.endpoint}" doc:name="Workday Human Resource">
 		<wd-hr:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW" />
