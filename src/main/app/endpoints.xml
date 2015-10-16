@@ -75,7 +75,7 @@ response.responseData.worker map {
 		"zip" : $.workerData.personalData.contactData.addressData[-1].postalCode,
 		street : $.workerData.personalData.contactData.addressData[-1].addressLineData[-1].value,
 		city : $.workerData.personalData.contactData.addressData[-1].municipality,
-		state : $.workerData.personalData.contactData.addressData[-1].countryRegionReference[-1].ID[-1].value,
+		state : $.workerData.personalData.contactData.addressData[-1].countryRegionReference.ID[-1].value,
 		userName : $.workerReference.ID[1].value,
 		LastModifiedOn : payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.updatedThrough,		
 		lastEventType : $.workerData.transactionLogEntryData.transactionLogEntry[0].transactionLogReference.ID[0].type,
