@@ -61,7 +61,9 @@ There are a couple of things you should take into account before running this te
 
 2. All times are stored in the ServiceNow platform in Coordinated Universal Time (UTC) so time data needs to be converted to UTC time zone before querying the ServiceNow.
 
-3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.
+3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.			
+
+4. **Username field:** The username has to be valid for both instancies.
 
 
 

@@ -377,9 +377,9 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 ---
 {
 	ns0#update: {
-		ns0#"user_name": recordVars.snowUser.sys_id,
+		ns0#"user_name": payload.employeeReference.ID[1].value,
 		// get the ID of the new employee
-		ns0#"sys_id": payload.employeeReference.ID[1].value	
+		ns0#"sys_id": recordVars.snowUser.sys_id	
 	}
 }]]></dw:set-payload>
                 </dw:transform-message>

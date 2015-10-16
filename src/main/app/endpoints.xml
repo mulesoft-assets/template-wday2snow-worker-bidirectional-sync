@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
     <flow name="triggerSyncFromWorkdayFlow"  processingStrategy="synchronous" initialState="started">
 		<poll doc:name="Poll">
 			<fixed-frequency-scheduler frequency="${poll.frequencyMillis}" startDelay="${poll.startDelayMillis}" />
-			<watermark variable="lastQueryDateA" default-expression="${wday.watermark.default.expression}" update-expression="#[flowVars.updatedThrough]"/>
+			<watermark variable="lastQueryDateA" default-expression="${wday.watermark.default.expression}" />
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="Lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
                 <logger message="Fetching Workday updates: #[flowVars.lastQueryDate]" level="INFO" doc:name="Log 'Fetching Workday updates...'"/>
@@ -55,7 +55,6 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
                 <wd-hr:get-workers config-ref="Workday_Human_Resource"  doc:name="Fetch Workers from Workday"/>
 			</processor-chain>
 		</poll>
-        <set-variable variableName="updatedThrough" value="#[payload.getRequestCriteria().getTransactionLogCriteriaData().get(0).getTransactionDateRangeData().getUpdatedThrough()]" doc:name="Set updatedThrough"/>
 
 
         <dw:transform-message doc:name="GetWorkersResponseType to Map">
@@ -84,6 +83,10 @@ response.responseData.worker map {
 } unless (response.responseData is :null) otherwise []
 
 ]]></dw:set-payload>
+            <dw:set-variable variableName="lastQueryDateA"><![CDATA[%dw 1.0
+%output application/java
+---
+payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.updatedThrough]]></dw:set-variable>
         </dw:transform-message>
 
 
