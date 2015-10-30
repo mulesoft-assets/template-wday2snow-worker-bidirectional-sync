@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
     <batch:job name="syncBatchWorkday" max-failed-records="1">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
-            <batch:step name="GetLastEvent" accept-expression="payload.lastEventType != null &amp;&amp; payload.lastEventValue != null">
+            <batch:step name="GetLastEventStep" accept-expression="payload.lastEventType != null &amp;&amp; payload.lastEventValue != null">
                 <enricher source="#[payload]" target="#[recordVars['lastEvent']]" doc:name="store the value in 'recordVars['lastEvent']'">
                     <processor-chain doc:name="Processor Chain">
                         <dw:transform-message doc:name="Prepare GetEventDetailsRequestType request">
@@ -55,7 +55,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
                 </enricher>
             </batch:step>
 
-			<batch:step name="getUserInServiceNowIfExists" accept-expression="#[recordVars['lastEvent'] == null || recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
+			<batch:step name="getUserInServiceNowIfExistsStep" accept-expression="#[recordVars['lastEvent'] == null || recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
 
                 <enricher source="#[payload]" target="#[recordVars['userInTargetInstance']]" doc:name="store the existence of the user in target instance">
                     <processor-chain doc:name="Processor Chain">
@@ -84,7 +84,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
             		</processor-chain>
                 </enricher>
             </batch:step>
-                        <batch:step name="InsertUserInServiceNowIfItDoesntExist" accept-expression="#[recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].isEmpty()]">
+                        <batch:step name="InsertUserInServiceNowIfItDoesntExistStep" accept-expression="#[recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].isEmpty()]">
                 <logger message="inserting user to ServiceNow: #[payload]" level="INFO" doc:name="Log the insertion of the User"/>
                 <dw:transform-message doc:name="Prepare insertUser request">
                     <dw:set-payload><![CDATA[%dw 1.0
@@ -113,7 +113,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
                 <servicenow:invoke config-ref="ServiceNow" type="sys_user||insert" doc:name="Insert User to ServiceNow"/>
 
             </batch:step>
-            <batch:step name="UpdateUserInServiceNowIfItExists" accept-expression="#[(recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; !recordVars['userInTargetInstance'].isEmpty()) || (recordVars['lastEvent'] == null &amp;&amp; !recordVars['userInTargetInstance'].isEmpty())]">
+            <batch:step name="UpdateUserInServiceNowIfItExistsStep" accept-expression="#[(recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; !recordVars['userInTargetInstance'].isEmpty()) || (recordVars['lastEvent'] == null &amp;&amp; !recordVars['userInTargetInstance'].isEmpty())]">
                 <logger message="updating user in ServiceNow: #[payload]" level="INFO" doc:name="Log the update of the User"/>
 
                 <dw:transform-message doc:name="Prepare updateUser request">
@@ -160,7 +160,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
     <batch:job name="syncBatchServiceNow" max-failed-records="1">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
-            <batch:step name="storeUserInformation" >
+            <batch:step name="storeUserInformationStep" >
                 <logger message="ServiceNow user: #[payload]" level="INFO" doc:name="Log the ServiceNow user"/>
                 <batch:set-record-variable variableName="snowUser" value="#[payload]" doc:name="store Service Now user"/>
                 <batch:set-record-variable variableName="userUpdatedBy" value="#[payload['sys_updated_by']]" doc:name="Store User sysUpdatedBy"/>
@@ -202,7 +202,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 
             </batch:step>
 
-            <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExist" accept-expression="#[(recordVars['workerInTargetInstance'] == null)]">
+            <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExistStep" accept-expression="#[(recordVars['workerInTargetInstance'] == null)]">
 
                 <dw:transform-message doc:name="Transform User To HireEmployeeRequestType">
                     <dw:set-payload><![CDATA[%dw 1.0
@@ -388,7 +388,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 <!--                 <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update userName in Service Now"> -->
 
             </batch:step>
-            <batch:step name="updateWorkerInWorkdayIfWorkerExists" accept-expression="#[(recordVars['workerInTargetInstance'] != null &amp;&amp; recordVars['workerInTargetInstance'].responseData != null)]">
+            <batch:step name="updateWorkerInWorkdayIfWorkerExistsStep" accept-expression="#[(recordVars['workerInTargetInstance'] != null &amp;&amp; recordVars['workerInTargetInstance'].responseData != null)]">
 
  <dw:transform-message doc:name="Transform User To MaintainContactInformationForPersonEventRequestType">
                     <dw:set-payload><![CDATA[%dw 1.0
