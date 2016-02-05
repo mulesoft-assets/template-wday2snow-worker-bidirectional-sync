@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>template-wday2snow-worker-bidirectional-sync</artifactId>
 	<packaging>mule</packaging>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<name>template-wday2snow-worker-bidirectional-sync Mule Anypoint Template Project</name>
 
 	<scm>
