@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.junit.Rule;
 import org.mule.api.config.MuleProperties;
+import org.mule.construct.Flow;
 import org.mule.tck.junit4.FunctionalTestCase;
 import org.mule.tck.junit4.rule.DynamicPort;
 
@@ -84,6 +85,10 @@ public class AbstractTemplateTestCase extends FunctionalTestCase {
 		builder.append(timeStamp);
 
 		return builder.toString();
+	}
+	
+	protected Flow getFlow(String flowName) {
+		return (Flow) muleContext.getRegistry().lookupObject(flowName);
 	}
 
 }
