@@ -30,13 +30,9 @@ import org.mule.api.MuleException;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.construct.Flow;
 import org.mule.processor.chain.InterceptingChainLifecycleWrapper;
-import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.templates.object.Worker;
 
 import com.mulesoft.module.batch.BatchTestHelper;
-import com.workday.hr.GetWorkersResponseType;
-import com.workday.hr.PersonNameDataType;
-import com.workday.hr.WorkerType;
 
 /**
  * The objective of this class is validating the correct behavior of the flows
@@ -57,12 +53,12 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 	
 	private static final String SERVICE_NOW_INBOUND_FLOW_NAME = "triggerSyncFromServiceNowFlow";
 	private static final String WORKDAY_INBOUND_FLOW_NAME = "triggerSyncFromWorkdayFlow";
-	private static final int TIMEOUT_MILLIS = 300;
+	private static final int TIMEOUT_MILLIS = 30000;
 
 	private Flow insertUserInServiceNowFlow;
 	private Flow updateUserInServiceNowFlow;
 	private Flow queryUserFromServiceNowFlow;
-	private SubflowInterceptingChainLifecycleWrapper updateWorkerInWorkdayFlow;
+	private Flow updateWorkerInWorkdayFlow;
 	private InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow;
 	private BatchTestHelper batchTestHelper;
 	
@@ -125,17 +121,16 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 	
 	private void getAndInitializeFlows() throws MuleException {
 		// Flow for inserting a user in Service Now
-		insertUserInServiceNowFlow = muleContext.getRegistry().lookupObject("insertUserInServiceNowFlow");
+		insertUserInServiceNowFlow = getFlow("insertUserInServiceNowFlow");
 				
 		// Flow for updating a user in Service Now
-		updateUserInServiceNowFlow = muleContext.getRegistry().lookupObject("updateUserInServiceNowFlow");
+		updateUserInServiceNowFlow = getFlow("updateUserInServiceNowFlow");
 
 		// Flow for querying the user from Service Now
-		queryUserFromServiceNowFlow = muleContext.getRegistry().lookupObject("queryUserFromServiceNowFlow");
+		queryUserFromServiceNowFlow = getFlow("queryUserFromServiceNowFlow");
 		
 		// Flow for updating a user in Workday
-		updateWorkerInWorkdayFlow = getSubFlow("updateWorkerInWorkdayFlow");
-		updateWorkerInWorkdayFlow.initialise();
+		updateWorkerInWorkdayFlow = getFlow("updateWorkerInWorkdayFlow");
 
 		// Flow for querying the worker from Workday
 		queryWorkerFromWorkdayFlow = getSubFlow("queryWorkerFromWorkdayFlow");
@@ -210,16 +205,19 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		
 		List<Map<String, Object>> snowResponse = (List<Map<String,Object>>) queryServieNowUser(user , queryUserFromServiceNowFlow);
 		
-		WorkerType worker = queryWorkdayWorker((String)snowResponse.get(0).get("user_name"), queryWorkerFromWorkdayFlow);
-		PersonNameDataType workerNameData = worker.getWorkerData().getPersonalData().getNameData();
+		Thread.sleep(20000);
+		Map<String, Object> workerData = queryWorkdayWorker((String)snowResponse.get(0).get("user_name"), queryWorkerFromWorkdayFlow);
 		
-		Assert.assertFalse("Synchronized user should not be null payload", worker == null);
+		for(String key : workerData.keySet()){
+			String newValue = workerData.get(key).toString().substring(1, workerData.get(key).toString().length() - 1); // we have to cut the brackets
+			workerData.put(key, newValue);
+		}
+		
+		Assert.assertFalse("Synchronized user should not be null payload", workerData == null);
 		Assert.assertEquals("The user should have been sync and the first name must match", user.get(VAR_FIRST_NAME), 
-				workerNameData.getPreferredNameData().getNameDetailData().getFirstName());
+				workerData.get("firstName"));
 		Assert.assertEquals("The user should have been sync and the last name must match", user.get(VAR_LAST_NAME), 
-				workerNameData.getPreferredNameData().getNameDetailData().getLastName());
-		Assert.assertEquals("The user should have been sync and the email must match", user.get(VAR_EMAIL), 
-				worker.getWorkerData().getPersonalData().getContactData().getEmailAddressData().get(1).getEmailAddress());
+				workerData.get("lastName"));
 			
 	}
 
@@ -246,11 +244,11 @@ public class BidirectionalWorkerSyncTestIT extends AbstractTemplateTestCase {
 		Assert.assertEquals("The user should have been sync and the last name must match", worker.getLastName(), user.get("last_name"));
 	}
 	
-	private WorkerType queryWorkdayWorker(String id, InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow2) {
+	private Map<String, Object> queryWorkdayWorker(String id, InterceptingChainLifecycleWrapper queryWorkerFromWorkdayFlow2) {
 		try {
 			MuleEvent response = queryWorkerFromWorkdayFlow2.process(getTestEvent(id, MessageExchangePattern.REQUEST_RESPONSE));
-			GetWorkersResponseType res = (GetWorkersResponseType) response.getMessage().getPayload();
-			return res.getResponseData().getWorker().isEmpty() ? null : res.getResponseData().getWorker().get(0);
+			Map<String, Object> res = (Map<String, Object>) response.getMessage().getPayload();
+			return res;
 		} catch (InitialisationException e) {
 			e.printStackTrace();
 		} catch (MuleException e) {

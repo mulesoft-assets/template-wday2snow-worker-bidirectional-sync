@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.mule.templates</groupId>
 		<artifactId>templates-tooling-parent-pom</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.8</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -20,11 +20,6 @@
 	  <tag>HEAD</tag>
   </scm>
 
-	<properties>
-		<wday.st.version>5.0.0</wday.st.version>
-		<wday.int.version>5.0.0</wday.int.version>	
-	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -38,16 +33,16 @@
 							<artifactId>mule-module-servicenow</artifactId>
 						</inclusion>
 						<inclusion>
+							<groupId>org.mule.modules</groupId>
+							<artifactId>mule-module-extensions-support</artifactId>
+						</inclusion>
+						<inclusion>
+							<groupId>org.mule.modules</groupId>
+							<artifactId>mule-module-extensions-spring-support</artifactId>
+						</inclusion>
+						<inclusion>
                             <groupId>org.mule.modules</groupId>
-                            <artifactId>mule-module-workday-integrations</artifactId>
-                        </inclusion>
-                    <inclusion>
-                            <groupId>org.mule.modules</groupId>
-                            <artifactId>mule-module-workday-humanresources</artifactId>
-                        </inclusion>
-                    <inclusion>
-                            <groupId>org.mule.modules</groupId>
-                            <artifactId>mule-module-workday-staffing</artifactId>
+                            <artifactId>workday-connector</artifactId>
                         </inclusion>
                     </inclusions>
 				</configuration>
@@ -67,30 +62,9 @@
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-workday-humanresources</artifactId>
-            <version>${wday.hr.version}</version>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-workday-staffing</artifactId>
-            <version>${wday.st.version}</version>
-        </dependency>
-      	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-workday-integrations</artifactId>
-            <version>${wday.int.version}</version>
-        </dependency>
     <dependency>
             <groupId>com.mulesoft.muleesb.modules</groupId>
             <artifactId>mule-module-batch-ee</artifactId>
-            <version>${mule.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    <dependency>
-            <groupId>com.mulesoft.muleesb.modules</groupId>
-            <artifactId>mule-module-data-mapper</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -105,6 +79,21 @@
             <artifactId>mule-plugin-weave_2.11</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
+        </dependency>        
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-extensions-support</artifactId>
+			<version>${mule.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-extensions-spring-support</artifactId>
+			<version>${mule.version}</version>
+		</dependency>
+    	<dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>workday-connector</artifactId>
+            <version>${wday.version}</version>
         </dependency>
     </dependencies>
 

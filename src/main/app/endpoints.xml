@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+<mule xmlns:wd-connector="http://www.mulesoft.org/schema/mule/wd-connector" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr"
-	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wd-connector http://www.mulesoft.org/schema/mule/wd-connector/current/mule-wd-connector.xsd
 http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
 http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
-http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
-http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
     
     <!-- This is the endpoints file. In this file you should declare your inbound and outbound endpoints in order to control the access to your integration -->
 
@@ -23,71 +22,75 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 			<watermark variable="lastQueryDateA" default-expression="${wday.watermark.default.expression}" />
             <processor-chain doc:name="Processor Chain">
             	<expression-component doc:name="Lock processing to avoid two syncs occurring at the same time"><![CDATA[app.registry['PollSynchronizer'].lock();]]></expression-component>
-                <logger message="Fetching Workday updates: #[flowVars.lastQueryDate]" level="INFO" doc:name="Log 'Fetching Workday updates...'"/>
+                <logger message="Fetching Workday updates: #[flowVars.lastQueryDateA]" level="INFO" doc:name="Log 'Fetching Workday updates...'"/>
                 <dw:transform-message doc:name="Create getWorkersRequest">
                     <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
+%namespace ns0 urn:com.workday/bsvc
 ---
 {
-	requestCriteria: {		
-		transactionLogCriteriaData: [
-			{
-				transactionDateRangeData: {
-					updatedFrom		: flowVars.lastQueryDateA,
-					updatedThrough	: now - |PT6S|
+	ns0#Get_Workers_Request: {
+		ns0#Request_Criteria: {
+			ns0#Transaction_Log_Criteria_Data: {
+				ns0#Transaction_Date_Range_Data: {
+					ns0#Updated_From: flowVars.lastQueryDateA,
+					ns0#Updated_Through: now - |PT6S|
 				}
-			}
-		]
-	},
-	responseGroup: {
-		includeUserAccount			: true,
-		includeReference			: true,
-		includeRoles				: true,
-		includePersonalInformation	: true,
-		includeOrganizations		: true, 
-		includeEmploymentInformation: true,
-		includeReference			: true,
-		includeTransactionLogData	: true
+			},
+			ns0#Exclude_Inactive_Workers: true,
+			ns0#Exclude_Employees: false,
+			ns0#Exclude_Contingent_Workers: false
+		},
+		ns0#Response_Group: {
+			ns0#Include_Reference: true,
+			ns0#Include_Personal_Information: true,
+			ns0#Include_Organizations: true,
+			ns0#Include_Transaction_Log_Data: true
+		}
 	}
-
-} as :object {class: "com.workday.hr.GetWorkersRequestType"}]]></dw:set-payload>
+}]]></dw:set-payload>
                 </dw:transform-message>
-                <wd-hr:get-workers config-ref="Workday_Human_Resource"  doc:name="Fetch Workers from Workday"/>
+
+                <wd-connector:invoke config-ref="Workday__Basic" type="Human_Resources||Get_Workers" doc:name="Fetch Workers from Workday"/>
+
+                <dw:transform-message doc:name="GetWorkersResponseType to Map and update lastQueryDateA">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 urn:com.workday/bsvc
+---
+payload.ns0#Get_Workers_Response.ns0#Response_Data.*ns0#Worker map ((worker , indexOfWorker) -> {
+	name: worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Legal_Name_Data.ns0#Name_Detail_Data.ns0#Formatted_Name,
+	active : worker.ns0#Worker_Data.ns0#Employment_Data.ns0#Worker_Status_Data.ns0#Active,
+	firstName : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Preferred_Name_Data.ns0#Name_Detail_Data.ns0#First_Name,
+	lastName : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Preferred_Name_Data.ns0#Name_Detail_Data.ns0#Last_Name,
+	middleName : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Preferred_Name_Data.ns0#Name_Detail_Data.ns0#Middle_Name,
+	email : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address,
+	country : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Address_Data[-1].ns0#Country_Reference.ns0#ID[2],
+	employeeNumber : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Preferred_Name_Data.ns0#Name_Detail_Data.ns0#First_Name ++ 
+					 worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Name_Data.ns0#Preferred_Name_Data.ns0#Name_Detail_Data.ns0#Last_Name,
+	homePhone : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Phone_Data[-1].ns0#Phone_Number,
+	"zip" : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Address_Data[-1].ns0#Postal_Code,
+	street : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Address_Data[-1].ns0#Address_Line_Data[-1],
+	city : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Address_Data[-1].ns0#Municipality,
+	state : worker.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Address_Data[-1].ns0#Country_Region_Reference.ns0#ID[-1],
+	userName : (worker.ns0#Worker_Reference),
+	LastModifiedOn : payload.ns0#Request_Criteria.ns0#Transaction_Log_Criteria_Data[0].ns0#Transaction_Date_Range_Data.ns0#Updated_Through,		
+	lastEventType : worker.ns0#Worker_Data.ns0#Transaction_Log_Entry_Data.ns0#Transaction_Log_Entry.ns0#Transaction_Log_Reference.ns0#ID.@ns0#type,
+	lastEventValue : worker.ns0#Worker_Data.ns0#Transaction_Log_Entry_Data.ns0#Transaction_Log_Entry.ns0#Transaction_Log_Reference.ns0#ID	
+}) unless (payload.ns0#Get_Workers_Response.ns0#Response_Data is :null) otherwise []
+
+]]></dw:set-payload>
+                   <dw:set-variable variableName="lastQueryDateA"><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 urn:com.workday/bsvc
+---
+payload.ns0#Get_Workers_Response.ns0#Request_Criteria.ns0#Transaction_Log_Criteria_Data.ns0#Transaction_Date_Range_Data.ns0#Updated_Through]]></dw:set-variable>
+                </dw:transform-message>
+
+
 			</processor-chain>
 		</poll>
 
-
-        <dw:transform-message doc:name="GetWorkersResponseType to Map">
-            <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
-%var response = payload as :object { class: "com.workday.hr.GetWorkersResponseType" }
----
-response.responseData.worker map {
-		name : $.workerData.personalData.nameData.preferredNameData.nameDetailData.formattedName,
-		active : $.workerData.employmentData.workerStatusData.active,
-		firstName : $.workerData.personalData.nameData.preferredNameData.nameDetailData.firstName,
-		lastName : $.workerData.personalData.nameData.preferredNameData.nameDetailData.lastName,
-		middleName : $.workerData.personalData.nameData.preferredNameData.nameDetailData.middleName,
-		email : $.workerData.personalData.contactData.emailAddressData[-1].emailAddress,
-		country : $.workerData.personalData.contactData.addressData[-1].countryReference.ID[2].value,
-		employeeNumber : $.workerData.personalData.nameData.preferredNameData.nameDetailData.firstName ++ "." ++ $.workerData.personalData.nameData.preferredNameData.nameDetailData.lastName,
-		homePhone : $.workerData.personalData.contactData.phoneData[-1].phoneNumber,
-		"zip" : $.workerData.personalData.contactData.addressData[-1].postalCode,
-		street : $.workerData.personalData.contactData.addressData[-1].addressLineData[-1].value,
-		city : $.workerData.personalData.contactData.addressData[-1].municipality,
-		state : $.workerData.personalData.contactData.addressData[-1].countryRegionReference.ID[-1].value,
-		userName : $.workerReference.ID[1].value,
-		LastModifiedOn : payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.updatedThrough,		
-		lastEventType : $.workerData.transactionLogEntryData.transactionLogEntry[0].transactionLogReference.ID[0].type,
-		lastEventValue : $.workerData.transactionLogEntryData.transactionLogEntry[0].transactionLogReference.ID[0].value		
-} unless (response.responseData is :null) otherwise []
-
-]]></dw:set-payload>
-            <dw:set-variable variableName="lastQueryDateA"><![CDATA[%dw 1.0
-%output application/java
----
-payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.updatedThrough]]></dw:set-variable>
-        </dw:transform-message>
 
 
         <choice doc:name="Filter empty result set">
@@ -95,7 +98,7 @@ payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.u
                 <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
             </when>
             <otherwise>
-                <batch:execute name="syncBatchWorkday" doc:name="Execute syncBatchWorkday"/>
+                <batch:execute name="syncBatchWorkday" doc:name="syncBatchWorkday"/>
             </otherwise>
         </choice>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>
@@ -138,7 +141,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
                 <expression-component doc:name="Release lock"><![CDATA[#[app.registry['PollSynchronizer'].unlock()]]]></expression-component>
             </when>
             <otherwise>
-                <batch:execute name="syncBatchServiceNow" doc:name="Execute syncBatchServiceNow"/>
+                <batch:execute name="syncBatchServiceNow" doc:name="syncBatchServiceNow"/>
             </otherwise>
         </choice>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>

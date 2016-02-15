@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:wd-integration="http://www.mulesoft.org/schema/mule/wd-integration" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
+<mule xmlns:wd-connector="http://www.mulesoft.org/schema/mule/wd-connector" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:wd-integration="http://www.mulesoft.org/schema/mule/wd-integration" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,46 +14,48 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
 http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
 http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schema/mule/wd-integration/current/mule-wd-integration.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd" >
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/wd-connector http://www.mulesoft.org/schema/mule/wd-connector/current/mule-wd-connector.xsd" >
      
     <batch:job name="syncBatchWorkday" max-failed-records="1">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
+
             <batch:step name="GetLastEventStep" accept-expression="payload.lastEventType != null &amp;&amp; payload.lastEventValue != null">
                 <enricher source="#[payload]" target="#[recordVars['lastEvent']]" doc:name="store the value in 'recordVars['lastEvent']'">
                     <processor-chain doc:name="Processor Chain">
                         <dw:transform-message doc:name="Prepare GetEventDetailsRequestType request">
                             <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
+%namespace ns0 urn:com.workday/bsvc
 ---
+ns0#Get_Event_Details_Request: 
 {
-	requestReferences: {
-		eventReference: [{
-			ID: [{				
-				type: payload.lastEventType,
-				value: payload.lastEventValue
-			}]
-		}]
+	ns0#Request_References: {
+		ns0#Event_Reference: {
+			ns0#ID @(ns0#type: payload.lastEventType): payload.lastEventValue 
+		} 
 	}
-} as :object {
-	class : "com.workday.integrations.GetEventDetailsRequestType"
 }]]></dw:set-payload>
                         </dw:transform-message>
-                        <wd-integration:get-event-detail config-ref="Workday_Integrations"  doc:name="Query for the last event"/>
+                        <wd-connector:invoke config-ref="Workday__Basic" type="Integrations||Get_Event_Detail" doc:name="Query for the last event"/>
+
                         <dw:transform-message doc:name="Get LastModifiedById and LastModifiedDate">
                             <dw:set-payload><![CDATA[%dw 1.0
 %output application/java
+%namespace ns0 urn:com.workday/bsvc
 ---
 ({
-	LastModifiedById : payload.responseData.event[0].eventDetailData.initiatingPersonReference.ID[0].value,
- 	LastModifiedDate : payload.responseData.event[0].eventDetailData.completedDate
-}) when ((sizeOf payload.responseData.event) > 0) 
+	LastModifiedById : payload.ns0#Get_Event_Details_Response.ns0#Response_Data.ns0#Event.ns0#Event_Detail_Data.ns0#Initiating_Person_Reference.ns0#ID,
+ 	LastModifiedDate : payload.ns0#Get_Event_Details_Response.ns0#Response_Data.ns0#Event.ns0#Event_Detail_Data.ns0#Completed_Date
+}) when ((sizeOf payload.ns0#Get_Event_Details_Response.ns0#Response_Data.ns0#Event) > 0) 
    otherwise null
 ]]></dw:set-payload>
                         </dw:transform-message>
                     </processor-chain>
                 </enricher>
             </batch:step>
+
 
 			<batch:step name="getUserInServiceNowIfExistsStep" accept-expression="#[recordVars['lastEvent'] == null || recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}']">
 
@@ -66,7 +68,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 ---
 {
 	ns0#getRecords: {
-		ns0#"user_name": payload.userName
+		ns0#"user_name": payload.userName.ID
 	}
 }]]></dw:set-payload>
                         </dw:transform-message>
@@ -84,7 +86,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
             		</processor-chain>
                 </enricher>
             </batch:step>
-                        <batch:step name="InsertUserInServiceNowIfItDoesntExistStep" accept-expression="#[recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].isEmpty()]">
+                        <batch:step name="InsertUserInServiceNowIfItDoesntExistStep" accept-expression="#[(recordVars['lastEvent'] != null &amp;&amp; recordVars['lastEvent'].LastModifiedById != '${wday.integration.user.id}' &amp;&amp; recordVars['userInTargetInstance'].isEmpty()) || (recordVars['lastEvent'] == null &amp;&amp; recordVars['userInTargetInstance'].isEmpty())]">
                 <logger message="inserting user to ServiceNow: #[payload]" level="INFO" doc:name="Log the insertion of the User"/>
                 <dw:transform-message doc:name="Prepare insertUser request">
                     <dw:set-payload><![CDATA[%dw 1.0
@@ -105,7 +107,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 		ns0#name: payload.name,
 		ns0#state: payload.state,
 		ns0#street: payload.street,
-		ns0#"user_name": payload.userName,
+		ns0#"user_name": payload.userName.ID,
 		ns0#zip: payload.zip
 	}
 }]]></dw:set-payload>
@@ -139,7 +141,7 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 		ns0#name: payload.name,
 		ns0#state: payload.state,
 		ns0#street: payload.street,
-		ns0#"user_name": payload.userName,
+		ns0#"user_name": payload.userName.ID,
 		ns0#"zip": payload.zip,
 		ns0#"sys_id": recordVars.userInTargetInstance[0].sys_id
 	}
@@ -170,357 +172,284 @@ payload.getRecordsResponse.*getRecordsResult when (payload.getRecordsResponse !=
 
                 <enricher source="#[payload]" target="#[recordVars['workerInTargetInstance']]" doc:name="store the existence of the user in target instance">
                    <processor-chain doc:name="Processor Chain">
+
                         <dw:transform-message doc:name="Prepare GetWorkersRequestType request">
                             <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
+%namespace ns0 urn:com.workday/bsvc
 ---
+ns0#Get_Workers_Request: 
 {
-	requestReferences: {
-		workerReference: [{
-			ID: [{
-				type: "Employee_ID",
-				value: payload.user_name
-			}]
-		}]
+	ns0#Request_References: {
+		ns0#Worker_Reference: {
+			ns0#ID @(ns0#type: "Employee_ID" ): payload.user_name
+		}
 	},
-	responseGroup: {
-		includeEmploymentInformation: true,
-		includeOrganizations: true,
-		includePersonalInformation: true,
-		includeReference: true,
-		includeRoles: true,
-		includeTransactionLogData: true,
-		includeUserAccount: true
+	ns0#Response_Group: {
+		ns0#Include_Employment_Information: true,
+		ns0#Include_Organizations: true,
+		ns0#Include_Personal_Information: true,
+		ns0#Include_Reference: true,
+		ns0#Include_Roles: true,
+		ns0#Include_Transaction_Log_Data: true,
+		ns0#Include_User_Account: true
 	}
-} as :object {
-	class : "com.workday.hr.GetWorkersRequestType"
 }]]></dw:set-payload>
                         </dw:transform-message>
-                    	<wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Get Workers from Workday" />
+                        <wd-connector:invoke config-ref="Workday__Basic" type="Human_Resources||Get_Workers" doc:name="Get Workers from Workday"/>
+                        <dw:transform-message doc:name="Transform Message">
+                            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 urn:com.workday/bsvc
+---
+payload.ns0#Get_Workers_Response.ns0#Response_Data.ns0#Worker.ns0#Worker_Reference.ns0#ID]]></dw:set-payload>
+                        </dw:transform-message>
+
                 	</processor-chain>
                 </enricher>
 
             </batch:step>
 
+
             <batch:step name="InsertEmployeeInWorkdayIfWorkerDoesntExistStep" accept-expression="#[(recordVars['workerInTargetInstance'] == null)]">
+
 
                 <dw:transform-message doc:name="Transform User To HireEmployeeRequestType">
                     <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
+%namespace ns0 urn:com.workday/bsvc
 
 %function lookupCountryISOCode (snowCode) {
 	code: 'USA' when snowCode == 'US' otherwise p('wday.country')
 }
 ---
+ns0#Hire_Employee_Request: 
 {
-	hireEmployeeData: {
-		addAcademicAppointmentSubProcess: {
-			addAcademicAppointmentData: {
-				createAcademicAffiliateData: {
-					contactInformationData: {
-						addressData: [{
-							addressLineData: [{
-								type: "ADDRESS_LINE_1",
-								value: payload.street when payload.street != '' otherwise p('wday.location')
-							}]							
-						}]						
+	ns0#Hire_Employee_Data: {
+		ns0#Add_Academic_Appointment_Sub_Process: {
+			ns0#Add_Academic_Appointment_Data: {
+				ns0#Create_Academic_Affiliate_Data: {
+					ns0#Contact_Information_Data: {
+						ns0#Address_Data: {
+							ns0#Address_Line_Data @(ns0#type: "ADDRESS_LINE_1"): payload.street when payload.street != '' otherwise p('wday.location')
+						}						
 					}
 				}
 			}	
 		},
-		applicantData: {
-			personalData: {
-				contactData: {
-					addressData: [{
-						countryReference: {
-							ID: [{
-								type: "ISO_3166-1_Alpha-3_Code",
-								value: lookupCountryISOCode(payload.country).code
-							}]
+		ns0#Applicant_Data: {
+			ns0#Personal_Data: {
+				ns0#Contact_Data: {
+					ns0#Address_Data: {
+						ns0#Country_Reference: {
+							ns0#ID @(ns0#type: "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
 						},
-						countryRegionReference: {
-							ID: [{
-								type: "Country_Region_ID",
-								value: p('wday.state') when payload.state == '' otherwise payload.state
-							}]
+						ns0#Country_Region_Reference: {
+							ns0#ID @(ns0#type: "Country_Region_ID"): p('wday.state') when payload.state == '' otherwise payload.state
 						},
-						(effectiveDate: payload.sysCreatedOn as :date {format: "yyyy-MM-dd HH:mm:ss"}) when payload.sysCreatedOn != '',
-						municipality: p('wday.city') when payload.city == '' otherwise payload.city,
-						postalCode: p('wday.postalCode') when payload.zip == '' otherwise payload.zip,
-						usageData: [{
-							public: false,
-							typeData: [{
-								primary: true,
-								typeReference: {
-									ID: [{
-										type: "Communication_Usage_Type_ID",
-										value: "HOME"
-									}]
+						(ns0#Effective_Date: payload.sysCreatedOn as :date {format: "yyyy-MM-dd HH:mm:ss"}) when payload.sysCreatedOn != '',
+						ns0#Municipality: p('wday.city') when payload.city == '' otherwise payload.city,
+						ns0#Postal_Code: p('wday.postalCode') when payload.zip == '' otherwise payload.zip,
+						ns0#Usage_Data @(Public: false): {
+							ns0#Type_Data @(ns0#Primary: true): {
+								ns0#Type_Reference: {
+									ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 								}
-							}]							
-						}]
-					}],
-					emailAddressData: [{
-						emailAddress: payload.email,
-						usageData: [{
-							public: true,
-							typeData: [{
-								primary: true,
-								typeReference: {
-									ID: [{
-										type: "Communication_Usage_Type_ID",
-										value: "HOME"
-									}]
+							}						
+						}
+					},
+					ns0#Email_Address_Data: {
+						ns0#Email_Address: payload.email,
+						ns0#Usage_Data @(ns0#Public: true): {
+							ns0#Type_Data @(ns0#Primary: true): {
+								ns0#Type_Reference: {
+									ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 								}
-							}]
-						}]
-					}],
-					phoneData: [{
-						phoneDeviceTypeReference: {
-							ID: [{
-								type: "Phone_Device_Type_ID",
-								value: "1063.5"
-							}]
+							}						
+						}
+					},
+					ns0#Phone_Data: {
+						ns0#Phone_Device_Type_Reference: {
+							ns0#ID @(ns0#type: "Phone_Device_Type_ID"): value: "1063.5"
 						},
-						phoneNumber : payload.home_phone,
-						countryISOCode : lookupCountryISOCode(payload.country).code,
-						
-						usageData: [{
-							public: true,
-							typeData: [{
-								primary: true,
-								typeReference: {
-									ID: [{
-										type: "Communication_Usage_Type_ID",
-										value: "HOME"
-									}]
+						ns0#Phone_Number : payload.home_phone,
+						ns0#Country_ISO_Code : lookupCountryISOCode(payload.country).code,						
+						ns0#Usage_Data @(ns0#Public: true): {
+							ns0#Type_Data @(ns0#Primary: true): {
+								ns0#Type_Reference: {
+									ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 								}
-							}]
-						}]
-					}]					
+							}						
+						}
+					},					
 				},
-				nameData: {					
-					legalNameData: {
-						nameDetailData: {
-							countryReference: {
-								ID: [{
-									type : "ISO_3166-1_Alpha-3_Code",
-									value : lookupCountryISOCode(payload.country).code
-								}]
+				ns0#Name_Data: {					
+					ns0#Legal_Name_Data: {
+						ns0#Name_Detail_Data: {
+							ns0#Country_Reference: {
+								ns0#ID @(ns0#type : "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
 							},
-							firstName : payload.first_name,
-							lastName : payload.last_name,							
-							middleName : payload.middle_name
+							ns0#First_Name : payload.first_name,
+							ns0#Last_Name : payload.last_name,							
+							ns0#Middle_Name : payload.middle_name
 						}
 					}
 				}				
 			}
 		},
-		hireEmployeeEventData: {
-			employeeTypeReference: {
-				ID: [{
-					type: "Employee_Type_ID",
-					value: "Regular"
-				}]
+		ns0#Hire_Employee_Event_Data: {
+			ns0#Employee_Type_Reference: {
+				ns0#ID @(ns0#type: "Employee_Type_ID"): "Regular"
 			},			
-			hireReasonReference: {
-				ID: [{
-					type: "General_Event_Subcategory_ID",
-					value: "Hire_Employee_New_Hire_Fill_Vacancy"
-				}]
+			ns0#Hire_Reason_Reference: {
+				ns0#ID @(ns0#type: "General_Event_Subcategory_ID"): "Hire_Employee_New_Hire_Fill_Vacancy"
 			},
-			positionDetails: {				
-				jobProfileReference: {
-					ID: [{
-						type: "Job_Profile_ID",
-						value: p('wday.jobprofileId')
-					}]
+			ns0#Position_Details: {				
+				ns0#Job_Profile_Reference: {
+					ns0#ID @(ns0#type: "Job_Profile_ID"): p('wday.jobprofileId')
 				},
-				locationReference: {
-					ID: [{
-						type: "Location_ID",
-						value: p('wday.location')
-					}]
+				ns0#Location_Reference: {
+					ns0#ID @(ns0#type: "Location_ID"): p('wday.location')
 				},
-				payRateTypeReference: {
-					ID: [{
-						type: "Pay_Rate_Type_ID",
-						value: "Salary"
-					}]
+				ns0#Pay_Rate_Type_Reference: {
+					ns0#ID @(ns0#type: "Pay_Rate_Type_ID"): "Salary"
 				},				
-				positionTimeTypeReference: {
-					ID: [{
-						type: "Position_Time_Type_ID",
-						value: "Full_time"
-					}]
+				ns0#Position_Time_Type_Reference: {
+					ns0#ID @(ns0#type: "Position_Time_Type_ID"): "Full_time"
 				}
 			}
 		},
-		organizationReference: {
-			ID: [{
-				type: "Organization_Reference_ID",
-				value: p('wday.organization')
-			}]
+		ns0#Organization_Reference: {
+			ns0#ID @(ns0#type: "Organization_Reference_ID"): p('wday.organization')
 		}
 	}
-} as :object {
-	class : "com.workday.staffing.HireEmployeeRequestType"
-}]]></dw:set-payload>
+}
+]]></dw:set-payload>
                 </dw:transform-message>
+                <wd-connector:invoke config-ref="Workday__Basic" type="Staffing||Hire_Employee" doc:name="Hire Employee"/>
 
-                <wd-staffing:hire-employee config-ref="Workday_Staffing" doc:name="Hire Employee"/>
 
                 <dw:transform-message doc:name="Prepare update of User username request">
                     <dw:set-payload><![CDATA[%dw 1.0
 %output application/xml
 %namespace ns0 http://www.service-now.com/sys_user
+%namespace ns1 urn:com.workday/bsvc
 ---
 {
 	ns0#update: {
-		ns0#"user_name": payload.employeeReference.ID[1].value,
+		ns0#"user_name": payload.ns1#Hire_Employee_Event_Response.ns1#Employee_Reference.ns1#ID[1],
 		// get the ID of the new employee
 		ns0#"sys_id": recordVars.snowUser.sys_id	
 	}
 }]]></dw:set-payload>
                 </dw:transform-message>
+
                 <servicenow:invoke config-ref="ServiceNow" type="sys_user||update" doc:name="Update User username in ServiceNow"/>
  
 <!--                 <servicenow:update config-ref="ServiceNow" type="SYS_USER" doc:name="Update userName in Service Now"> -->
 
             </batch:step>
-            <batch:step name="updateWorkerInWorkdayIfWorkerExistsStep" accept-expression="#[(recordVars['workerInTargetInstance'] != null &amp;&amp; recordVars['workerInTargetInstance'].responseData != null)]">
+            <batch:step name="updateWorkerInWorkdayIfWorkerExistsStep" accept-expression="#[(recordVars['workerInTargetInstance'] != null &amp;&amp; recordVars['workerInTargetInstance'] != null)]">
+
 
  <dw:transform-message doc:name="Transform User To MaintainContactInformationForPersonEventRequestType">
                     <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
 
 %function lookupCountryISOCode(snowISOCode){
 	code: 'USA' when snowISOCode == 'US' otherwise p('wday.country')	
 }
+%namespace ns0 urn:com.workday/bsvc
 ---
+ns0#Maintain_Contact_Information_for_Person_Event_Request: 
 {
-	maintainContactInformationData: {
-		(effectiveDate: payload.sys_updated_on as :date {format: "yyyy-MM-dd HH:mm:ss"}) when payload.sys_updated_on != '',
-		workerContactInformationData: {
-			addressData: [{
-				addressLineData: [{
-					type : "ADDRESS_LINE_1",
-					value: p('wday.location') when payload.street == '' otherwise payload.street
-				}],
-				countryReference: {
-					ID: [{
-						type: "ISO_3166-1_Alpha-3_Code",
-						value: lookupCountryISOCode(payload.country).code
-					}]
+	ns0#Maintain_Contact_Information_Data: {
+		(ns0#Effective_Date: payload.sys_updated_on as :date {format: "yyyy-MM-dd HH:mm:ss"}) when payload.sys_updated_on != '',
+		ns0#Worker_Contact_Information_Data: {
+			ns0#Address_Data: {
+				ns0#Address_Line_Data @(ns0#Type : "ADDRESS_LINE_1"): p('wday.location') when payload.street == '' otherwise payload.street,
+				ns0#Country_Reference: {
+					ns0#ID @(ns0#type: "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
 				},
-				countryRegionReference: {
-					ID: [{
-						type: "Country_Region_ID",
-						value: p('wday.state') when payload.state == '' otherwise payload.state
-					}]
+				ns0#Country_Region_Reference: {
+					ns0#ID @(ns0#type: "Country_Region_ID"): p('wday.state') when payload.state == '' otherwise payload.state
 				},				
-				(effectiveDate: payload.sys_updated_on as :date {format:"yyyy-MM-dd HH:mm:ss"} ) when payload.sys_updated_on != '',
-				municipality: p('wday.city') when payload.city == '' otherwise payload.city,
-				postalCode: p('wday.postalCode') when payload.zip == '' otherwise payload.zip,
-				usageData: [{					
-					public: false,
-					typeData: [{
-						typeReference: {
-							ID: [{
-								type: "Communication_Usage_Type_ID",
-								value: "HOME"
-							}]
+				ns0#Municipality: p('wday.city') when payload.city == '' otherwise payload.city,
+				ns0#Postal_Code: p('wday.postalCode') when payload."zip" == '' otherwise payload."zip",
+				ns0#Usage_Data @(ns0#Public: false): {
+					ns0#Type_Data: {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 						}
-					}]
-				}]
-			}],
-			emailAddressData: [{
-				emailAddress: payload.email,
-				usageData: [{
-					public: true,
-					typeData: [{
-						typeReference: {
-							ID: [{
-								type: "Communication_Usage_Type_ID",
-								value: "HOME"
-							}]
+					}
+				}
+			},
+			ns0#Email_Address_Data: {
+				ns0#Email_Address: payload.email,
+				ns0#Usage_Data @(ns0#Public: true): {
+					ns0#Type_Data : {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 						}
-					}]
-				}]
-			}],
-			(phoneData: [{
-				countryISOCode: lookupCountryISOCode(payload.country).code,
-				phoneDeviceTypeReference: {
-					ID: [{
-						type: "Phone_Device_Type_ID",
-						value: "1063.5"
-					}]
+					}
+				}
+			},
+			(ns0#Phone_Data: {
+				ns0#Country_ISO_Code: lookupCountryISOCode(payload.country).code,
+				ns0#Phone_Device_Type_Reference: {
+					ns0#ID @(ns0#type: "Phone_Device_Type_ID"):"1063.5"
 				},
-				phoneNumber: payload.home_phone,
-				usageData: [{
-					public: true,
-					typeData: [{
-						typeReference: {
-							ID: [{
-								type: "Communication_Usage_Type_ID",
-								value: "HOME"
-							}]
+				ns0#Phone_Number: payload.home_phone,
+				ns0#Usage_Data @(ns0#Public: true): {
+					ns0#Type_Data: {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#type: "Communication_Usage_Type_ID"): "HOME"
 						}
-					}]
-				}]
-			}]) when payload.home_phone != ''			
+					}
+				}
+			}) when payload.home_phone != ''			
 		},
-		workerReference: {
-			ID: [{
-				type: "Employee_ID",
-				value: payload.user_name
-			}]
+		ns0#Worker_Reference: {
+			ns0#ID @(ns0#type: "Employee_ID"): payload.user_name
 		}
 	}
-} as :object {
-	class : "com.workday.hr.MaintainContactInformationForPersonEventRequestType"
 }]]></dw:set-payload>
                 </dw:transform-message>
+                <wd-connector:invoke config-ref="Workday__Basic" type="Human_Resources||Maintain_Contact_Information" doc:name="Update Contact Information"/>
 
-
-                <wd-hr:maintain-contact-information config-ref="Workday_Human_Resource" doc:name="Update Contact Information"/>
 
                 <set-payload value="#[recordVars['snowUser']]" doc:name="Set Payload to Service Now User"/>
 
+
                 <dw:transform-message doc:name="Transform User To ChangePreferredNameRequestType">
                     <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/xml
 
 %function lookupCountryISOCode(snowISOCode){
 	code: 'USA' when snowISOCode == 'US' otherwise p('wday.country')	
 }
+%namespace ns0 urn:com.workday/bsvc
 ---
+ns0#Change_Preferred_Name_Request: 
 {
-	changePreferredNameData: {
-		nameData: {
-			countryReference: {
-				ID: [{
-					type: "ISO_3166-1_Alpha-3_Code",
-					value: lookupCountryISOCode(payload.country).code
-				}]
+	ns0#Change_Preferred_Name_Data: {
+		ns0#Name_Data: {
+			ns0#Country_Reference: {
+				ns0#ID @(ns0#type: "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
 			},
-			firstName: payload.first_name,
-			lastName: payload.last_name,
-			(middleName: payload.middle_name) when payload.middle_name != ''		
+			ns0#First_Name: payload.first_name,
+			ns0#Last_Name: payload.last_name,
+			(ns0#Middle_Name: payload.middle_name) when payload.middle_name != ''		
 		},
-		workerReference: {
-			ID: [{
-				type: "Employee_ID",
-				value: payload.user_name
-			}]
+		ns0#Worker_Reference: {
+			ns0#ID @(ns0#type: "Employee_ID"): payload.user_name
 		}
 	}
-} as :object {
-	class : "com.workday.hr.ChangePreferredNameRequestType"
 }]]></dw:set-payload>
                 </dw:transform-message>
+                <wd-connector:invoke config-ref="Workday__Basic" type="Human_Resources||Change_Preferred_Name" doc:name="Workday Human Resource"/>
 
-                <wd-hr:change-preferred-name config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
+
 
 
             </batch:step>
