@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:wd-connector="http://www.mulesoft.org/schema/mule/wd-connector"
-	xmlns:wd-integration="http://www.mulesoft.org/schema/mule/wd-integration" xmlns:wd-staffing="http://www.mulesoft.org/schema/mule/wd-staffing" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans"
@@ -11,10 +11,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
 http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/1.0/mule-objectstore.xsd
-http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
-http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
-http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
-http://www.mulesoft.org/schema/mule/wd-integration http://www.mulesoft.org/schema/mule/wd-integration/current/mule-wd-integration.xsd">
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
 
 	<!-- This is the configurations file. You should use this file to place all the connector configurations and declarations -->
 
