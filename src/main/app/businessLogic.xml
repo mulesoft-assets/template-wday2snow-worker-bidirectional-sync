@@ -193,7 +193,7 @@ ns0#Get_Workers_Request:
 }]]></dw:set-payload>
                         </dw:transform-message>
                         <wd-connector:invoke config-ref="Workday__Basic" type="Human_Resources||Get_Workers" doc:name="Get Workers from Workday"/>
-                        <dw:transform-message doc:name="Transform Message">
+                        <dw:transform-message doc:name="Get Id from the GetWorkersResponse">
                             <dw:set-payload><![CDATA[%dw 1.0
 %output application/java
 %namespace ns0 urn:com.workday/bsvc
