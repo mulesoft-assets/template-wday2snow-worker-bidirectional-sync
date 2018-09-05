@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:workday="http://www.mulesoft.org/schema/mule/workday"
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
+
+
+	<flow name="fromWorkdaytoServiceNow" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
+		<batch:job jobName="migrateWorkersBatchFromWorkday" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6"
+			blockSize="${page.size}">
+			<batch:process-records>
+				<batch:step name="getWorkersFromServiceNow" doc:id="89713774-362a-4e92-9bdc-41e31802bf38">
+					<ee:transform doc:name="Create getRecords Request"
+						doc:id="b0e904b1-ee55-4159-99c0-c8a290a381e4">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sys_user
+---
+using (personalData = payload.Worker_Data.Personal_Data)
+{
+	ns0#getRecords: {
+		ns0#email: personalData.Contact_Data.Email_Address_Data.Email_Address,
+		ns0#"first_name": personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
+		ns0#"last_name": personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name
+	}
+}]]></ee:set-payload>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<servicenow:invoke service="sys_user" operation="getRecords"
+						doc:name="Get User from ServiceNow" doc:id="89370269-6733-4abf-9e14-b1895286494e"
+						config-ref="ServiceNow_Config" />
+					<ee:transform doc:name="Get User ID"
+						doc:id="eb376624-cb1d-45c1-8303-19329e28094b">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+vars.worker ++ {
+	snowUserId: payload.body.getRecordsResponse.getRecordsResult.sys_id
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</batch:step>
+				<batch:step name="createUsersInServiceNow" doc:id="13d29b30-853d-4c44-92d1-f53749e3e436"
+					acceptExpression="#[payload != null and payload.snowUserId == null]">
+					<ee:transform doc:name="Create insert Request"
+						doc:id="0d45ef31-1598-4216-8b2a-b8f2adf8f5b7">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sys_user
+---
+using (personalData = payload.Worker_Data.Personal_Data)
+{
+	ns0#insert: {
+		ns0#active        : 1,
+		ns0#city          : personalData.Contact_Data.Address_Data.Municipality,
+		ns0#country       : personalData.Contact_Data.Address_Data.Country_Reference.ID,
+		ns0#email         : personalData.Contact_Data.Email_Address_Data.Email_Address,
+		ns0#"first_name"  : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
+		ns0#"home_phone"  : personalData.Contact_Data.Phone_Data.Phone_Number,
+		ns0#"last_name"   : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
+		ns0#state         : personalData.Contact_Data.Address_Data.Country_Region_Reference.ID,
+		ns0#street        : personalData.Contact_Data.Address_Data.Address_Line_Data,
+		ns0#"user_name"   : payload.Worker_Reference.ID,
+		ns0#"zip"         : personalData.Contact_Data.Address_Data.Postal_Code
+	}
+}
+
+]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<servicenow:invoke doc:name="Insert data"
+						doc:id="6183c574-16e9-4007-956c-113a2702efb9" config-ref="ServiceNow_Config"
+						service="sys_user" operation="insert" />
+					<logger level="INFO" doc:name="Logger insert"
+						doc:id="15aa0445-c8fd-483c-b13d-779e9d603e42"
+						message="Insert in ServiceNow: #[output application/json --- payload]" />
+				</batch:step>
+
+				<batch:step name="updateUsersInServiceNowStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950"
+					acceptExpression="#[payload != null and payload.snowUserId != null]">
+					<ee:transform doc:name="Create update Request"
+						doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sys_user
+---
+using (personalData = payload.Worker_Data.Personal_Data)
+{
+	ns0#update: {
+		ns0#"sys_id"      : payload.snowUserId,
+		ns0#active        : 1,
+		ns0#city          : personalData.Contact_Data.Address_Data.Municipality,
+		ns0#country       : personalData.Contact_Data.Address_Data.Country_Reference.ID,
+		ns0#email         : personalData.Contact_Data.Email_Address_Data.Email_Address,
+		ns0#"first_name"  : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
+		ns0#"home_phone"  : personalData.Contact_Data.Phone_Data.Phone_Number,
+		ns0#"last_name"   : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
+		ns0#state         : personalData.Contact_Data.Address_Data.Country_Region_Reference.ID,
+		ns0#street        : personalData.Contact_Data.Address_Data.Address_Line_Data,
+		ns0#"user_name"  : payload.Worker_Reference.ID,
+		ns0#"zip"         : personalData.Contact_Data.Address_Data.Postal_Code
+	}
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<servicenow:invoke doc:name="Update data"
+						doc:id="1e70d815-8368-42e2-b9e2-9b93f6788822" config-ref="ServiceNow_Config"
+						service="sys_user" operation="update" />
+					<logger level="INFO" doc:name="Logger update"
+						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
+						message="Update in ServiceNow: #[output application/json --- payload]" />
+				</batch:step>
+
+			</batch:process-records>
+			<batch:on-complete>
+				<os:store key="syncState" doc:name="Set sync state to ServiceNow"
+					doc:id="f08de372-2fb9-4aef-80ca-f6da2241fc75" objectStore="SchedulerStatus">
+					<os:value><![CDATA[fromServiceNow]]></os:value>
+				</os:store>
+			</batch:on-complete>
+
+		</batch:job>
+	</flow>
+	<flow name="fromServiceNowToWorkday" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
+		<batch:job jobName="migrateWorkersBatchFromSNow" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6"
+			blockSize="${page.size}">
+			<batch:process-records>
+				<batch:step name="SetWorkerBatch" doc:id="6f80760e-77e3-4ebf-9e98-612349c138a4">
+					<ee:transform doc:name="Set Worker variable"
+						doc:id="195e50db-2330-41ef-b914-19de0c79cbee">
+						<ee:message>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
+output application/java
+---
+payload ++ {
+	wdayUserId: null
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+				</batch:step>
+				<batch:step name="getWorkersFromWorkday" doc:id="89713774-362a-4e92-9bdc-41e31802bf38"
+					acceptExpression="#[vars.worker.user_name != null]">
+					<ee:transform doc:name="Prepare GetWorkers request"
+						doc:id="26a43370-b8f9-4859-85d4-d796d5e610fd">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 urn:com.workday/bsvc
+---
+{
+	ns0#Get_Workers_Request: {
+		ns0#Request_References: {
+			ns0#Worker_Reference: {
+				ns0#ID @(ns0#"type": "Employee_ID"): payload.user_name
+			}
+		},
+		ns0#Response_Group: {
+			ns0#Include_Employment_Information: true,
+			ns0#Include_Organizations: true,
+			ns0#Include_Personal_Information: true,
+			ns0#Include_Reference: true,
+			ns0#Include_Roles: true,
+			ns0#Include_Transaction_Log_Data: true,
+			ns0#Include_User_Account: true
+		}
+	}
+}
+				]]></ee:set-payload>
+						</ee:message>
+						<ee:variables>
+						</ee:variables>
+					</ee:transform>
+					<workday:invoke service="Human_Resources" operation="Get_Workers"
+						doc:name="Get Workers from Workday" doc:id="128e2819-7c90-4470-a234-d516802f0920"
+						config-ref="Workday_Config" />
+					<ee:transform doc:name="Get Worker ID"
+						doc:id="ea91fa20-9253-4c89-89ea-835e7e2ad8d9">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+vars.worker ++ {
+	wdayUserId: payload.body.Get_Workers_Response.Request_References.Worker_Reference.ID
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</batch:step>
+				<batch:step name="insertWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950"
+					acceptExpression="#[vars.worker.user_name == null]">
+					<ee:transform doc:name="User To HireEmployeeRequestType"
+						doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+
+fun lookupCountryISOCode(snowISOCode) = {
+	code: if (snowISOCode == 'US') 'USA' else p('wday.country')	
+}
+ns ns0 urn:com.workday/bsvc
+---
+ns0#Hire_Employee_Request: 
+{
+	ns0#Hire_Employee_Data: {
+		ns0#Applicant_Data: {
+			ns0#Personal_Data: {
+				ns0#Contact_Data: {
+					ns0#Address_Data: {
+						ns0#Address_Line_Data @(ns0#Type: 'ADDRESS_LINE_1') : p('wday.address'),
+						ns0#Country_Reference: {
+							ns0#ID @(ns0#"type": "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
+						},
+						ns0#Country_Region_Reference: {
+							ns0#ID @(ns0#"type": "Country_Region_ID"): if ( payload.state == null ) p('wday.state')  else payload.state
+						},
+						ns0#Municipality: if (payload.city == null) p('wday.city') else payload.city,
+						ns0#Postal_Code:  if (payload.zip == null) p('wday.postalCode') else payload.zip,
+						ns0#Usage_Data @(ns0#Public: false): [{
+							ns0#Type_Data @(ns0#Primary: true): [{
+								ns0#Type_Reference: {
+									ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+								}
+							}]						
+						}]
+					},
+					ns0#Email_Address_Data: {
+						ns0#Email_Address: payload.email,
+						ns0#Usage_Data @(ns0#Public: true): {
+							ns0#Type_Data @(ns0#Primary: true): {
+								ns0#Type_Reference: {
+									ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+								}
+							}						
+						}
+					},
+					ns0#Phone_Data: [{
+							ns0#Phone_Device_Type_Reference: {
+								ns0#ID @(ns0#"type"	: 'Phone_Device_Type_ID') : '1063.5'
+							},
+							ns0#Phone_Number		: payload.home_phone,
+							ns0#Country_ISO_Code : lookupCountryISOCode(payload.country).code,		
+							ns0#Usage_Data @(ns0#Public : true) : [{
+								ns0#Type_Data @(ns0#Primary: true): [{
+									ns0#Type_Reference: {
+										ns0#ID @(ns0#"type"	: 'Communication_Usage_Type_ID') : 'HOME'
+									}
+								}]
+							}]
+						}]				
+				},
+				ns0#Name_Data: {					
+					ns0#Legal_Name_Data: {
+						ns0#Name_Detail_Data: {
+							ns0#Country_Reference: {
+								ns0#ID @(ns0#"type" : "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
+							},
+							ns0#First_Name : payload.first_name,
+							ns0#Last_Name : payload.last_name,							
+							ns0#Middle_Name : payload.middle_name
+						}
+					}
+				}				
+			}
+		},
+		ns0#Hire_Employee_Event_Data: {
+			ns0#Employee_Type_Reference: {
+				ns0#ID @(ns0#"type": "Employee_Type_ID"): "Regular"
+			},			
+			ns0#Hire_Reason_Reference: {
+				ns0#ID @(ns0#"type": "General_Event_Subcategory_ID"): "Hire_Employee_New_Hire_Fill_Vacancy"
+			},
+			ns0#Position_Details: {				
+				ns0#Job_Profile_Reference: {
+					ns0#ID @(ns0#"type": "Job_Profile_ID"): p('wday.jobprofileId')
+				},
+				ns0#Location_Reference: {
+					ns0#ID @(ns0#"type": "Location_ID"): p('wday.location')
+				},
+				ns0#Pay_Rate_Type_Reference: {
+					ns0#ID @(ns0#"type": "Pay_Rate_Type_ID"): "Salary"
+				},				
+				ns0#Position_Time_Type_Reference: {
+					ns0#ID @(ns0#"type": "Position_Time_Type_ID"): "Full_time"
+				}
+			}
+		},
+		ns0#Organization_Reference: {
+				ns0#ID @(ns0#"type": 'Organization_Reference_ID') : p('wday.organization')
+				
+			}
+	}
+}
+]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<workday:invoke service="Staffing" operation="Hire_Employee"
+						doc:name="Hire Employee" doc:id="362ec49b-4a56-4f91-a2c3-017979624df6"
+						config-ref="Workday_Config" />
+					<logger level="INFO" doc:name="Logger update contact information"
+						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Hire Employee: #[output application/json --- payload]" />
+					<ee:transform doc:name="Prepare update of User username request"
+						doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sys_user
+---
+ns0#update: {
+	ns0#"user_name": payload.body.Hire_Employee_Event_Response.Employee_Reference[1],
+	ns0#"sys_id": vars.worker.sys_id
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<servicenow:invoke doc:name="Update User username in ServiceNow"
+						doc:id="1e70d815-8368-42e2-b9e2-9b93f6788822" config-ref="ServiceNow_Config"
+						service="sys_user" operation="update" />
+					<logger level="INFO" doc:name="Logger update name"
+						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
+						message="Update in Workday Contact Information: #[output application/json --- payload]" />
+				</batch:step>
+
+				<batch:step name="updateWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950"
+					acceptExpression="#[vars.worker != null and vars.worker.wdayUserId != null]">
+					<ee:transform
+						doc:name="User To MaintainContactInformationForPersonEventRequestType"
+						doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+fun lookupCountryISOCode(snowISOCode) = {
+	code: if (snowISOCode == 'US') 'USA' else p('wday.country')	
+}
+
+fun createCountryRegionReference(countryISOCode, stateISOCode) = {
+	code: lookupCountryISOCode(countryISOCode).code ++ "-" ++	stateISOCode
+}
+
+ns ns0 urn:com.workday/bsvc
+---
+ns0#Maintain_Contact_Information_for_Person_Event_Request: 
+{
+	ns0#Maintain_Contact_Information_Data: {
+		ns0#Effective_Date: now() as Date ,
+		ns0#Worker_Contact_Information_Data : {
+			ns0#Address_Data : {
+				ns0#Address_Line_Data @(ns0#Type : "ADDRESS_LINE_1"): if (payload.street == null) p('wday.location') else payload.street,
+				ns0#Country_Reference: {
+					ns0#ID @(ns0#"type": "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(payload.country).code
+				},
+				ns0#Country_Region_Reference: {
+					ns0#ID @(ns0#"type": "Country_Region_ID"):  if (payload.state == null ) p('wday.state') else createCountryRegionReference(payload.country,payload.state).code
+				},				
+				ns0#Municipality: if (payload.city == null) p('wday.city')   else payload.city,
+				ns0#Postal_Code: if (payload."zip" == null) p('wday.postalCode') else payload."zip",
+				ns0#Usage_Data @(ns0#Public: false): {
+					ns0#Type_Data: {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+						}
+					}
+				}
+			},
+			ns0#Email_Address_Data: {
+				ns0#Email_Address: payload.email,
+				ns0#Usage_Data @(ns0#Public: true): {
+					ns0#Type_Data : {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+						}
+					}
+				}
+			},
+			(ns0#Phone_Data: {
+				ns0#Country_ISO_Code: lookupCountryISOCode(payload.country).code,
+				ns0#Phone_Device_Type_Reference: {
+					ns0#ID @(ns0#"type": "Phone_Device_Type_ID"):"1063.5"
+				},
+				ns0#Phone_Number: payload.home_phone replace "-" with "" ,
+				ns0#Usage_Data @(ns0#Public: true): {
+					ns0#Type_Data: {
+						ns0#Type_Reference: {
+							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+						}
+					}
+				}
+			}) if payload.home_phone != null			
+		},
+		ns0#Worker_Reference: {
+			ns0#ID @(ns0#"type": "Employee_ID"): payload.user_name
+		}
+	}
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<workday:invoke service="Human_Resources"
+						operation="Maintain_Contact_Information" doc:name="Update Contact Information"
+						doc:id="362ec49b-4a56-4f91-a2c3-017979624df6" config-ref="Workday_Config" />
+					<logger level="INFO" doc:name="Logger update contact information"
+						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
+						message="Update in Workday Contact Information: #[output application/json --- payload]" />
+					<ee:transform doc:name="Transform User To ChangePreferredNameRequestType"
+						doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+
+fun lookupCountryISOCode(snowISOCode) = {
+	code: if (snowISOCode == 'US') 'USA' else p('wday.country')	
+}
+ns ns0 urn:com.workday/bsvc
+---
+ns0#Change_Preferred_Name_Request: 
+{
+	ns0#Change_Preferred_Name_Data: {
+		ns0#Name_Data: {
+			ns0#Country_Reference: {
+				ns0#ID @(ns0#"type": "ISO_3166-1_Alpha-3_Code"): lookupCountryISOCode(vars.worker.country).code
+			},
+			ns0#First_Name: vars.worker.first_name,
+			ns0#Last_Name: vars.worker.last_name,
+			(ns0#Middle_Name: vars.worker.middle_name) if vars.worker.middle_name != null		
+		},
+		ns0#Worker_Reference: {
+			ns0#ID @(ns0#"type": "Employee_ID"): vars.worker.user_name
+		}
+	}
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<workday:invoke service="Human_Resources" operation="Change_Preferred_Name"
+						doc:name="Update Preferred Name" doc:id="362ec49b-4a56-4f91-a2c3-017979624df6"
+						config-ref="Workday_Config" />
+					<logger level="INFO" doc:name="Logger update name"
+						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
+						message="Update in Workday Contact Information: #[output application/json --- payload]" />
+				</batch:step>
+
+			</batch:process-records>
+			<batch:on-complete>
+				<os:store key="syncState" doc:name="Set sync state to Workday"
+					doc:id="f08de372-2fb9-4aef-80ca-f6da2241fc75" objectStore="SchedulerStatus">
+					<os:value><![CDATA[fromWorkday]]></os:value>
+				</os:store>
+			</batch:on-complete>
+
+		</batch:job>
+	</flow>
+</mule>
+
+        
