@@ -28,7 +28,7 @@ Let's say we want to keep Workday synchronized with ServiceNow. Then, the integr
 
 And so on...
 			  
-The question for recent changes since a certain moment is nothing but a [poll inbound](http://www.mulesoft.org/documentation/display/current/Poll+Reference) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
+The question for recent changes since a certain moment is nothing but a [Scheduler](https://docs.mulesoft.com/mule4-user-guide/v/4.1/scheduler-concept) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
 ]]>
 		</section>
 		<section id="considerations">
@@ -49,7 +49,6 @@ There are a couple of things you should take into account before running this te
 			<![CDATA[
 **Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.			
 
-+ http.port `9090`
 + page.size `10`			
 + scheduler.frequency `10000`
 + scheduler.startDelay `500`
@@ -60,7 +59,6 @@ There are a couple of things you should take into account before running this te
 + wday.password `secret`
 + wday.tenant `company`
 + wday.hostname `wd2-impl-services1.workday.com`
-+ wday.integration.user.id `72d1073ba8f51050e3c83a48d7a9ead6`
 + wday.watermark.default.expression `2018-01-01T07:53:00Z`
 
 #### Default values for required WorkDay fields
