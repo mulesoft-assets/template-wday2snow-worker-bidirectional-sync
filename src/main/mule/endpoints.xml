@@ -147,7 +147,7 @@ ns ns0 http://www.service-now.com/sys_user
 		</ee:transform>
     <servicenow:invoke service="sys_user" doc:name="Fetch Users from ServiceNow" doc:id="520b05fa-0eb6-4275-86ec-c53f4fff0f82" config-ref="ServiceNow_Config" operation="getRecords"/>
 		<os:store doc:name="lastQueryDateSnow" doc:id="b2bc9346-6f0b-4294-a6ae-a83e48211dc4" key="watermark" failOnNullValue="false" objectStore="watermarkSnow">
-			<os:value><![CDATA[max(payload.body.getRecordsResponse.*getRecordsResult.sys_updated_on)]]></os:value>
+			<os:value><![CDATA[#[max(payload.body.getRecordsResponse.*getRecordsResult.sys_updated_on)]]]></os:value>
 		</os:store>
 		<ee:transform doc:name="Filter response" doc:id="3b7df51c-a38d-47ee-b1cc-d3c2a346e463" >
 			<ee:message >
@@ -161,6 +161,8 @@ else []]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 </flow>
+
+
 </mule>
 
         
