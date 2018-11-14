@@ -1,53 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ns4="http://www.mulesoft.org/schema/mule/servicenow" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
-	xmlns:workday="http://www.mulesoft.org/schema/mule/workday"
-	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
-http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
-http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
-
-	<workday:config name="Workday_Config" doc:name="Workday Config"
-		doc:id="b2813c32-7613-4f3c-9122-79cf973fbf82">
-		<workday:basic-connection username="${wday.username}"
-			password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.hostname}">
+	<workday:config name="Workday_Config" doc:id="b2813c32-7613-4f3c-9122-79cf973fbf82" doc:name="Workday Config">
+		<workday:basic-connection hostName="${wday.hostname}" password="${wday.password}" tenantName="${wday.tenant}" username="${wday.username}">
 			<workday:transport>
 				<workday:default-http-dispatcher-provider />
 			</workday:transport>
 		</workday:basic-connection>
 	</workday:config>
-	<servicenow:config name="ServiceNow_Config" doc:name="ServiceNow Config"
-		doc:id="5d6d0474-0c30-4cda-aaa7-82b3dd916b1c">
-		<servicenow:basic-connection username="${snow.user}"
-			password="${snow.password}" serviceAddress="${snow.endpoint}"
-			serviceNowVersion="JAKARTA">
-			<servicenow:transport>
-				<servicenow:basic-auth-http-message-dispatcher-provider
-					username="${snow.user}" password="${snow.password}" />
-			</servicenow:transport>
-		</servicenow:basic-connection>
-	</servicenow:config>
+	<ns4:config name="ServiceNow_Config" doc:id="5d6d0474-0c30-4cda-aaa7-82b3dd916b1c" doc:name="ServiceNow Config">
+		<ns4:basic-connection password="${snow.password}" serviceAddress="${snow.endpoint}" serviceNowVersion="JAKARTA" username="${snow.user}">
+			<ns4:transport>
+				<ns4:basic-auth-http-message-dispatcher-provider password="${snow.password}" username="${snow.user}" />
+			</ns4:transport>
+		</ns4:basic-connection>
+	</ns4:config>
 
-	<configuration-properties file="mule.${mule.env}.properties"
-		doc:name="Configuration properties" doc:id="46877740-aac5-4812-8728-4718689aa9ec" />
-	<configuration-properties file="common.properties"
-		doc:name="Configuration properties" doc:id="dffa4da7-cc5c-4ecb-922e-1115b4387354" />
-	<configuration-properties doc:name="Configuration properties"
-		doc:id="d185e6c2-8ca4-4217-928b-a845563af693" file="mule-artifact.properties" />
-	<os:object-store name="SchedulerStatus" doc:name="Object store"
-		doc:id="e9862648-2cb3-47db-a763-9275db0a1854" persistent="false" />
+	<configuration-properties file="mule.${mule.env}.properties" doc:id="46877740-aac5-4812-8728-4718689aa9ec" doc:name="Configuration properties" />
+	<configuration-properties file="common.properties" doc:id="dffa4da7-cc5c-4ecb-922e-1115b4387354" doc:name="Configuration properties" />
+	<configuration-properties file="mule-artifact.properties" doc:id="d185e6c2-8ca4-4217-928b-a845563af693" doc:name="Configuration properties" />
+	<os:object-store name="SchedulerStatus" persistent="false" doc:id="e9862648-2cb3-47db-a763-9275db0a1854" doc:name="Object store" />
 	<os:object-store name="watermarkWday" doc:name="Object store" />
 	<os:object-store name="watermarkSnow" doc:name="Object store" />
 
-	<global-property doc:name="Global Property" name="mule.env"
-		value="dev" />
+	<global-property name="mule.env" value="dev" doc:name="Global Property" />
 </mule>
-
-        
