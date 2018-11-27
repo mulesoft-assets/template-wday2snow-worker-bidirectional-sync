@@ -41,7 +41,7 @@ The question for recent changes since a certain moment is nothing but a [Schedul
 <!-- Default Considerations (end) -->
 
 <!-- Considerations (start) -->
-**Note:** This particular Anypoint Template illustrate the synchronization use case between Workday and ServiceNow.
+**Note:** This template illustrates the synchronization use case between Workday and ServiceNow.
 There are a couple of things you should take into account before running this template:
 
 1. **Workers cannot be deleted in Workday:** They are only set as terminated employees.

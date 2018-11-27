@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version='1.0' encoding='utf-8'?>
 <configuration>
 	<placeholders>
 		<placeholder id="template_name">Workday Worker to ServiceNow User Bidirectional synchronization</placeholder>
@@ -6,16 +6,16 @@
 	<sections>
 		<section id="use_case">  
 			I want to have my workers/users synchronized between Workday and ServiceNow.
-<![CDATA[
-### Template overview <a name="templateoverview"/>
+
+### Template overview &lt;a name="templateoverview"/&gt;
 						
 Let's say we want to keep Workday synchronized with ServiceNow. Then, the integration behavior can be summarized just with the following steps:
 
 1. Ask Workday:
-> *Which changes have there been since the last time I got in touch with you?*
+&gt; *Which changes have there been since the last time I got in touch with you?*
 
 2. For each of the updates fetched in the previous step (1.), ask ServiceNow:
-> *Does the update received from Workday should be applied?*
+&gt; *Does the update received from Workday should be applied?*
 
 3. If ServiceNow's answer for the previous question (2.) is *Yes*, then *upsert* (create or update depending on each particular case) ServiceNow with the belonging change
 
@@ -24,16 +24,16 @@ Let's say we want to keep Workday synchronized with ServiceNow. Then, the integr
  Repeat *ad infinitum*:
 
 5. Ask Workday:
-> *Which changes have there been since the question I've made in the step 1.?*
+&gt; *Which changes have there been since the question I've made in the step 1.?*
 
 And so on...
 			  
 The question for recent changes since a certain moment is nothing but a [Scheduler](https://docs.mulesoft.com/mule4-user-guide/v/4.1/scheduler-concept) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
-]]>
+
 		</section>
 		<section id="considerations">
-<![CDATA[ 
-**Note:** This particular Anypoint Template illustrate the synchronization use case between Workday and ServiceNow.
+ 
+**Note:** This template illustrates the synchronization use case between Workday and ServiceNow.
 There are a couple of things you should take into account before running this template:
 
 1. **Workers cannot be deleted in Workday:** They are only set as terminated employees.
@@ -43,10 +43,10 @@ There are a couple of things you should take into account before running this te
 3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.			
 
 4. **Username field:** The username has to be valid for both instancies or username can be null in ServiceNow.			
-]]>
+
 		</section>
 		<section id="application_configuration">
-			<![CDATA[
+			
 **Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.			
 
 + page.size `10`			
@@ -79,23 +79,23 @@ There are a couple of things you should take into account before running this te
 + snow.integration.user.id `user`
 + snow.watermark.default.expression `2018-01-01T07:53:00Z`
 
-	  ]]>
+	  
 		</section>
 		<section id="api_calls">
-			<![CDATA[
+			
 There are no special considerations regarding API calls.
-]]>
+
 		</section>
 		<section id="default_endpoints_xml">
-		<![CDATA[
+		
 This file should contain every inbound and outbound endpoint of your integration app. It is intended to contain the application API.
 In this particular template, this file contains a couple of poll inbound endpoints that query Workday and ServiceNow for updates using watermark as mentioned before.
-]]>
+
 		</section>
 		<section id="default_business_logic_xml">
-		<![CDATA[
+		
 This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for both executing the synchronization from Workday to ServiceNow and the other way around.
-]]>
+
 		</section>
 	</sections>		
 </configuration>
