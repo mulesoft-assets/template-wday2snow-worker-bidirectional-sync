@@ -2,18 +2,26 @@
 # Anypoint Template: Workday Worker to ServiceNow User Bidirectional synchronization	
 
 <!-- Header (start) -->
+Bi-directionally synchronizes workers data between Workday and ServiceNow. Configure this template quickly by only modifying the fields to be synchronized, how they map, and criteria on when to trigger the synchronization. Real time synchronization is achieved via rapid polling of both systems or can be extended to include outbound notifications. 
 
+This template leverages watermarking functionality to ensure that only the most recent items are synchronized and batch to efficiently process many records at a time.
+
+![bb71bf4f-8822-4404-bb30-b041825073a4-image.png](https://exchange2-file-upload-service-kprod.s3.us-east-1.amazonaws.com:443/bb71bf4f-8822-4404-bb30-b041825073a4-image.png)
+
+## Workday Requirements
+
+Install Workday System - Integrations, Workday HCM - Human Resources and Workday HCM - Staffing modules that you can find on the [Workday connector page](/exchange/org.mule.modules/mule-module-workday-connector/).
 <!-- Header (end) -->
 
-# License Agreement
+## License Agreement
 This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio. 
-# Use Case
+## Use Case
 <!-- Use Case (start) -->
 I want to have my workers/users synchronized between Workday and ServiceNow.
 
-### Template overview <a name="templateoverview"/>
+### Template Overview
 						
-Let's say we want to keep Workday synchronized with ServiceNow. Then, the integration behavior can be summarized just with the following steps:
+Keeps Workday synchronized with ServiceNow. The integration behavior is:
 
 1. Ask Workday:
 > *Which changes have there been since the last time I got in touch with you?*
@@ -32,7 +40,7 @@ Let's say we want to keep Workday synchronized with ServiceNow. Then, the integr
 
 And so on...
 			  
-The question for recent changes since a certain moment is nothing but a [Scheduler](https://docs.mulesoft.com/mule4-user-guide/v/4.1/scheduler-concept) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
+The question for recent changes since a certain moment is nothing but a Scheduler with a watermark defined.
 <!-- Use Case (end) -->
 
 # Considerations
@@ -41,7 +49,7 @@ The question for recent changes since a certain moment is nothing but a [Schedul
 <!-- Default Considerations (end) -->
 
 <!-- Considerations (start) -->
-**Note:** This template illustrates the synchronization use case between Workday and ServiceNow.
+This template illustrates the synchronization use case between Workday and ServiceNow.
 There are a couple of things you should take into account before running this template:
 
 1. **Workers cannot be deleted in Workday:** They are only set as terminated employees.
@@ -52,10 +60,6 @@ There are a couple of things you should take into account before running this te
 
 4. **Username field:** The username has to be valid for both instancies or username can be null in ServiceNow.
 <!-- Considerations (end) -->
-
-
-
-
 
 ## ServiceNow Considerations
 
@@ -76,24 +80,19 @@ There are no considerations with using Workday as a data origin.
 
 There are no considerations with using Workday as a data destination.
 
-
-
-
-
-
 # Run it!
 Simple steps to get this template running.
 <!-- Run it (start) -->
 
 <!-- Run it (end) -->
 
-## Running On Premises
+## Run On Premises
 In this section we help you run this template on your computer.
 <!-- Running on premise (start) -->
 
 <!-- Running on premise (end) -->
 
-### Where to Download Anypoint Studio and the Mule Runtime
+### Download Anypoint Studio and the Mule Runtime
 If you are new to Mule, download this software:
 
 + [Download Anypoint Studio](https://www.mulesoft.com/platform/studio)
@@ -104,37 +103,38 @@ If you are new to Mule, download this software:
 
 <!-- Where to download (end) -->
 
-### Importing a Template into Studio
+### Import a Template into Studio
 In Studio, click the Exchange X icon in the upper left of the taskbar, log in with your Anypoint Platform credentials, search for the template, and click Open.
 <!-- Importing into Studio (start) -->
 
 <!-- Importing into Studio (end) -->
 
-### Running on Studio
+### Run on Studio
 After you import your template into Anypoint Studio, follow these steps to run it:
 
-+ Locate the properties file `mule.dev.properties`, in src/main/resources.
-+ Complete all the properties required as per the examples in the "Properties to Configure" section.
-+ Right click the template project folder.
-+ Hover your mouse over `Run as`.
-+ Click `Mule Application (configure)`.
-+ Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
-+ Click `Run`.
+1. Locate the properties file `mule.dev.properties`, in src/main/resources.
+2. Complete all the properties required per the examples in the "Properties to Configure" section.
+3. Right click the template project folder.
+4. Hover your mouse over `Run as`.
+5. Click `Mule Application (configure)`.
+6. Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
+7. Click `Run`.
+
 <!-- Running on Studio (start) -->
 
 <!-- Running on Studio (end) -->
 
-### Running on Mule Standalone
+### Run on Mule Standalone
 Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`. 
 
 
-## Running on CloudHub
+## Run on CloudHub
 When creating your application in CloudHub, go to Runtime Manager > Manage Application > Properties to set the environment variables listed in "Properties to Configure" as well as the mule.env value.
 <!-- Running on Cloudhub (start) -->
 
 <!-- Running on Cloudhub (end) -->
 
-### Deploying a Template in CloudHub
+### Deploy a Template in CloudHub
 In Studio, right click your project name in Package Explorer and select Anypoint Platform > Deploy on CloudHub.
 <!-- Deploying on Cloudhub (start) -->
 
@@ -146,35 +146,38 @@ To use this template, configure properties such as credentials, configurations, 
 <!-- Application Configuration (start) -->
 **Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.			
 
-+ page.size `10`			
-+ scheduler.frequency `10000`
-+ scheduler.startDelay `500`
+- page.size `10`			
+- scheduler.frequency `10000`
+- scheduler.startDelay `500`
 
 		
-#### Workday Connector configuration
-+ wday.username `user`
-+ wday.password `secret`
-+ wday.tenant `company`
-+ wday.hostname `wd2-impl-services1.workday.com`
-+ wday.watermark.default.expression `2018-01-01T07:53:00Z`
+#### Workday Connector Configuration
 
-#### Default values for required WorkDay fields
-+ wday.country `USA`
-+ wday.state `USA-CA`
-+ wday.organization `50006855`
-+ wday.jobprofileId `39905`
-+ wday.postalCode `90001`
-+ wday.address `San Francisco 123`
-+ wday.city `San Francisco`
-+ wday.location `San_Francisco_Site`
-+ wday.currency `USD`
+- wday.username `user`
+- wday.password `secret`
+- wday.tenant `company`
+- wday.hostname `wd2-impl-services1.workday.com`
+- wday.watermark.default.expression `2018-01-01T07:53:00Z`
 
-#### ServiceNow Connector configuration
-+ snow.user `user` 
-+ snow.password `secret`
-+ snow.endpoint `https://dev.service-now.com`
-+ snow.integration.user.id `user`
-+ snow.watermark.default.expression `2018-01-01T07:53:00Z`
+#### Default Values for Required WorkDay Fields
+
+- wday.country `USA`
+- wday.state `USA-CA`
+- wday.organization `50006855`
+- wday.jobprofileId `39905`
+- wday.postalCode `90001`
+- wday.address `San Francisco 123`
+- wday.city `San Francisco`
+- wday.location `San_Francisco_Site`
+- wday.currency `USD`
+
+#### ServiceNow Connector Configuration
+
+- snow.user `user` 
+- snow.password `secret`
+- snow.endpoint `https://dev.service-now.com`
+- snow.integration.user.id `user`
+- snow.watermark.default.expression `2018-01-01T07:53:00Z`
 <!-- Application Configuration (end) -->
 
 # API Calls
@@ -188,13 +191,15 @@ This brief guide provides a high level understanding of how this template is bui
 * config.xml
 * businessLogic.xml
 * endpoints.xml
-* errorHandling.xml<!-- Customize it (start) -->
+* errorHandling.xml
+<!-- Customize it (start) -->
 
 <!-- Customize it (end) -->
 
 ## config.xml
 <!-- Default Config XML (start) -->
-This file provides the configuration for connectors and configuration properties. Only change this file to make core changes to the connector processing logic. Otherwise, all parameters that can be modified should instead be in a properties file, which is the recommended place to make changes.<!-- Default Config XML (end) -->
+This file provides the configuration for connectors and configuration properties. Only change this file to make core changes to the connector processing logic. Otherwise, all parameters that can be modified should instead be in a properties file, which is the recommended place to make changes.
+<!-- Default Config XML (end) -->
 
 <!-- Config XML (start) -->
 
@@ -202,7 +207,8 @@ This file provides the configuration for connectors and configuration properties
 
 ## businessLogic.xml
 <!-- Default Business Logic XML (start) -->
-This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for both executing the synchronization from Workday to ServiceNow and the other way around.<!-- Default Business Logic XML (end) -->
+This file holds the functional aspect of the template (points 2. to 4. described in the template overview). Its main component is a batch job, and it includes *steps* for both executing the synchronization from Workday to ServiceNow and the other way around.
+<!-- Default Business Logic XML (end) -->
 
 <!-- Business Logic XML (start) -->
 
@@ -211,7 +217,8 @@ This file holds the functional aspect of the template (points 2. to 4. described
 ## endpoints.xml
 <!-- Default Endpoints XML (start) -->
 This file should contain every inbound and outbound endpoint of your integration app. It is intended to contain the application API.
-In this particular template, this file contains a couple of poll inbound endpoints that query Workday and ServiceNow for updates using watermark as mentioned before.<!-- Default Endpoints XML (end) -->
+In this particular template, this file contains a couple of poll inbound endpoints that query Workday and ServiceNow for updates using watermark as mentioned before.
+<!-- Default Endpoints XML (end) -->
 
 <!-- Endpoints XML (start) -->
 
@@ -219,7 +226,8 @@ In this particular template, this file contains a couple of poll inbound endpoin
 
 ## errorHandling.xml
 <!-- Default Error Handling XML (start) -->
-This file handles how your integration reacts depending on the different exceptions. This file provides error handling that is referenced by the main flow in the business logic.<!-- Default Error Handling XML (end) -->
+This file handles how your integration reacts depending on the different exceptions. This file provides error handling that is referenced by the main flow in the business logic.
+<!-- Default Error Handling XML (end) -->
 
 <!-- Error Handling XML (start) -->
 
