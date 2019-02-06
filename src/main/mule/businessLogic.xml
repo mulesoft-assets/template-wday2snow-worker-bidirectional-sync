@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
 		<batch:job jobName="migrateWorkersBatchFromWorkday" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6"
 			blockSize="${page.size}">
 			<batch:process-records>
-				<batch:step name="getWorkersFromServiceNow" doc:id="89713774-362a-4e92-9bdc-41e31802bf38">
+				<batch:step name="getWorkersFromServiceNow" doc:id="89713774-362a-4e92-9bdc-41e31802bf38" acceptExpression="#[payload != null]">
 					<ee:transform doc:name="Create getRecords Request"
 						doc:id="b0e904b1-ee55-4159-99c0-c8a290a381e4">
 						<ee:message>
@@ -27,12 +27,11 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
 output application/xml
 ns ns0 http://www.service-now.com/sys_user
 ---
-using (personalData = payload.Worker_Data.Personal_Data)
 {
 	ns0#getRecords: {
-		ns0#email: personalData.Contact_Data.Email_Address_Data.Email_Address,
-		ns0#"first_name": personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
-		ns0#"last_name": personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name
+		ns0#email: payload.email,
+		ns0#"first_name": payload.firstname,
+		ns0#"last_name": payload.lastname
 	}
 }]]></ee:set-payload>
 						</ee:message>
@@ -67,20 +66,19 @@ vars.worker ++ {
 output application/xml
 ns ns0 http://www.service-now.com/sys_user
 ---
-using (personalData = payload.Worker_Data.Personal_Data)
 {
 	ns0#insert: {
 		ns0#active        : 1,
-		ns0#city          : personalData.Contact_Data.Address_Data.Municipality,
-		ns0#country       : personalData.Contact_Data.Address_Data.Country_Reference.ID,
-		ns0#email         : personalData.Contact_Data.Email_Address_Data.Email_Address,
-		ns0#"first_name"  : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
-		ns0#"home_phone"  : personalData.Contact_Data.Phone_Data.Phone_Number,
-		ns0#"last_name"   : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		ns0#state         : personalData.Contact_Data.Address_Data.Country_Region_Reference.ID,
-		ns0#street        : personalData.Contact_Data.Address_Data.Address_Line_Data,
-		ns0#"user_name"   : payload.Worker_Reference.ID,
-		ns0#"zip"         : personalData.Contact_Data.Address_Data.Postal_Code
+		ns0#city          : payload.city,
+		ns0#country       : payload.country,
+		ns0#email         : payload.email,
+		ns0#"first_name"  : payload.firstname,
+		ns0#"home_phone"  : payload.homephone,
+		ns0#"last_name"   : payload.lastname,
+		ns0#state         : payload.state,
+		ns0#street        : payload.street,
+		ns0#"user_name"   : payload.username,
+		ns0#"zip"         : payload.zip
 	}
 }
 
@@ -104,21 +102,20 @@ using (personalData = payload.Worker_Data.Personal_Data)
 output application/xml
 ns ns0 http://www.service-now.com/sys_user
 ---
-using (personalData = payload.Worker_Data.Personal_Data)
 {
 	ns0#update: {
 		ns0#"sys_id"      : payload.snowUserId,
 		ns0#active        : 1,
-		ns0#city          : personalData.Contact_Data.Address_Data.Municipality,
-		ns0#country       : personalData.Contact_Data.Address_Data.Country_Reference.ID,
-		ns0#email         : personalData.Contact_Data.Email_Address_Data.Email_Address,
-		ns0#"first_name"  : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
-		ns0#"home_phone"  : personalData.Contact_Data.Phone_Data.Phone_Number,
-		ns0#"last_name"   : personalData.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		ns0#state         : personalData.Contact_Data.Address_Data.Country_Region_Reference.ID,
-		ns0#street        : personalData.Contact_Data.Address_Data.Address_Line_Data,
-		ns0#"user_name"  : payload.Worker_Reference.ID,
-		ns0#"zip"         : personalData.Contact_Data.Address_Data.Postal_Code
+		ns0#city          : payload.city,
+		ns0#country       : payload.country,
+		ns0#email         : payload.email,
+		ns0#"first_name"  : payload.firstname,
+		ns0#"home_phone"  : payload.homephone,
+		ns0#"last_name"   : payload.lastname,
+		ns0#state         : payload.state,
+		ns0#street        : payload.street,
+		ns0#"user_name"   : payload.username,
+		ns0#"zip"         : payload.zip
 	}
 }]]></ee:set-payload>
 						</ee:message>
@@ -134,36 +131,18 @@ using (personalData = payload.Worker_Data.Personal_Data)
 			</batch:process-records>
 			<batch:on-complete>
 				<os:store key="syncState" doc:name="Set sync state to ServiceNow"
-					doc:id="f08de372-2fb9-4aef-80ca-f6da2241fc75" objectStore="SchedulerStatus">
+					doc:id="c392a576-b632-440c-8bcd-e4eeca687eb5" objectStore="SchedulerStatus">
 					<os:value><![CDATA[fromServiceNow]]></os:value>
 				</os:store>
 			</batch:on-complete>
 
 		</batch:job>
 	</flow>
-	<flow name="fromServiceNowToWorkday" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
-		<batch:job jobName="migrateWorkersBatchFromSNow" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6"
-			blockSize="${page.size}">
+		<flow name="fromServiceNowToWorkday" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
+		<batch:job jobName="migrateWorkersBatchFromSNow" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6" blockSize="${page.size}">
 			<batch:process-records>
-				<batch:step name="SetWorkerBatch" doc:id="6f80760e-77e3-4ebf-9e98-612349c138a4">
-					<ee:transform doc:name="Set Worker variable"
-						doc:id="195e50db-2330-41ef-b914-19de0c79cbee">
-						<ee:message>
-						</ee:message>
-						<ee:variables>
-							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
-output application/java
----
-payload ++ {
-	wdayUserId: null
-}]]></ee:set-variable>
-						</ee:variables>
-					</ee:transform>
-				</batch:step>
-				<batch:step name="getWorkersFromWorkday" doc:id="89713774-362a-4e92-9bdc-41e31802bf38"
-					acceptExpression="#[vars.worker.user_name != null]">
-					<ee:transform doc:name="Prepare GetWorkers request"
-						doc:id="26a43370-b8f9-4859-85d4-d796d5e610fd">
+				<batch:step name="getWorkersFromWorkday" doc:id="89713774-362a-4e92-9bdc-41e31802bf38" acceptExpression="#[payload.user_name != null]">
+					<ee:transform doc:name="Prepare GetWorkers request" doc:id="26a43370-b8f9-4859-85d4-d796d5e610fd">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
@@ -177,40 +156,41 @@ ns ns0 urn:com.workday/bsvc
 			}
 		},
 		ns0#Response_Group: {
+			ns0#Include_User_Account: true,
 			ns0#Include_Employment_Information: true,
 			ns0#Include_Organizations: true,
 			ns0#Include_Personal_Information: true,
 			ns0#Include_Reference: true,
 			ns0#Include_Roles: true,
-			ns0#Include_Transaction_Log_Data: true,
-			ns0#Include_User_Account: true
+			ns0#Include_Transaction_Log_Data: true
+			
+
 		}
 	}
-}
-				]]></ee:set-payload>
+}]]></ee:set-payload>
 						</ee:message>
 						<ee:variables>
+							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<workday:invoke service="Human_Resources" operation="Get_Workers"
-						doc:name="Get Workers from Workday" doc:id="128e2819-7c90-4470-a234-d516802f0920"
-						config-ref="Workday_Config" />
-					<ee:transform doc:name="Get Worker ID"
-						doc:id="ea91fa20-9253-4c89-89ea-835e7e2ad8d9">
+					<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="f7959b6a-ab1c-474e-bc75-46e2ab82908d" config-ref="Workday_Config_version_30" />
+					<ee:transform doc:name="Get Worker ID" doc:id="ea91fa20-9253-4c89-89ea-835e7e2ad8d9">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 vars.worker ++ {
-	wdayUserId: payload.body.Get_Workers_Response.Request_References.Worker_Reference.ID
+	wdayUserId: payload.Get_Workers_Response.Request_References.Worker_Reference.ID
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
+					<logger level="INFO" doc:name="Logger" doc:id="a856c2ba-482e-42c6-84d9-cedc98c51a88" message="#[output application/json --- payload]" />
 				</batch:step>
-				<batch:step name="insertWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950"
-					acceptExpression="#[vars.worker.user_name == null]">
-					<ee:transform doc:name="User To HireEmployeeRequestType"
-						doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
+				<batch:step name="insertWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950" acceptExpression="#[payload != null and payload.user_name == null]">
+					<ee:transform doc:name="User To HireEmployeeRequestType" doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
@@ -313,38 +293,40 @@ ns0#Hire_Employee_Request:
 }
 ]]></ee:set-payload>
 						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+						</ee:variables>
 					</ee:transform>
-					<workday:invoke service="Staffing" operation="Hire_Employee"
-						doc:name="Hire Employee" doc:id="362ec49b-4a56-4f91-a2c3-017979624df6"
-						config-ref="Workday_Config" />
-					<logger level="INFO" doc:name="Logger update contact information"
-						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Hire Employee: #[output application/json --- payload]" />
-					<ee:transform doc:name="Prepare update of User username request"
-						doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
+					<workday:staffing operation="Hire_Employee" doc:name="Hire Employee" doc:id="0009e2e2-01be-4424-bc85-391484d13572" config-ref="Workday_Config_version_30" />
+					<logger level="INFO" doc:name="Logger update contact information" doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Hire Employee: #[output application/json --- payload]" />
+					<ee:transform doc:name="Prepare update of User username request" doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ns ns0 http://www.service-now.com/sys_user
 ---
 ns0#update: {
-	ns0#"user_name": payload.body.Hire_Employee_Event_Response.Employee_Reference[1],
+	ns0#"user_name": payload.Hire_Employee_Event_Response.Employee_Reference[1],
 	ns0#"sys_id": vars.worker.sys_id
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-					<servicenow:invoke doc:name="Update User username in ServiceNow"
-						doc:id="1e70d815-8368-42e2-b9e2-9b93f6788822" config-ref="ServiceNow_Config"
-						service="sys_user" operation="update" />
-					<logger level="INFO" doc:name="Logger update name"
-						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
-						message="Update in Workday Contact Information: #[output application/json --- payload]" />
+					<servicenow:invoke doc:name="Update User username in ServiceNow" doc:id="1e70d815-8368-42e2-b9e2-9b93f6788822" config-ref="ServiceNow_Config" service="sys_user" operation="update" />
+					<ee:transform doc:name="Set payload" doc:id="52041075-9779-4873-8f3b-cf749bb697a8">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+vars.worker]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
 				</batch:step>
 
-				<batch:step name="updateWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950"
-					acceptExpression="#[vars.worker != null and vars.worker.wdayUserId != null]">
-					<ee:transform
-						doc:name="User To MaintainContactInformationForPersonEventRequestType"
-						doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
+				<batch:step name="updateWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950" acceptExpression="#[payload.wdayUserId != null]">
+					<ee:transform doc:name="User To MaintainContactInformationForPersonEventRequestType" doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
@@ -372,9 +354,9 @@ ns0#Maintain_Contact_Information_for_Person_Event_Request:
 					ns0#ID @(ns0#"type": "Country_Region_ID"):  if (payload.state == null ) p('wday.state') else createCountryRegionReference(payload.country,payload.state).code
 				},				
 				ns0#Municipality: if (payload.city == null) p('wday.city')   else payload.city,
-				ns0#Postal_Code: if (payload."zip" == null) p('wday.postalCode') else payload."zip",
+				ns0#Postal_Code: if (payload.zip == null) p('wday.postalCode') else payload.zip,
 				ns0#Usage_Data @(ns0#Public: false): {
-					ns0#Type_Data: {
+					ns0#Type_Data @(ns0#Primary: true): {
 						ns0#Type_Reference: {
 							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
 						}
@@ -384,7 +366,7 @@ ns0#Maintain_Contact_Information_for_Person_Event_Request:
 			ns0#Email_Address_Data: {
 				ns0#Email_Address: payload.email,
 				ns0#Usage_Data @(ns0#Public: true): {
-					ns0#Type_Data : {
+					ns0#Type_Data @(ns0#Primary: true): {
 						ns0#Type_Reference: {
 							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
 						}
@@ -398,7 +380,7 @@ ns0#Maintain_Contact_Information_for_Person_Event_Request:
 				},
 				ns0#Phone_Number: payload.home_phone replace "-" with "" ,
 				ns0#Usage_Data @(ns0#Public: true): {
-					ns0#Type_Data: {
+					ns0#Type_Data @(ns0#Primary: true): {
 						ns0#Type_Reference: {
 							ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
 						}
@@ -412,15 +394,18 @@ ns0#Maintain_Contact_Information_for_Person_Event_Request:
 	}
 }]]></ee:set-payload>
 						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="worker"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+						</ee:variables>
 					</ee:transform>
-					<workday:invoke service="Human_Resources"
-						operation="Maintain_Contact_Information" doc:name="Update Contact Information"
-						doc:id="362ec49b-4a56-4f91-a2c3-017979624df6" config-ref="Workday_Config" />
-					<logger level="INFO" doc:name="Logger update contact information"
-						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
-						message="Update in Workday Contact Information: #[output application/json --- payload]" />
-					<ee:transform doc:name="Transform User To ChangePreferredNameRequestType"
-						doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
+					<workday:human-resources operation="Maintain_Contact_Information" doc:name="Update Contact Information" doc:id="ac502b64-0cc0-4f3e-9418-06a4eeed5970" config-ref="Workday_Config_version_30" >
+						<ee:repeatable-file-store-stream inMemorySize="3" bufferUnit="MB" />
+					</workday:human-resources>
+					<logger level="INFO" doc:name="Logger update contact information" doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Update in Workday Contact Information: #[output application/json --- payload]" />
+					<ee:transform doc:name="Transform User To ChangePreferredNameRequestType" doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
@@ -448,18 +433,20 @@ ns0#Change_Preferred_Name_Request:
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-					<workday:invoke service="Human_Resources" operation="Change_Preferred_Name"
-						doc:name="Update Preferred Name" doc:id="362ec49b-4a56-4f91-a2c3-017979624df6"
-						config-ref="Workday_Config" />
-					<logger level="INFO" doc:name="Logger update name"
-						doc:id="ea85968e-fd18-44b9-ad4d-6230def59835"
-						message="Update in Workday Contact Information: #[output application/json --- payload]" />
+					<workday:human-resources operation="Change_Preferred_Name" doc:name="Update Preferred Name" doc:id="16256bb9-34e3-4361-acd4-ed89cd16459a" config-ref="Workday_Config_version_30" />
+					<ee:transform doc:name="Set payload" doc:id="9d90704e-43da-43b4-b685-febbc009b742" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.worker]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
 				</batch:step>
 
 			</batch:process-records>
 			<batch:on-complete>
-				<os:store key="syncState" doc:name="Set sync state to Workday"
-					doc:id="f08de372-2fb9-4aef-80ca-f6da2241fc75" objectStore="SchedulerStatus">
+				<os:store key="syncState" doc:name="Set sync state to Workday" doc:id="f08de372-2fb9-4aef-80ca-f6da2241fc75" objectStore="SchedulerStatus">
 					<os:value><![CDATA[fromWorkday]]></os:value>
 				</os:store>
 			</batch:on-complete>
