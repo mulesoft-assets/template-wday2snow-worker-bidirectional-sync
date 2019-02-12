@@ -22,7 +22,7 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<classifier>mule-application</classifier>
+					<classifier>mule-application-template</classifier>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -87,15 +87,15 @@
 	</dependencies>
 	<repositories>
 		<repository>
-			<id>mulesoft-releases</id>
-			<name>MuleSoft Releases Repository</name>
-			<url>https://repository.mulesoft.org/releases/</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
 			<id>anypoint-exchange</id>
 			<name>Anypoint Exchange</name>
 			<url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
