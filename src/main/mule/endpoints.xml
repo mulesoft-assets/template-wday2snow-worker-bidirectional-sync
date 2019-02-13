@@ -68,7 +68,7 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
 			</on-error-propagate>
 		</error-handler>
 	</flow>
-
+	
 	<flow name="queryWorkdayFlow">
 		<os:retrieve key="watermark" objectStore="watermarkWday"
 			target="lastQueryDateWday" doc:name="Retrieve lastQueryDateWday">
@@ -105,27 +105,45 @@ ns ns0 urn:com.workday/bsvc
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<workday:invoke service="Human_Resources" operation="Get_Workers"
-			doc:name="Get Workers from Workday" doc:id="9ed7cf3f-94c4-4ac5-9435-876ec6f4e2c3"
-			config-ref="Workday_Config" />
-		<os:store key="watermark" failOnNullValue="false"
-			doc:name="Store lastQueryDateWday" objectStore="watermarkWday">
-			<os:value><![CDATA[#[payload.body.Get_Workers_Response.Request_Criteria.Transaction_Log_Criteria_Data.Transaction_Date_Range_Data.Updated_Through]]]></os:value>
-		</os:store>
+		<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="c6e7ea50-1b8f-48ed-85e9-e16a84a4db69" config-ref="Workday_Config_version_30"/>
 		<ee:transform doc:name="Filter response" doc:id="cd7fc927-9b51-4d82-8f17-3777dcae6973">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ns ns0 urn:com.workday/bsvc
----
-if (payload.body.ns0#Get_Workers_Response.ns0#Response_Data != null) 
-((payload.body.ns0#Get_Workers_Response.ns0#Response_Data.*ns0#Worker
+var data = if (payload.ns0#Get_Workers_Response.ns0#Response_Data != null) 
+((payload.ns0#Get_Workers_Response.ns0#Response_Data.*ns0#Worker
 filter ($.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address != null 
 and $.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address != ''))
 distinctBy $.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address)
-else []]]></ee:set-payload>
+else null
+---
+if(data != null)
+	data map {
+		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
+		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
+		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
+		firstname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
+		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
+		lastname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
+		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[2],
+		street : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Address_Line_Data,
+		username : $.Worker_Reference.*ID[1],
+		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code
+} else []]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="workdayDate" ><![CDATA[%dw 2.0
+output application/java
+ns ns0 urn:com.workday/bsvc
+---
+payload.ns0#Get_Workers_Response.Request_Criteria.Transaction_Log_Criteria_Data.Transaction_Date_Range_Data.Updated_Through]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
+		<os:store key="watermark" failOnNullValue="false"
+			doc:name="Store lastQueryDateWday" objectStore="watermarkWday">
+			<os:value><![CDATA[#[vars.workdayDate]]]></os:value>
+		</os:store>
 </flow>
 <flow name="queryServiceNow">
 		<os:retrieve key="watermark" objectStore="watermarkSnow" target="lastQueryDateSNow" doc:name="Retrieve lastQueryDateSNow">
@@ -146,12 +164,9 @@ ns ns0 http://www.service-now.com/sys_user
 			</ee:message>
 		</ee:transform>
     <servicenow:invoke service="sys_user" doc:name="Fetch Users from ServiceNow" doc:id="520b05fa-0eb6-4275-86ec-c53f4fff0f82" config-ref="ServiceNow_Config" operation="getRecords"/>
-		<os:store doc:name="lastQueryDateSnow" doc:id="b2bc9346-6f0b-4294-a6ae-a83e48211dc4" key="watermark" failOnNullValue="false" objectStore="watermarkSnow">
-			<os:value><![CDATA[#[max(payload.body.getRecordsResponse.*getRecordsResult.sys_updated_on)]]]></os:value>
-		</os:store>
-		<ee:transform doc:name="Filter response" doc:id="3b7df51c-a38d-47ee-b1cc-d3c2a346e463" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform doc:name="Filter response" doc:id="3b7df51c-a38d-47ee-b1cc-d3c2a346e463">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
  if (payload.body.getRecordsResponse != null ) 
@@ -159,7 +174,16 @@ output application/java
 filter($.email != null and $.email != '')) distinctBy $.email )
 else []]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="snowDate" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.body.getRecordsResponse.*getRecordsResult.sys_updated_on]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
+		<os:store doc:name="lastQueryDateSnow" doc:id="b2bc9346-6f0b-4294-a6ae-a83e48211dc4" key="watermark" failOnNullValue="false" objectStore="watermarkSnow">
+			<os:value><![CDATA[#[max(vars.snowDate)]]]></os:value>
+		</os:store>
 </flow>
 
 
