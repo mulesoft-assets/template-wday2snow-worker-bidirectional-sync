@@ -121,14 +121,14 @@ else null
 if(data != null)
 	data map {
 		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
-		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.ID,
+		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
 		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
 		firstname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
 		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
 		lastname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.ID,
+		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[2],
 		street : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Address_Line_Data,
-		username : $.Worker_Reference.ID,
+		username : $.Worker_Reference.*ID[1],
 		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code
 } else []]]></ee:set-payload>
 			</ee:message>
@@ -164,7 +164,6 @@ ns ns0 http://www.service-now.com/sys_user
 			</ee:message>
 		</ee:transform>
     <servicenow:invoke service="sys_user" doc:name="Fetch Users from ServiceNow" doc:id="520b05fa-0eb6-4275-86ec-c53f4fff0f82" config-ref="ServiceNow_Config" operation="getRecords"/>
-		<logger level="INFO" doc:name="Logger" doc:id="a1c63659-9e46-4be3-b56c-a6338bebfc1a" message="#[output application/json --- payload]"/>
 		<ee:transform doc:name="Filter response" doc:id="3b7df51c-a38d-47ee-b1cc-d3c2a346e463">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0

@@ -29,9 +29,7 @@ ns ns0 http://www.service-now.com/sys_user
 ---
 {
 	ns0#getRecords: {
-		ns0#email: payload.email,
-		ns0#"first_name": payload.firstname,
-		ns0#"last_name": payload.lastname
+		ns0#"user_name": payload.username
 	}
 }]]></ee:set-payload>
 						</ee:message>
@@ -187,7 +185,6 @@ vars.worker ++ {
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-					<logger level="INFO" doc:name="Logger" doc:id="a856c2ba-482e-42c6-84d9-cedc98c51a88" message="#[output application/json --- payload]" />
 				</batch:step>
 				<batch:step name="insertWorkersInWorkdayStep" doc:id="495279da-ca4e-49ec-a805-f7f9c9334950" acceptExpression="#[payload != null and payload.user_name == null]">
 					<ee:transform doc:name="User To HireEmployeeRequestType" doc:id="25b73fcd-2dfa-47b1-a9a3-a8d929a23e10">

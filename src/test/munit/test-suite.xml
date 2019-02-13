@@ -17,6 +17,7 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
     <configuration-properties doc:name="Configuration properties" doc:id="560ab989-6e19-4d33-afca-e0ea90c67c58" file="mule.test.properties" />
    
 <munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="e0e0e98f-b743-4151-9d5e-33b7dba9e917">
+		<flow-ref doc:name="Query Workday Record" doc:id="c2e1e3dc-8b5b-46ab-a98c-0793de6ce521" name="queryWorkdayRecord"/>
 		<ee:transform doc:name="Prepare Insert Request" doc:id="11e2baca-bf5b-4bd9-9386-c74f42971d61" >
 			<ee:message >
 			</ee:message>
@@ -29,16 +30,16 @@ var generateId = randomInt(100000)
 {
 	ns0#insert: {
 		ns0#active        : 1,
-		ns0#city          : p('wday.city') ++ generateId,
-		ns0#country       : p('wday.country'),
-		ns0#email         : p('test.wday.email'),
-		ns0#"first_name"  : p('test.wday.firstname'),
+		ns0#city          : payload[0].city,
+		ns0#country       : payload[0].country,
+		ns0#email         : payload[0].email,
+		ns0#"first_name"  : payload[0].firstname,
 	    ns0#"home_phone"  : (generateId ++ generateId)[0 to 6],
-		ns0#"last_name"   : p('test.wday.lastname'),
-		ns0#state         : p('wday.state'),
-		ns0#street        : p('wday.address'),
-		ns0#"user_name"   : p('test.wday.username'),
-		ns0#"zip"         : p('wday.postalCode'),
+		ns0#"last_name"   : payload[0].lastname,
+		ns0#state         : payload[0].state,
+		ns0#street        : payload[0].street,
+		ns0#"user_name"   : payload[0].username,
+		ns0#"zip"         : payload[0].zip
 	}
 }
 ]]></ee:set-variable>
@@ -56,7 +57,9 @@ var generateId = randomInt(100000)
 				<ee:set-variable variableName="snowIds" ><![CDATA[%dw 2.0
 output application/java
 ---
-[payload.body.insertResponse."sys_id"]]]></ee:set-variable>
+if(payload != null)
+[payload.body.insertResponse."sys_id"]
+else []]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</munit:before-test>
@@ -67,7 +70,7 @@ output application/java
 				<ee:message >
 					<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
-var updateRecords= payload filter ($.email == p('test.wday.email') and $.firstname == p('test.wday.firstname') and $.lastname == p('test.wday.lastname'))
+var updateRecords= payload filter ($.username == p('test.wday.username'))
 var generateId = randomInt(100000)
 ---
 updateRecords + {
@@ -105,12 +108,8 @@ ns ns0 http://www.service-now.com/sys_user
 ---
 {
 	ns0#getRecords: {
-		ns0#email: vars.migratedRecords[0].email,
-		ns0#"first_name": vars.migratedRecords[0].firstname,
-		ns0#"last_name": vars.migratedRecords[0].lastname,
-		ns0#"city": vars.migratedRecords[0].city,
+		ns0#user_name: vars.migratedRecords[0].username,
 		ns0#"state": vars.migratedRecords[0].state
-		
 	}
 }]]></ee:set-payload>
 			</ee:message>
@@ -146,9 +145,7 @@ ns ns0 http://www.service-now.com/sys_user
 ---
 {
 	ns0#getRecords: {
-		ns0#email: vars.migratedRecords[1].email,
-		ns0#"first_name": vars.migratedRecords[1].firstname,
-		ns0#"last_name": vars.migratedRecords[1].lastname
+		ns0#user_name: vars.migratedRecords[1].username,
 	}
 }]]></ee:set-payload>
 			</ee:message>
@@ -183,16 +180,27 @@ vars.snowIds + payload.body.getRecordsResponse.getRecordsResult.sys_id]]></ee:se
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
-payload filter ($.email == p('test.wday.email') and $.first_name == p('test.wday.firstname') and $.last_name == p('test.wday.lastname'))]]></ee:set-payload>
+payload filter ($."user_name" == p('test.wday.username'))]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
 			<flow-ref doc:name="Call Business Logic fromServiceNowToWorkday" doc:id="ff9f5ac4-4448-4b93-8312-5e524febd0f6" name="fromServiceNowToWorkday"/>
 			<scripting:execute doc:name="Sleep for 60s until the processing is completed" doc:id="ecab7352-b10d-434a-96a0-3b8aeb1ec6e4" engine="groovy">
 				<scripting:code >sleep(60000)</scripting:code>
 			</scripting:execute>
-		</munit:execution>
-		<munit:validation >
 			<flow-ref doc:name="Query Workday Record" doc:id="6a424ba7-4ce6-4836-8a24-d18c52dbd21f" name="queryWorkdayRecord" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that Worker was updated" doc:id="17348791-d1de-45b2-acc9-083909c53d0e" expression="#[payload[0].homephone]" is="#[MunitTools::equalTo(vars.snowRecord.homephone)]" message="Phone should be updated" />
+			<munit-tools:verify-call doc:name="Verify Update Contact Information call" doc:id="28cf1c5c-d87c-49a6-ba66-4264cb00107b" processor="workday:human-resources" times="1">
+			<munit-tools:with-attributes>
+				<munit-tools:with-attribute attributeName="doc:id" whereValue="ac502b64-0cc0-4f3e-9418-06a4eeed5970" />
+			</munit-tools:with-attributes>
+		</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Update Preferred Name call" doc:id="259a98a5-fffb-4db2-b26b-d57c1e3ab003" processor="workday:human-resources" times="1">
+			<munit-tools:with-attributes>
+				<munit-tools:with-attribute attributeName="doc:id" whereValue="16256bb9-34e3-4361-acd4-ed89cd16459a" />
+			</munit-tools:with-attributes>
+		</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
 	<sub-flow name="queryWorkdayRecord" doc:id="ec766754-d239-4228-8372-a5a685f229d1" >
@@ -210,14 +218,8 @@ ns ns0 urn:com.workday/bsvc
 			}
 		},
 		ns0#Response_Group: {
-			ns0#Include_User_Account: true,
-			ns0#Include_Employment_Information: true,
-			ns0#Include_Organizations: true,
 			ns0#Include_Personal_Information: true,
-			ns0#Include_Reference: true,
-			ns0#Include_Roles: true,
-			ns0#Include_Transaction_Log_Data: true
-			
+			ns0#Include_Reference: true
 
 		}
 	}
@@ -230,7 +232,7 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="0f195baf-01cd-44a8-8e91-0c549bb8696e" config-ref="Workday_Config_version_30" />
+		<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="0f195baf-01cd-44a8-8e91-0c549bb8696e" config-ref="Workday_Config_version_30" />
 					<ee:transform doc:name="Prepare Response" doc:id="116f66f4-1f19-4dd4-a19f-bd3117b4c039">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
@@ -240,14 +242,14 @@ var data = payload.ns0#Get_Workers_Response.ns0#Response_Data.*ns0#Worker
 ---
 data map {
 		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
-		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.ID,
+		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
 		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
 		firstname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
 		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
 		lastname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.ID,
+		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[2],
 		street : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Address_Line_Data,
-		username : $.Worker_Reference.ID,
+		username : $.Worker_Reference.*ID[1],
 		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code
 }]]></ee:set-payload>
 						</ee:message>
@@ -269,17 +271,6 @@ output application/java
 }]]></ee:set-variable>
 			</ee:variables>
 					</ee:transform>
-		<munit-tools:assert-that doc:name="Assert that Worker was updated" doc:id="17348791-d1de-45b2-acc9-083909c53d0e" expression="#[payload[0].homephone]" is="#[MunitTools::equalTo(vars.snowRecord.homephone)]" message="Phone should be updated"/>
-		<munit-tools:verify-call doc:name="Verify Update Contact Information call" doc:id="28cf1c5c-d87c-49a6-ba66-4264cb00107b" processor="workday:human-resources" times="1">
-			<munit-tools:with-attributes >
-				<munit-tools:with-attribute attributeName="doc:id" whereValue="ac502b64-0cc0-4f3e-9418-06a4eeed5970" />
-			</munit-tools:with-attributes>
-		</munit-tools:verify-call>
-		<munit-tools:verify-call doc:name="Verify Update Preferred Name call" doc:id="259a98a5-fffb-4db2-b26b-d57c1e3ab003" processor="workday:human-resources" times="1">
-			<munit-tools:with-attributes >
-				<munit-tools:with-attribute attributeName="doc:id" whereValue="16256bb9-34e3-4361-acd4-ed89cd16459a" />
-			</munit-tools:with-attributes>
-		</munit-tools:verify-call>
 
 	</sub-flow>
 	<munit:after-test name="test-suiteAfter_Test"
