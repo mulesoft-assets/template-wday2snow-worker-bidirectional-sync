@@ -10,65 +10,47 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd
 http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
-
-
+	
 	<flow name="schedulerFlow" doc:id="aff4106d-d2f6-4366-940a-a380dcb1cf73">
 		<scheduler doc:name="Scheduler" doc:id="58b7c776-fbee-4753-9bea-f6cc3e037efd">
 			<scheduling-strategy>
-				<fixed-frequency frequency="${scheduler.frequency}"
-					startDelay="${scheduler.startDelay}" />
+				<fixed-frequency frequency="${scheduler.frequency}" startDelay="${scheduler.startDelay}" />
 			</scheduling-strategy>
 		</scheduler>
-		<os:retrieve key="syncState" doc:name="Retrieve sync state"
-			objectStore="SchedulerStatus" target="syncState">
+		<os:retrieve key="syncState" doc:name="Retrieve sync state" objectStore="SchedulerStatus" target="syncState">
 			<os:default-value><![CDATA[fromWorkday]]></os:default-value>
 
 		</os:retrieve>
 		<choice doc:name="SyncState?" doc:id="b4703d83-780b-4e2d-bf5d-51b1566d66e2">
-			<when
-				expression="#[(vars.syncState != 'running' and vars.syncState == 'fromWorkday') or vars.syncState == null]">
-				<logger level="INFO" doc:name="running from Workday"
-					doc:id="c9cd1c27-5978-4ad8-b87f-99da49944447" message="running from Workday" />
-				<os:store key="syncState" doc:name="Set sync state to running"
-					doc:id="340ac5e0-764f-4164-aeaa-14e616987553" objectStore="SchedulerStatus">
+			<when expression="#[(vars.syncState != 'running' and vars.syncState == 'fromWorkday') or vars.syncState == null]">
+				<logger level="INFO" doc:name="running from Workday" doc:id="c9cd1c27-5978-4ad8-b87f-99da49944447" message="running from Workday" />
+				<os:store key="syncState" doc:name="Set sync state to running" doc:id="340ac5e0-764f-4164-aeaa-14e616987553" objectStore="SchedulerStatus">
 					<os:value><![CDATA[running]]></os:value>
 				</os:store>
-				<flow-ref doc:name="queryWorkdayFlow" doc:id="b0c87553-d459-4f12-940c-0f8f19892266"
-					name="queryWorkdayFlow" />
-				<flow-ref doc:name="Flow fromWorkdaytoServiceNow" doc:id="23f1d107-ece6-4ad6-a8ca-63ee836dea58"
-					name="fromWorkdaytoServiceNow" />
 
-
+				 <flow-ref doc:name="queryWorkdayFlow" doc:id="b0c87553-d459-4f12-940c-0f8f19892266" name="queryWorkdayFlow" />
+			<flow-ref doc:name="Flow fromWorkdaytoServiceNow" doc:id="23f1d107-ece6-4ad6-a8ca-63ee836dea58" name="fromWorkdaytoServiceNow" />
 			</when>
-			<when
-				expression="#[vars.syncState != 'running' and vars.syncState == 'fromServiceNow']">
-				<logger level="INFO" doc:name="running from ServiceNow"
-					doc:id="840599bf-2442-45d6-b66d-fbe11593bd60" message="running from ServiceNow" />
-				<os:store key="syncState" doc:name="Set sync state to running"
-					doc:id="5059b820-0895-4454-9e50-e686d0f07758" objectStore="SchedulerStatus">
+			<when expression="#[vars.syncState != 'running' and vars.syncState == 'fromServiceNow']">
+				<logger level="INFO" doc:name="running from ServiceNow" doc:id="840599bf-2442-45d6-b66d-fbe11593bd60" message="running from ServiceNow" />
+				<os:store key="syncState" doc:name="Set sync state to running" doc:id="5059b820-0895-4454-9e50-e686d0f07758" objectStore="SchedulerStatus">
 					<os:value><![CDATA[running]]></os:value>
 				</os:store>
-				<flow-ref doc:name="queryServiceNow" doc:id="121efa5b-33a7-4c76-aa72-3112507c4c0b"
-					name="queryServiceNow" />
-				<flow-ref doc:name="Flow fromServiceNowToWorkday" doc:id="986d4ce3-913d-41ff-9574-609dfa2e6135" name="fromServiceNowToWorkday" />
+ 				<flow-ref doc:name="queryServiceNow" doc:id="121efa5b-33a7-4c76-aa72-3112507c4c0b" name="queryServiceNow" />
+				<flow-ref doc:name="Flow fromServiceNowToWorkday" doc:id="986d4ce3-913d-41ff-9574-609dfa2e6135" name="fromServiceNowToWorkday" /> 
 
 
 			</when>
 			<otherwise>
-				<logger level="INFO" doc:name="Batch running"
-					doc:id="bf955eec-4baf-4836-b7fd-7d77ff5ebcb1" message="Batch running" />
+				<logger level="INFO" doc:name="Batch running" doc:id="bf955eec-4baf-4836-b7fd-7d77ff5ebcb1" message="Batch running" />
 			</otherwise>
 		</choice>
 		<error-handler>
-			<on-error-propagate enableNotifications="true"
-				logException="true" doc:name="On Error Propagate" doc:id="488b507d-e26c-4c56-8759-8bb4f6645d71"
-				type="ANY">
-				<flow-ref doc:name="errorHandlingFlow" doc:id="afdaf73c-0137-4d60-84f6-5c41234771a3"
-					name="errorHandlingFlow" />
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="488b507d-e26c-4c56-8759-8bb4f6645d71" type="ANY">
+				<flow-ref doc:name="errorHandlingFlow" doc:id="afdaf73c-0137-4d60-84f6-5c41234771a3" name="errorHandlingFlow" />
 			</on-error-propagate>
 		</error-handler>
 	</flow>
-	
 	<flow name="queryWorkdayFlow">
 		<os:retrieve key="watermark" objectStore="watermarkWday"
 			target="lastQueryDateWday" doc:name="Retrieve lastQueryDateWday">
@@ -98,8 +80,7 @@ ns ns0 urn:com.workday/bsvc
             ns0#Include_Reference: true,
             ns0#Include_Personal_Information: true,
 			ns0#Include_Organizations: true,
-            ns0#Include_Transaction_Log_Data: true,
-            ns0#Include_User_Account: true
+            ns0#Include_Transaction_Log_Data: true
         }
     }
 }]]></ee:set-payload>
@@ -117,32 +98,34 @@ filter ($.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_D
 and $.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address != ''))
 distinctBy $.ns0#Worker_Data.ns0#Personal_Data.ns0#Contact_Data.ns0#Email_Address_Data.ns0#Email_Address)
 else null
+var lastModifiedDate = payload.ns0#Get_Workers_Response.ns0#Request_Criteria.ns0#Transaction_Log_Criteria_Data.ns0#Transaction_Date_Range_Data.ns0#Updated_Through
 ---
 if(data != null)
 	data map {
-		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
-		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
-		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
 		firstname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
-		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
 		lastname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[2],
+		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
+		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
+		employeeNumber : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name ++ 
+					 $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
+		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
+		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code,
 		street : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Address_Line_Data,
-		username : $.Worker_Reference.*ID[1],
-		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code
-} else []]]></ee:set-payload>
+		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
+		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[-1],
+		username : $.Worker_Reference.*ID[-1],
+		lastEventType : $.Worker_Data.Transaction_Log_Entry_Data.Transaction_Log_Entry.Transaction_Log_Reference.ID.@"type",
+		lastEventValue :  $.Worker_Data.Transaction_Log_Entry_Data.Transaction_Log_Entry.Transaction_Log_Reference.ID,
+		LastModifiedOn : lastModifiedDate
+} 
+else []]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="workdayDate" ><![CDATA[%dw 2.0
-output application/java
-ns ns0 urn:com.workday/bsvc
----
-payload.ns0#Get_Workers_Response.Request_Criteria.Transaction_Log_Criteria_Data.Transaction_Date_Range_Data.Updated_Through]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<os:store key="watermark" failOnNullValue="false"
 			doc:name="Store lastQueryDateWday" objectStore="watermarkWday">
-			<os:value><![CDATA[#[vars.workdayDate]]]></os:value>
+			<os:value><![CDATA[#[max(payload map ($.LastModifiedOn))]]]></os:value>
 		</os:store>
 </flow>
 <flow name="queryServiceNow">
@@ -175,14 +158,10 @@ filter($.email != null and $.email != '')) distinctBy $.email )
 else []]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="snowDate" ><![CDATA[%dw 2.0
-output application/java
----
-payload.body.getRecordsResponse.*getRecordsResult.sys_updated_on]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<os:store doc:name="lastQueryDateSnow" doc:id="b2bc9346-6f0b-4294-a6ae-a83e48211dc4" key="watermark" failOnNullValue="false" objectStore="watermarkSnow">
-			<os:value><![CDATA[#[max(vars.snowDate)]]]></os:value>
+			<os:value><![CDATA[#[max(payload map ($.sys_updated_on))]]]></os:value>
 		</os:store>
 </flow>
 

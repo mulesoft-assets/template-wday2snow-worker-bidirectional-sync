@@ -12,8 +12,8 @@
 	<configuration-properties file="mule.${mule.env}.properties" doc:id="46877740-aac5-4812-8728-4718689aa9ec" doc:name="Configuration properties" />
 	<configuration-properties file="common.properties" doc:id="dffa4da7-cc5c-4ecb-922e-1115b4387354" doc:name="Configuration properties" />
 	<os:object-store name="SchedulerStatus" persistent="false" doc:id="e9862648-2cb3-47db-a763-9275db0a1854" doc:name="Object store" />
-	<os:object-store name="watermarkWday" doc:name="Object store" />
-	<os:object-store name="watermarkSnow" doc:name="Object store" />
+	<os:object-store name="watermarkWday" doc:name="Object store" persistent="false"/>
+	<os:object-store name="watermarkSnow" doc:name="Object store" persistent="false"/>
 	<workday:config-version-30-config name="Workday_Config_version_30" doc:name="Workday Config version 30" doc:id="c419e56e-713a-4f56-978b-b3ce82fd174d" >
 		<workday:basic-authentication-api-v30-connection username="${wday.username}" password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.hostname}" responseTimeout="25000" />
 	</workday:config-version-30-config>

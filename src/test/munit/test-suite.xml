@@ -233,7 +233,7 @@ payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
 		<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="0f195baf-01cd-44a8-8e91-0c549bb8696e" config-ref="Workday_Config_version_30" />
-					<ee:transform doc:name="Prepare Response" doc:id="116f66f4-1f19-4dd4-a19f-bd3117b4c039">
+		<ee:transform doc:name="Prepare Response" doc:id="116f66f4-1f19-4dd4-a19f-bd3117b4c039">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
 output application/java
@@ -241,20 +241,20 @@ ns ns0 urn:com.workday/bsvc
 var data = payload.ns0#Get_Workers_Response.ns0#Response_Data.*ns0#Worker
 ---
 data map {
-		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
-		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
-		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
 		firstname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.First_Name,
-		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
 		lastname : $.Worker_Data.Personal_Data.Name_Data.Preferred_Name_Data.Name_Detail_Data.Last_Name,
-		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[2],
+		email: $.Worker_Data.Personal_Data.Contact_Data.Email_Address_Data.Email_Address,
+		country: $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Reference.*ID[2],
+		homephone : $.Worker_Data.Personal_Data.Contact_Data.Phone_Data.Phone_Number,
+		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code,
 		street : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Address_Line_Data,
-		username : $.Worker_Reference.*ID[1],
-		zip : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Postal_Code
-}]]></ee:set-payload>
+		city : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Municipality,
+		state : $.Worker_Data.Personal_Data.Contact_Data.Address_Data.Country_Region_Reference.*ID[-1],
+		username : $.Worker_Reference.*ID[-1]
+	}]]></ee:set-payload>
 						</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="snowRecord" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="snowRecord"><![CDATA[%dw 2.0
 output application/java
 ---
 {
