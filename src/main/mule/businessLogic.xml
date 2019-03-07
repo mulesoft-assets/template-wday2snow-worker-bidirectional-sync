@@ -263,7 +263,7 @@ ns0#Hire_Employee_Request:
 						ns0#Country_Region_Reference: {
 							ns0#ID @(ns0#"type": "Country_Region_ID"): if ( payload.state == null ) p('wday.state')  else lookupCountryISOCode(payload.country).code ++ "-" ++ payload.state
 						},
-						(ns0#Effective_Date: now() as DateTime) if(payload.sysCreatedOn !=null) ,
+						(ns0#Effective_Date: now() as String {format: "YYYY-MM-dd-hh:mm"}) if(payload.sysCreatedOn !=null) ,
 						ns0#Municipality: if (payload.city == null) p('wday.city') else payload.city,
 						ns0#Postal_Code:  if (payload.zip == null) p('wday.postalCode') else payload.zip,
 						ns0#Usage_Data @(ns0#Public: false): [{
@@ -389,7 +389,7 @@ ns ns0 urn:com.workday/bsvc
 ns0#Maintain_Contact_Information_for_Person_Event_Request: 
 {
 	ns0#Maintain_Contact_Information_Data: {
-		(ns0#Effective_Date: now() as DateTime) if (payload.sys_updated_on != null),
+		(ns0#Effective_Date: now() as String {format: "YYYY-MM-dd-hh:mm"} ) if (payload.sys_updated_on != null),
 		ns0#Worker_Contact_Information_Data : {
 			ns0#Address_Data : {
 				ns0#Address_Line_Data @(ns0#Type : "ADDRESS_LINE_1"): if (payload.street == null) p('wday.location') else payload.street,
