@@ -1,8 +1,8 @@
 
-# Anypoint Template: Workday Worker to ServiceNow User Bidirectional synchronization	
+# Anypoint Template: Workday Worker to ServiceNow User Bidirectional synchronization
 
 <!-- Header (start) -->
-Bi-directionally synchronizes workers data between Workday and ServiceNow. Configure this template quickly by only modifying the fields to be synchronized, how they map, and criteria on when to trigger the synchronization. Real time synchronization is achieved via rapid polling of both systems or can be extended to include outbound notifications. 
+Bi-directionally synchronizes workers data between Workday and ServiceNow. Configure this template quickly by only modifying the fields to be synchronized, how they map, and criteria on when to trigger the synchronization. Real time synchronization is achieved via rapid polling of both systems or can be extended to include outbound notifications.
 
 This template leverages watermarking functionality to ensure that only the most recent items are synchronized and batch to efficiently process many records at a time.
 
@@ -14,13 +14,13 @@ Install Workday System - Integrations, Workday HCM - Human Resources and Workday
 <!-- Header (end) -->
 
 ## License Agreement
-This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio. 
+This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
 ## Use Case
 <!-- Use Case (start) -->
 I want to have my workers/users synchronized between Workday and ServiceNow.
 
 ### Template Overview
-						
+
 Keeps Workday synchronized with ServiceNow. The integration behavior is:
 
 1. Ask Workday:
@@ -39,7 +39,7 @@ Keeps Workday synchronized with ServiceNow. The integration behavior is:
 > *Which changes have there been since the question I've made in the step 1.?*
 
 And so on...
-			  
+
 The question for recent changes since a certain moment is nothing but a Scheduler with a watermark defined.
 <!-- Use Case (end) -->
 
@@ -125,7 +125,7 @@ After you import your template into Anypoint Studio, follow these steps to run i
 <!-- Running on Studio (end) -->
 
 ### Run on Mule Standalone
-Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`. 
+Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`.
 
 
 ## Run on CloudHub
@@ -150,7 +150,7 @@ To use this template, configure properties such as credentials, configurations, 
 - scheduler.frequency `10000`
 - scheduler.startDelay `500`
 
-		
+
 #### Workday Connector Configuration
 
 - wday.username `user`
@@ -170,14 +170,16 @@ To use this template, configure properties such as credentials, configurations, 
 - wday.city `San Francisco`
 - wday.location `San_Francisco_Site`
 - wday.currency `USD`
+- wday.responseTimeout `25000`
 
 #### ServiceNow Connector Configuration
 
-- snow.user `user` 
+- snow.user `user`
 - snow.password `secret`
 - snow.endpoint `https://dev.service-now.com`
 - snow.integration.user.id `user`
 - snow.watermark.default.expression `2018-01-01T07:53:00Z`
+- snow.version `snow_version`
 <!-- Application Configuration (end) -->
 
 # API Calls

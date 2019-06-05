@@ -4,11 +4,11 @@
 		<placeholder id="template_name">Workday Worker to ServiceNow User Bidirectional synchronization</placeholder>
 	</placeholders>
 	<sections>
-		<section id="use_case">  
+		<section id="use_case">
 			I want to have my workers/users synchronized between Workday and ServiceNow.
 
 ### Template overview &lt;a name="templateoverview"/&gt;
-						
+
 Let's say we want to keep Workday synchronized with ServiceNow. Then, the integration behavior can be summarized just with the following steps:
 
 1. Ask Workday:
@@ -27,12 +27,12 @@ Let's say we want to keep Workday synchronized with ServiceNow. Then, the integr
 &gt; *Which changes have there been since the question I've made in the step 1.?*
 
 And so on...
-			  
+
 The question for recent changes since a certain moment is nothing but a [Scheduler](https://docs.mulesoft.com/mule4-user-guide/v/4.1/scheduler-concept) with a [watermark](http://blogs.mulesoft.org/data-synchronizing-made-easy-with-mule-watermarks/) defined.
 
 		</section>
 		<section id="considerations">
- 
+
 **Note:** This template illustrates the synchronization use case between Workday and ServiceNow.
 There are a couple of things you should take into account before running this template:
 
@@ -40,20 +40,20 @@ There are a couple of things you should take into account before running this te
 
 2. All times are stored in the ServiceNow platform in Coordinated Universal Time (UTC) so time data needs to be converted to UTC time zone before querying the ServiceNow.
 
-3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.			
+3. **Required Fields:** The following fields should be filled in in ServiceNow instance as they are required in Workday: Street, City, State/Province, Zip/Postal Code, Country, Phone.
 
-4. **Username field:** The username has to be valid for both instancies or username can be null in ServiceNow.			
+4. **Username field:** The username has to be valid for both instancies or username can be null in ServiceNow.
 
 		</section>
 		<section id="application_configuration">
-			
-**Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.			
 
-+ page.size `10`			
+**Note**: The watermark for ServiceNow is in the GMT timezone. The initial value you set in *snow.watermark.default.expression* will be therefore converted before the usage.
+
++ page.size `10`
 + scheduler.frequency `10000`
 + scheduler.startDelay `500`
 
-		
+
 #### Workday Connector configuration
 + wday.username `user`
 + wday.password `secret`
@@ -71,31 +71,33 @@ There are a couple of things you should take into account before running this te
 + wday.city `San Francisco`
 + wday.location `San_Francisco_Site`
 + wday.currency `USD`
++ wday.responseTimeout `25000`
 
 #### ServiceNow Connector configuration
-+ snow.user `user` 
++ snow.user `user`
 + snow.password `secret`
 + snow.endpoint `https://dev.service-now.com`
 + snow.integration.user.id `user`
 + snow.watermark.default.expression `2018-01-01T07:53:00Z`
++ snow.version `snow_version`
 
-	  
+
 		</section>
 		<section id="api_calls">
-			
+
 There are no special considerations regarding API calls.
 
 		</section>
 		<section id="default_endpoints_xml">
-		
+
 This file should contain every inbound and outbound endpoint of your integration app. It is intended to contain the application API.
 In this particular template, this file contains a couple of poll inbound endpoints that query Workday and ServiceNow for updates using watermark as mentioned before.
 
 		</section>
 		<section id="default_business_logic_xml">
-		
+
 This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for both executing the synchronization from Workday to ServiceNow and the other way around.
 
 		</section>
-	</sections>		
+	</sections>
 </configuration>
