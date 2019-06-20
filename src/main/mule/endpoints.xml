@@ -54,7 +54,7 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
 	<flow name="queryWorkdayFlow">
 		<os:retrieve key="watermark" objectStore="watermarkWday"
 			target="lastQueryDateWday" doc:name="Retrieve lastQueryDateWday">
-			<os:default-value><![CDATA[${wday.watermark.default.expression}]]></os:default-value>
+			<os:default-value ><![CDATA[#[read(p('wday.watermark.default.expression'))]]]></os:default-value>
 		</os:retrieve>
 		<ee:transform doc:name="Prepare Get Workers request"
 			doc:id="9b764bb7-ed1e-4673-a50a-d5f2391c77b4">
@@ -130,7 +130,7 @@ else []]]></ee:set-payload>
 </flow>
 <flow name="queryServiceNow">
 		<os:retrieve key="watermark" objectStore="watermarkSnow" target="lastQueryDateSNow" doc:name="Retrieve lastQueryDateSNow">
-        <os:default-value><![CDATA[${snow.watermark.default.expression}]]></os:default-value>
+       <os:default-value ><![CDATA[#[read(p('snow.watermark.default.expression'))]]]></os:default-value>
     </os:retrieve>
     <ee:transform doc:name="Prepare Users request" doc:id="0e482d0e-d1b5-458f-b4d4-39ce4dc6ba7c" >
 			<ee:message >
