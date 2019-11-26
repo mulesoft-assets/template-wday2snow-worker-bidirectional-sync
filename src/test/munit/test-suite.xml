@@ -232,7 +232,7 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-		<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="0f195baf-01cd-44a8-8e91-0c549bb8696e" config-ref="Workday_Config_version_30" />
+		<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="0f195baf-01cd-44a8-8e91-0c549bb8696e" config-ref="Workday_Config" />
 		<ee:transform doc:name="Prepare Response" doc:id="116f66f4-1f19-4dd4-a19f-bd3117b4c039">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0

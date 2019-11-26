@@ -2,6 +2,9 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
 
 	<global-property name="mule.env" value="dev" doc:name="Global Property" />
+    <configuration-properties file="mule.${mule.env}.properties" doc:id="f57567e7-7a54-4b19-99e6-94bc6d89edbd" doc:name="Configuration properties" />
+    <configuration-properties file="common.properties" doc:id="7e6ea5b5-cd62-427f-b39a-d52fa141329c" doc:name="Configuration properties" />
+    
 	<servicenow:config name="ServiceNow_Config" doc:id="5d6d0474-0c30-4cda-aaa7-82b3dd916b1c" doc:name="ServiceNow Config">
 		<servicenow:basic-connection password="${snow.password}" serviceAddress="${snow.endpoint}" serviceNowVersion="${snow.version}" username="${snow.user}">
 			<servicenow:transport>
@@ -9,12 +12,12 @@
 			</servicenow:transport>
 		</servicenow:basic-connection>
 	</servicenow:config>
-	<configuration-properties file="mule.${mule.env}.properties" doc:id="46877740-aac5-4812-8728-4718689aa9ec" doc:name="Configuration properties" />
-	<configuration-properties file="common.properties" doc:id="dffa4da7-cc5c-4ecb-922e-1115b4387354" doc:name="Configuration properties" />
-	<os:object-store name="SchedulerStatus" persistent="false" doc:id="e9862648-2cb3-47db-a763-9275db0a1854" doc:name="Object store" />
-	<os:object-store name="watermarkWday" doc:name="Object store" persistent="false"/>
-	<os:object-store name="watermarkSnow" doc:name="Object store" persistent="false"/>
-	<workday:config-version-30-config name="Workday_Config_version_30" doc:name="Workday Config version 30" doc:id="c419e56e-713a-4f56-978b-b3ce82fd174d" >
-		<workday:basic-authentication-api-v30-connection username="${wday.username}" password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.hostname}" responseTimeout="${wday.responseTimeout}" />
-	</workday:config-version-30-config>
+
+	<workday:config-version-32-config name="Workday_Config" doc:name="Workday Config version 32" doc:id="c95eec73-8b55-44ef-aa6d-3f5205e90ed2" >
+		<workday:basic-authentication-api-v32-connection userName="${wday.username}" password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.hostname}" />
+	</workday:config-version-32-config>
+    
+    <os:object-store name="SchedulerStatus" persistent="false" doc:id="c8ff322a-6332-491b-83fe-5d18485eb721" doc:name="Object store" />
+    <os:object-store name="watermarkWday" doc:name="Object store" persistent="false"/>
+    <os:object-store name="watermarkSnow" doc:name="Object store" persistent="false"/>
 </mule>
