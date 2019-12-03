@@ -18,6 +18,7 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
    
 <munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="e0e0e98f-b743-4151-9d5e-33b7dba9e917">
 		<flow-ref doc:name="Query Workday Record" doc:id="c2e1e3dc-8b5b-46ab-a98c-0793de6ce521" name="queryWorkdayRecord"/>
+        <set-variable value="#[payload[0]]" doc:name="Set wday record to variable" doc:id="ba6e7966-e67f-49d6-8c25-ffe5e99360c7" variableName="wdayWorker" />
 		<ee:transform doc:name="Prepare Insert Request" doc:id="11e2baca-bf5b-4bd9-9386-c74f42971d61" >
 			<ee:message >
 			</ee:message>
@@ -25,7 +26,6 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
 				<ee:set-variable variableName="snowInput" ><![CDATA[%dw 2.0
 output application/xml
 ns ns0 http://www.service-now.com/sys_user
-var generateId = randomInt(100000)
 ---
 {
 	ns0#insert: {
@@ -33,8 +33,8 @@ var generateId = randomInt(100000)
 		ns0#city          : payload[0].city,
 		ns0#country       : payload[0].country,
 		ns0#email         : payload[0].email,
-		ns0#"first_name"  : payload[0].firstname,
-	    ns0#"home_phone"  : (generateId ++ generateId)[0 to 6],
+		ns0#"first_name"  : "Test" ++ payload[0].firstname,
+	    ns0#"home_phone"  : "4152002020",
 		ns0#"last_name"   : payload[0].lastname,
 		ns0#state         : payload[0].state,
 		ns0#street        : payload[0].street,
@@ -63,28 +63,15 @@ else []]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</munit:before-test>
-		<munit:test name="test-suiteWdayToSnowFlowTest" description="MUnit Test" doc:id="bd50522d-400f-48ff-8ba6-bea0f057ea21" >
+	<munit:test name="test-suiteWdayToSnowFlowTest" description="MUnit Test" doc:id="bd50522d-400f-48ff-8ba6-bea0f057ea21">
 		<munit:execution>
 			<flow-ref doc:name="Query Flow" doc:id="ff311a82-d669-49ff-9e20-f9d14b22211a" name="queryWorkdayFlow"/>
-			<ee:transform doc:name="Filter Test Records and Add New Record" doc:id="f9e339f7-1f20-47ee-9973-de84e2d14170" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<ee:transform doc:name="Filter Test Records" doc:id="f9e339f7-1f20-47ee-9973-de84e2d14170">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
-var updateRecords= payload filter ($.username == p('test.wday.username'))
-var generateId = randomInt(100000)
 ---
-updateRecords + {
-    city: "TestMunit" ++ generateId,
-    country: "TestMunit" ++ generateId,
-    email: "TestMunit" ++ generateId,
-    firstname: "TestMunit" ++ generateId,
-    homephone: "TestMunit" ++ generateId,
-    lastname: "TestMunit" ++ generateId,
-    state: "TestMunit" ++ generateId,
-    street: "TestMunit" ++ generateId,
-    username: "TestMunit" ++ generateId,
-    zip: "TestMunit" ++ generateId
-  }]]></ee:set-payload>
+payload filter ($.username == p('test.wday.username') or $.username == p('test.wday.insert.username'))]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
 			<set-variable value="#[payload]" doc:name="Save Migrated Records" doc:id="377dd94d-6b09-4698-9c5d-4583fc4857b9" variableName="migratedRecords"/>
@@ -94,7 +81,7 @@ updateRecords + {
 			</scripting:execute>
 
 </munit:execution>
-		<munit:validation >
+	<munit:validation >
 			<flow-ref doc:name="Query For Updated User" doc:id="ff885cd7-546b-4e8a-aac1-b919f8639788" name="QueryForUpdatedUser"/>
 			<flow-ref doc:name="Query For Created User" doc:id="c7d8d4d1-8618-448d-b2d0-458b0f876dfe" name="QueryForCreatedUser" />
 		</munit:validation>
@@ -172,37 +159,43 @@ vars.snowIds + payload.body.getRecordsResponse.getRecordsResult.sys_id]]></ee:se
 			</munit-tools:with-attributes>
 		</munit-tools:verify-call>
 	</sub-flow>
-	<munit:test name="test-suiteFromSnowToWdayFlowTest" description="MUnit Test" doc:id="6ca7708d-69a0-4cc9-b468-00d4e2b2fa40" >
-		<munit:execution>
-			<flow-ref doc:name="Query ServiceNow" doc:id="fa204f6c-b673-4290-a3cd-a4bf102ae72f" name="queryServiceNow" />
-			<ee:transform doc:name="Filter test record" doc:id="4d0bdaa3-b4d9-4ce3-8047-1f55b15ab822">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+    <munit:test name="test-suiteFromSnowToWdayFlowTest" description="MUnit Test" doc:id="a46b7cf8-6b22-435c-99b4-ac644f3767e7" timeOut="200000">
+        <munit:execution>
+			<flow-ref doc:name="Query ServiceNow" doc:id="b988cb6d-ecad-4bb2-8cd9-9503d39e88bb" name="queryServiceNow" />
+			<ee:transform doc:name="Filter test record" doc:id="0eb48838-79c9-4603-829e-d979e9bc5a7d">
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ---
 payload filter ($."user_name" == p('test.wday.username'))]]></ee:set-payload>
-				</ee:message>
-			</ee:transform>
-			<flow-ref doc:name="Call Business Logic fromServiceNowToWorkday" doc:id="ff9f5ac4-4448-4b93-8312-5e524febd0f6" name="fromServiceNowToWorkday"/>
-			<scripting:execute doc:name="Sleep for 60s until the processing is completed" doc:id="ecab7352-b10d-434a-96a0-3b8aeb1ec6e4" engine="groovy">
+                </ee:message>
+            </ee:transform>
+			<flow-ref doc:name="Call Business Logic fromServiceNowToWorkday" doc:id="1a406062-484f-48e7-80b2-c00438607f88" name="fromServiceNowToWorkday" />
+            <scripting:execute doc:name="Sleep for 60s until the processing is completed" doc:id="96fc50e2-91ae-4b35-b759-d6275dff8fa5" engine="groovy">
+                <scripting:code>sleep(60000)</scripting:code>
+            </scripting:execute>
+            <flow-ref doc:name="Query Workday Record" doc:id="4e1dc799-9cf4-43a2-bf96-388700adfbc3" name="queryWorkdayRecord" />
+            <set-variable value="#[payload]" doc:name="Set updated record to variable" doc:id="c60ba7fc-bfe0-4330-a946-70b624dbb244" variableName="wdayResult"/>
+			<flow-ref doc:name="Reference to revertWorkerSubFlow" doc:id="e834f21a-7f83-40fa-ba4b-38d686aa53f0" name="revertWorkerSubFlow"/>
+			<scripting:execute engine="groovy" doc:name="Sleep for 60s until the processing is completed" doc:id="aca53499-7603-4320-9ba8-13fb3dc218ed" >
 				<scripting:code >sleep(60000)</scripting:code>
 			</scripting:execute>
-			<flow-ref doc:name="Query Workday Record" doc:id="6a424ba7-4ce6-4836-8a24-d18c52dbd21f" name="queryWorkdayRecord" />
-		</munit:execution>
-		<munit:validation>
-			<munit-tools:assert-that doc:name="Assert that Worker was updated" doc:id="17348791-d1de-45b2-acc9-083909c53d0e" expression="#[payload[0].homephone]" is="#[MunitTools::equalTo(vars.snowRecord.homephone)]" message="Phone should be updated" />
-			<munit-tools:verify-call doc:name="Verify Update Contact Information call" doc:id="28cf1c5c-d87c-49a6-ba66-4264cb00107b" processor="workday:human-resources" times="1">
-			<munit-tools:with-attributes>
-				<munit-tools:with-attribute attributeName="doc:id" whereValue="ac502b64-0cc0-4f3e-9418-06a4eeed5970" />
-			</munit-tools:with-attributes>
-		</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify Update Preferred Name call" doc:id="259a98a5-fffb-4db2-b26b-d57c1e3ab003" processor="workday:human-resources" times="1">
-			<munit-tools:with-attributes>
-				<munit-tools:with-attribute attributeName="doc:id" whereValue="16256bb9-34e3-4361-acd4-ed89cd16459a" />
-			</munit-tools:with-attributes>
-		</munit-tools:verify-call>
-		</munit:validation>
-	</munit:test>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that doc:name="Assert that Worker was updated" doc:id="4684ae04-0f1d-4d5d-bbc5-db6baa596d2b" expression="#[vars.wdayResult[0].homephone]" is="#[MunitTools::equalTo(vars.snowRecord.homephone)]" message="Phone should be updated" />
+            <munit-tools:assert-that doc:name="Assert that Worker's name was updated" doc:id="01c9fc38-2cfd-4b05-a26b-c1b642073a8b" expression="#[vars.wdayResult[0].firstname]" is="#[MunitTools::equalTo(vars.snowRecord.firstname)]" message="Firstname should be updated" />
+			<munit-tools:verify-call doc:name="Verify Update Contact Information call" doc:id="235c1575-0e06-479c-82ce-fde9a6586175" processor="workday:human-resources" times="1">
+            <munit-tools:with-attributes>
+                <munit-tools:with-attribute attributeName="doc:id" whereValue="ac502b64-0cc0-4f3e-9418-06a4eeed5970" />
+            </munit-tools:with-attributes>
+        </munit-tools:verify-call>
+            <munit-tools:verify-call doc:name="Verify Update Preferred Name call" doc:id="abb7dc7f-72d0-4c77-ad13-de018736935f" processor="workday:human-resources" times="1">
+            <munit-tools:with-attributes>
+                <munit-tools:with-attribute attributeName="doc:id" whereValue="16256bb9-34e3-4361-acd4-ed89cd16459a" />
+            </munit-tools:with-attributes>
+        </munit-tools:verify-call>
+        </munit:validation>
+    </munit:test>
 	<sub-flow name="queryWorkdayRecord" doc:id="ec766754-d239-4228-8372-a5a685f229d1" >
 		<ee:transform doc:name="Prepare GetWorkers request" doc:id="424156e4-c731-4e15-a4c2-32f82a1eb3f0">
 						<ee:message>
@@ -273,6 +266,98 @@ output application/java
 					</ee:transform>
 
 	</sub-flow>
+        <sub-flow name="revertWorkerSubFlow" doc:id="cb28f798-02fd-4dc5-8c2f-fbb05f86ada7" >
+		<ee:transform doc:name="Prepare query for reverting worker" doc:id="7f599079-5090-4c66-b65b-713114a90f0b">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 urn:com.workday/bsvc
+---
+ns0#Maintain_Contact_Information_for_Person_Event_Request: 
+{
+    ns0#Maintain_Contact_Information_Data: {
+        ns0#Effective_Date: now() as Date ,
+        ns0#Worker_Contact_Information_Data : {
+            ns0#Address_Data : {
+                ns0#Address_Line_Data @(ns0#Type : "ADDRESS_LINE_1"): vars.wdayWorker.street,
+                ns0#Country_Reference: {
+                    ns0#ID @(ns0#"type": "ISO_3166-1_Alpha-3_Code"): p('wday.country')
+                },
+                ns0#Country_Region_Reference: {
+                    ns0#ID @(ns0#"type": "Country_Region_ID"): p('wday.state')
+                },              
+                ns0#Municipality: vars.wdayWorker.city,
+                ns0#Postal_Code: vars.wdayWorker.zip,
+                ns0#Usage_Data @(ns0#Public: false): {
+                    ns0#Type_Data @(ns0#Primary: true): {
+                        ns0#Type_Reference: {
+                            ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+                        }
+                    }
+                }
+            },
+            ns0#Email_Address_Data: {
+                ns0#Email_Address: vars.wdayWorker.email,
+                ns0#Usage_Data @(ns0#Public: true): {
+                    ns0#Type_Data : {
+                        ns0#Type_Reference: {
+                            ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+                        }
+                    }
+                }
+            },
+            ns0#Phone_Data: {
+                ns0#Country_ISO_Code: p('wday.country'),
+                ns0#Phone_Device_Type_Reference: {
+                    ns0#ID @(ns0#"type": "Phone_Device_Type_ID"):"1063.5"
+                },
+                ns0#Phone_Number: vars.wdayWorker.homephone replace "-" with "" ,
+                ns0#Usage_Data @(ns0#Public: true): {
+                    ns0#Type_Data: {
+                        ns0#Type_Reference: {
+                            ns0#ID @(ns0#"type": "Communication_Usage_Type_ID"): "HOME"
+                        }
+                    }
+                }
+            }       
+        },
+        ns0#Worker_Reference: {
+            ns0#ID @(ns0#"type": "Employee_ID"): vars.wdayWorker.username
+        }
+    }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <workday:human-resources doc:name="Revert worker contact information" doc:id="a5d7a2a7-e4bf-48a1-ae26-e96619ebed7f" config-ref="Workday_Config" operation="Maintain_Contact_Information">
+                    </workday:human-resources>
+		<ee:transform doc:name="Prepare query for change name" doc:id="d8c6e0d3-f8f4-4390-a9dd-ada2970ea274">
+                        <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 urn:com.workday/bsvc
+---
+ns0#Change_Preferred_Name_Request: 
+{
+    ns0#Change_Preferred_Name_Data: {
+        ns0#Name_Data: {
+            ns0#Country_Reference: {
+                ns0#ID @(ns0#"type": "ISO_3166-1_Alpha-3_Code"): p('wday.country')  
+            },
+            ns0#First_Name: vars.wdayWorker.firstname,
+            ns0#Last_Name: vars.wdayWorker.lastname,
+            },
+        ns0#Person_Reference: {
+            ns0#ID @(ns0#"type": "Employee_ID"): vars.wdayWorker.username
+        }
+    }
+}]]></ee:set-payload>
+                        </ee:message>
+                        <ee:variables>
+                        </ee:variables>
+                    </ee:transform>
+        <workday:human-resources doc:name="Revert worker name" doc:id="08fc97e4-de43-4501-82f8-7584fabb7c8a" config-ref="Workday_Config" operation="Change_Preferred_Name">
+                    </workday:human-resources>
+    </sub-flow>
 	<munit:after-test name="test-suiteAfter_Test"
 		description="After tests actions" doc:id="06dfa255-a78d-42b0-a762-ddd5d63e1431">
 		<foreach doc:name="For Each" doc:id="a63cfeec-00c5-4dff-8476-1074449608dc" collection="vars.snowIds">
@@ -292,7 +377,4 @@ ns ns0 http://www.service-now.com/sys_user
 			<servicenow:invoke doc:name="Delete test records" doc:id="b99cd22a-31ca-49f8-ac58-16e53c2847f6" config-ref="ServiceNow_Config" service="sys_user" operation="deleteRecord" />
 		</foreach>
 	</munit:after-test>
-
-
-
 </mule>
