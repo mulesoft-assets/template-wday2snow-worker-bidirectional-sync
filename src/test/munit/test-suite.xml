@@ -34,7 +34,7 @@ ns ns0 http://www.service-now.com/sys_user
 		ns0#country       : payload[0].country,
 		ns0#email         : payload[0].email,
 		ns0#"first_name"  : "Test" ++ payload[0].firstname,
-	    ns0#"home_phone"  : "4152002020",
+	    ns0#"home_phone"  : p('test.wday.phone'),
 		ns0#"last_name"   : payload[0].lastname,
 		ns0#state         : payload[0].state,
 		ns0#street        : payload[0].street,
