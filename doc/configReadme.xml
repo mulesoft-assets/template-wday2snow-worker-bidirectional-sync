@@ -71,7 +71,6 @@ There are a couple of things you should take into account before running this te
 + wday.city `San Francisco`
 + wday.location `San_Francisco_Site`
 + wday.currency `USD`
-+ wday.responseTimeout `25000`
 
 #### ServiceNow Connector configuration
 + snow.user `user`

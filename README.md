@@ -170,7 +170,6 @@ To use this template, configure properties such as credentials, configurations, 
 - wday.city `San Francisco`
 - wday.location `San_Francisco_Site`
 - wday.currency `USD`
-- wday.responseTimeout `25000`
 
 #### ServiceNow Connector Configuration
 

@@ -17,10 +17,10 @@ http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/
 		<batch:job jobName="migrateWorkersBatchFromWorkday" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6"
 			blockSize="${page.size}">
 			<batch:process-records>
-				<batch:step name="getLastEventStep" doc:id="4d8d1fad-8da7-4b1e-a5fa-826dcc0811ff" acceptExpression='#[payload.lastEventType != null and payload.lastEventValue != null]'>
-					<ee:transform doc:name="Prepare GetEventDetailsRequestType request" doc:id="e5452b95-d7c9-405f-953c-8ec319fc5b1b" >
-						<ee:message >
-							<ee:set-payload ><![CDATA[%dw 2.0
+				<batch:step name="getLastEventStep" doc:id="4d8d1fad-8da7-4b1e-a5fa-826dcc0811ff" acceptExpression="#[payload.lastEventType != null and payload.lastEventValue != null]">
+					<ee:transform doc:name="Prepare GetEventDetailsRequestType request" doc:id="e5452b95-d7c9-405f-953c-8ec319fc5b1b">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ns ns0 urn:com.workday/bsvc
 ---
@@ -33,17 +33,17 @@ ns0#Get_Event_Details_Request:
 	}
 }]]></ee:set-payload>
 						</ee:message>
-						<ee:variables >
-							<ee:set-variable variableName="workerData" ><![CDATA[%dw 2.0
+						<ee:variables>
+							<ee:set-variable variableName="workerData"><![CDATA[%dw 2.0
 output application/java
 ---
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<workday:integrations operation="Get_Event_Detail" doc:name="Query for the last event" doc:id="28d81dae-9bc1-467b-896f-244243c572b3" config-ref="Workday_Config_version_30"/>
-					<ee:transform doc:name="Get LastModifiedById and LastModifiedDate" doc:id="1eb48389-b27f-4040-869b-87811436314c" >
-						<ee:message >
-							<ee:set-payload ><![CDATA[%dw 2.0
+					<workday:integrations operation="Get_Event_Detail" doc:name="Query for the last event" doc:id="28d81dae-9bc1-467b-896f-244243c572b3" config-ref="Workday_Config" />
+					<ee:transform doc:name="Get LastModifiedById and LastModifiedDate" doc:id="1eb48389-b27f-4040-869b-87811436314c">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
 output application/java
 ns ns0 urn:com.workday/bsvc
 ---
@@ -225,7 +225,7 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="f7959b6a-ab1c-474e-bc75-46e2ab82908d" config-ref="Workday_Config_version_30" />
+					<workday:human-resources operation="Get_Workers" doc:name="Get Workers from Workday" doc:id="f7959b6a-ab1c-474e-bc75-46e2ab82908d" config-ref="Workday_Config" />
 					<ee:transform doc:name="Get Worker ID" doc:id="ea91fa20-9253-4c89-89ea-835e7e2ad8d9">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
@@ -350,7 +350,7 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
- 					<workday:staffing operation="Hire_Employee" doc:name="Hire Employee" doc:id="0009e2e2-01be-4424-bc85-391484d13572" config-ref="Workday_Config_version_30" />
+ 					<workday:staffing operation="Hire_Employee" doc:name="Hire Employee" doc:id="0009e2e2-01be-4424-bc85-391484d13572" config-ref="Workday_Config" />
 					<logger level="INFO" doc:name="Logger update contact information" doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Hire Employee: #[output application/json --- payload]" />
 					<ee:transform doc:name="Prepare update of User username request" doc:id="186a6444-3ad3-442a-a1c3-6fedd86dcac6">
 						<ee:message>
@@ -447,7 +447,7 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<workday:human-resources operation="Maintain_Contact_Information" doc:name="Update Contact Information" doc:id="ac502b64-0cc0-4f3e-9418-06a4eeed5970" config-ref="Workday_Config_version_30" >
+					<workday:human-resources operation="Maintain_Contact_Information" doc:name="Update Contact Information" doc:id="ac502b64-0cc0-4f3e-9418-06a4eeed5970" config-ref="Workday_Config" >
 						<ee:repeatable-file-store-stream inMemorySize="3" bufferUnit="MB" />
 					</workday:human-resources>
 					<logger level="INFO" doc:name="Logger update contact information" doc:id="ea85968e-fd18-44b9-ad4d-6230def59835" message="Update in Workday Contact Information: #[output application/json --- payload]" />
@@ -472,14 +472,14 @@ ns0#Change_Preferred_Name_Request:
 			ns0#Last_Name: vars.worker.last_name,
 			(ns0#Middle_Name: vars.worker.middle_name) if (vars.worker.middle_name != null)		
 		},
-		ns0#Worker_Reference: {
+		ns0#Person_Reference: {
 			ns0#ID @(ns0#"type": "Employee_ID"): vars.worker.user_name
 		}
 	}
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-					<workday:human-resources operation="Change_Preferred_Name" doc:name="Update Preferred Name" doc:id="16256bb9-34e3-4361-acd4-ed89cd16459a" config-ref="Workday_Config_version_30" />
+					<workday:human-resources operation="Change_Preferred_Name" doc:name="Update Preferred Name" doc:id="16256bb9-34e3-4361-acd4-ed89cd16459a" config-ref="Workday_Config" />
 					<ee:transform doc:name="Set payload" doc:id="9d90704e-43da-43b4-b685-febbc009b742" >
 						<ee:message >
 							<ee:set-payload ><![CDATA[%dw 2.0
