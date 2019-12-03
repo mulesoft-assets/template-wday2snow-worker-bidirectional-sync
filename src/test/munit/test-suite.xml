@@ -159,7 +159,7 @@ vars.snowIds + payload.body.getRecordsResponse.getRecordsResult.sys_id]]></ee:se
 			</munit-tools:with-attributes>
 		</munit-tools:verify-call>
 	</sub-flow>
-    <munit:test name="test-suiteFromSnowToWdayFlowTest" description="MUnit Test" doc:id="a46b7cf8-6b22-435c-99b4-ac644f3767e7" timeOut="200000">
+    <munit:test name="test-suiteFromSnowToWdayFlowTest" description="MUnit Test" doc:id="a46b7cf8-6b22-435c-99b4-ac644f3767e7" timeOut="400000">
         <munit:execution>
 			<flow-ref doc:name="Query ServiceNow" doc:id="b988cb6d-ecad-4bb2-8cd9-9503d39e88bb" name="queryServiceNow" />
 			<ee:transform doc:name="Filter test record" doc:id="0eb48838-79c9-4603-829e-d979e9bc5a7d">
@@ -177,8 +177,8 @@ payload filter ($."user_name" == p('test.wday.username'))]]></ee:set-payload>
             <flow-ref doc:name="Query Workday Record" doc:id="4e1dc799-9cf4-43a2-bf96-388700adfbc3" name="queryWorkdayRecord" />
             <set-variable value="#[payload]" doc:name="Set updated record to variable" doc:id="c60ba7fc-bfe0-4330-a946-70b624dbb244" variableName="wdayResult"/>
 			<flow-ref doc:name="Reference to revertWorkerSubFlow" doc:id="e834f21a-7f83-40fa-ba4b-38d686aa53f0" name="revertWorkerSubFlow"/>
-			<scripting:execute engine="groovy" doc:name="Sleep for 60s until the processing is completed" doc:id="aca53499-7603-4320-9ba8-13fb3dc218ed" >
-				<scripting:code >sleep(60000)</scripting:code>
+			<scripting:execute engine="groovy" doc:name="Sleep for 90s until the processing is completed" doc:id="aca53499-7603-4320-9ba8-13fb3dc218ed" >
+				<scripting:code >sleep(90000)</scripting:code>
 			</scripting:execute>
         </munit:execution>
         <munit:validation>
